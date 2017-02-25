@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="4">
+ <tileset firstgid="1" name="gameart2d.com-platformer-bg" tilewidth="1000" tileheight="750" tilecount="1" columns="0">
+  <tile id="0">
+   <image width="1000" height="750" source="BG/BG.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="2" name="gameart2d.com-platformer-object" tilewidth="282" tileheight="301" tilecount="13" columns="0">
+  <tile id="0">
+   <image width="133" height="65" source="Object/Bush (1).png"/>
+  </tile>
+  <tile id="1">
+   <image width="133" height="65" source="Object/Bush (2).png"/>
+  </tile>
+  <tile id="2">
+   <image width="73" height="47" source="Object/Bush (3).png"/>
+  </tile>
+  <tile id="3">
+   <image width="73" height="46" source="Object/Bush (4).png"/>
+  </tile>
+  <tile id="4">
+   <image width="77" height="77" source="Object/Crate.png"/>
+  </tile>
+  <tile id="5">
+   <image width="49" height="41" source="Object/Mushroom_1.png"/>
+  </tile>
+  <tile id="6">
+   <image width="50" height="41" source="Object/Mushroom_2.png"/>
+  </tile>
+  <tile id="7">
+   <image width="63" height="65" source="Object/Sign_1.png"/>
+  </tile>
+  <tile id="8">
+   <image width="62" height="64" source="Object/Sign_2.png"/>
+  </tile>
+  <tile id="9">
+   <image width="90" height="54" source="Object/Stone.png"/>
+  </tile>
+  <tile id="10">
+   <image width="116" height="44" source="Object/Tree_1.png"/>
+  </tile>
+  <tile id="11">
+   <image width="282" height="301" source="Object/Tree_2.png"/>
+  </tile>
+  <tile id="12">
+   <image width="282" height="275" source="Object/Tree_3.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="15" name="gameart2d.com-platformer-tiles" tilewidth="129" tileheight="129" tilecount="18" columns="0">
+  <tile id="0">
+   <image width="128" height="128" source="Tiles/1.png"/>
+  </tile>
+  <tile id="1">
+   <image width="128" height="128" source="Tiles/2.png"/>
+  </tile>
+  <tile id="2">
+   <image width="128" height="128" source="Tiles/3.png"/>
+  </tile>
+  <tile id="3">
+   <image width="129" height="129" source="Tiles/4.png"/>
+  </tile>
+  <tile id="4">
+   <image width="128" height="128" source="Tiles/5.png"/>
+  </tile>
+  <tile id="5">
+   <image width="128" height="128" source="Tiles/6.png"/>
+  </tile>
+  <tile id="6">
+   <image width="128" height="128" source="Tiles/7.png"/>
+  </tile>
+  <tile id="7">
+   <image width="128" height="128" source="Tiles/8.png"/>
+  </tile>
+  <tile id="8">
+   <image width="128" height="128" source="Tiles/9.png"/>
+  </tile>
+  <tile id="9">
+   <image width="128" height="128" source="Tiles/10.png"/>
+  </tile>
+  <tile id="10">
+   <image width="128" height="128" source="Tiles/11.png"/>
+  </tile>
+  <tile id="11">
+   <image width="128" height="128" source="Tiles/12.png"/>
+  </tile>
+  <tile id="12">
+   <image width="128" height="93" source="Tiles/13.png"/>
+  </tile>
+  <tile id="13">
+   <image width="128" height="93" source="Tiles/14.png"/>
+  </tile>
+  <tile id="14">
+   <image width="128" height="93" source="Tiles/15.png"/>
+  </tile>
+  <tile id="15">
+   <image width="128" height="128" source="Tiles/16.png"/>
+  </tile>
+  <tile id="16">
+   <image width="128" height="99" source="Tiles/17.png"/>
+  </tile>
+  <tile id="17">
+   <image width="128" height="128" source="Tiles/18.png"/>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="20" height="20">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Tile Layer 2" width="20" height="20">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,11,0,0,0,0,14,0,0,0,0,0,0,0,8
+</data>
+ </layer>
+ <layer name="Tile Layer 3" width="20" height="20">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+28,0,0,0,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="1" x="2" y="390">
+   <polyline points="0,0 247,0 253,17 249,31 236,49 207,52 187,76 134,91 -1,89 1,2"/>
+  </object>
+ </objectgroup>
+</map>
