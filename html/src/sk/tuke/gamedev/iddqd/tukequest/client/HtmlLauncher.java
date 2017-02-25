@@ -7,13 +7,13 @@ import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 
 public class HtmlLauncher extends GwtApplication {
 
-        @Override
-        public GwtApplicationConfiguration getConfig () {
-                return new GwtApplicationConfiguration(480, 320);
-        }
+    @Override
+    public GwtApplicationConfiguration getConfig() {
+        return new GwtApplicationConfiguration(480, 320);
+    }
 
-        @Override
-        public ApplicationListener createApplicationListener () {
-                return new TukeQuestGame();
-        }
+    @Override
+    public ApplicationListener createApplicationListener() {
+        return new TukeQuestGame();
+    }
 }
