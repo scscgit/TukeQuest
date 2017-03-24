@@ -106,6 +106,17 @@ public abstract class AbstractBodyActor implements BodyActor {
     }
 
     @Override
+    public Vector2 getCenterOffset() {
+        // Default implementation assumes the animation is set properly
+        return new Vector2(getAnimation().getWidth() / 2, getAnimation().getHeight() / 2);
+    }
+
+    @Override
+    public final Vector2 getCenter() {
+        return getPosition().cpy().add(getCenterOffset());
+    }
+
+    @Override
     public float getRotation() {
         return this.rotationDegrees;
     }

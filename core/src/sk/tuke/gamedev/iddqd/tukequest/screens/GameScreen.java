@@ -102,7 +102,7 @@ public class GameScreen extends AbstractScreen {
     public void difficultyIncrease() {
         // Example implementation of difficulty increase: increasing gravity
         System.out.println("Difficulty increased");
-        world.setGravity(world.getGravity().cpy().scl(5.5f));
+        world.setGravity(world.getGravity().cpy().scl(1.7f));
     }
 
 }

@@ -11,15 +11,13 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 /**
  * Created by Ruza on 24.3.2017.
  */
-public class Player extends AbstractBodyActor {
+public class Player extends RectangleActor {
 
     private static final float DENSITY = .5f;
     private static final float FRICTION = .4f;
     private static final float RESTITUTION = .6f;
     private static final float INPUT_FORCE_MULTIPLIER = 500000f;
 
-    private float width=50;
-    private float height=50;
     private Camera camera;
 
     public Player(float x, float y, Camera camera) {
@@ -55,16 +53,11 @@ public class Player extends AbstractBodyActor {
 
         // Jump (fly)
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            getBody().applyLinearImpulse(new Vector2(0, -10000f), getPosition(), true);
+            getBody().applyLinearImpulse(new Vector2(0, 10000f), getCenter(), true);
         }
     }
 
-    protected Shape createShape() {
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 2, this.height / 2, new Vector2(this.width / 2, this.height / 2), 0);
-        return shape;
-    }
-
+    @Override
     protected void configureFixtureDef(FixtureDef fixtureDef) {
         fixtureDef.density = DENSITY;
         fixtureDef.friction = FRICTION;

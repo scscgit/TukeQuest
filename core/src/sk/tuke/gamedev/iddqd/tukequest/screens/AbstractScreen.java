@@ -56,7 +56,7 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public void show() {
-        System.out.println("Scene " + this + " shown");
+        System.out.println("Screen " + this + " shown");
     }
 
     /**

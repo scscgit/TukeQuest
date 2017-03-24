@@ -56,7 +56,7 @@ public class ExampleActor extends AbstractBodyActor {
 
         // Jump (fly)
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            getBody().applyLinearImpulse(new Vector2(0, 10000f), getPosition(), true);
+            getBody().applyLinearImpulse(new Vector2(0, 10000f), getCenter(), true);
         }
     }
 
@@ -64,7 +64,7 @@ public class ExampleActor extends AbstractBodyActor {
         CircleShape shape = new CircleShape();
         shape.setRadius(getAnimation().getWidth() / 2);
         // Shape radius will start in the center
-        shape.setPosition(new Vector2(getAnimation().getWidth() / 2, getAnimation().getHeight() / 2));
+        shape.setPosition(getCenterOffset());
         return shape;
     }
 
