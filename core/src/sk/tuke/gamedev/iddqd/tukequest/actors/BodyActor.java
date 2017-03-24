@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
+ * {@link Actor} that can be placed in a physical {@link World}.
+ * <p>
  * Created by Steve on 08.03.2017.
  */
 public interface BodyActor extends Actor {

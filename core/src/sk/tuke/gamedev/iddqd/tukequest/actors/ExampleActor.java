@@ -2,7 +2,7 @@ package sk.tuke.gamedev.iddqd.tukequest.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -21,9 +21,9 @@ public class ExampleActor extends AbstractBodyActor {
     private static final float RESTITUTION = .6f;
     private static final float INPUT_FORCE_MULTIPLIER = 500000f;
 
-    private OrthographicCamera camera;
+    private Camera camera;
 
-    public ExampleActor(Animation animation, BodyDef.BodyType bodyType, float x, float y, OrthographicCamera camera) {
+    public ExampleActor(Animation animation, BodyDef.BodyType bodyType, float x, float y, Camera camera) {
         super(animation, bodyType, x, y);
         this.camera = camera;
     }
