@@ -32,16 +32,18 @@ public enum TaskManager {
     }
 
     private Timer.Task storeScheduledTimer(String type, Runnable action) {
-        if (!taskMap.containsKey(type)) {
-            taskMap.put(type, new LinkedList<>());
-        }
         Timer.Task task = new Timer.Task() {
             @Override
             public void run() {
                 action.run();
             }
         };
-        taskMap.get(type).add(task);
+        if (type != null) {
+            if (!taskMap.containsKey(type)) {
+                taskMap.put(type, new LinkedList<>());
+            }
+            taskMap.get(type).add(task);
+        }
         return task;
     }
 

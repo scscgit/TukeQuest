@@ -1,6 +1,5 @@
 package sk.tuke.gamedev.iddqd.tukequest.visual;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -23,9 +22,9 @@ public class Animation {
             return;
         }
         this.sprite = new Sprite(texture);
+        setScale(scale);
         // The origin needs to be at the starting corner in order for scaling to preserve position
         this.sprite.setOrigin(0, 0);
-        this.sprite.setScale(scale, scale);
     }
 
     public Animation(String textureName, float scale) {
@@ -38,11 +37,6 @@ public class Animation {
 
     public Animation(Texture texture) {
         this(texture, 1);
-    }
-
-    public Animation(Color color) {
-        this.sprite = new Sprite();
-        this.sprite.setColor(color);
     }
 
     private static Texture getTexture(String textureName) {
@@ -59,6 +53,10 @@ public class Animation {
 
     public float getHeight() {
         return this.sprite.getHeight() * this.sprite.getScaleY();
+    }
+
+    public void setScale(float scale) {
+        this.sprite.setScale(scale, scale);
     }
 
     public void draw(Batch batch, BodyActor actor) {

@@ -8,7 +8,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.BinaryVerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.ExampleActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
@@ -29,14 +31,21 @@ public class GameScreen extends AbstractScreen {
         new ExampleActor(
             new Animation("badlogic.jpg", 0.5f),
             BodyDef.BodyType.DynamicBody,
-            0,
+            50,
             300,
             camera
         ).addToWorld(this.world);
 
-        // Invisible ground
-        new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 0, 200, 500, 1)
+        // Invisible grounds
+        new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 0, 200, 200, 1)
             .addToWorld(this.world);
+        new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 200, 150, 1, 50)
+            .addToWorld(this.world);
+
+        // Places ground and two vertical walls above it
+        float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
+        new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, groundHeight).addToWorld(this.world);
+        new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, groundHeight).addToWorld(this.world);
     }
 
     private void initScheduling() {

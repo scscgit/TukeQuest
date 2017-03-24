@@ -96,7 +96,9 @@ public abstract class AbstractScreen implements Screen {
         this.batch.end();
 
         // Debug
-        debugRenderer.render(world, camera.combined);
+        if (TukeQuestGame.debug) {
+            debugRenderer.render(world, camera.combined);
+        }
     }
 
     protected void calculatePhysics() {
