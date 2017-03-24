@@ -9,8 +9,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BinaryVerticalWall;
-import sk.tuke.gamedev.iddqd.tukequest.actors.ExampleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.KeyboardGround;
+import sk.tuke.gamedev.iddqd.tukequest.actors.Player;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
@@ -28,9 +28,7 @@ public class GameScreen extends AbstractScreen {
 
     private void initActors() {
         // Create example Actors in the World
-        new ExampleActor(
-            new Animation("badlogic.jpg", 0.5f),
-            BodyDef.BodyType.DynamicBody,
+        new Player(
             50,
             300,
             camera
