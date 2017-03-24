@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.ExampleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
@@ -19,16 +20,36 @@ public class GameScreen extends AbstractScreen {
 
     public GameScreen(TukeQuestGame game) {
         super(game);
+        initActors();
+        initScheduling();
+    }
 
+    private void initActors() {
         // Create example Actors in the World
-        for (int i = 0; i < 3; i++) {
-            new ExampleActor(
-                new Animation("badlogic.jpg", 0.5f), BodyDef.BodyType.DynamicBody, i * 150, 300, camera
-            ).addToWorld(this.world);
-        }
+        new ExampleActor(
+            new Animation("badlogic.jpg", 0.5f),
+            BodyDef.BodyType.DynamicBody,
+            0,
+            300,
+            camera
+        ).addToWorld(this.world);
+
         // Invisible ground
         new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 0, 200, 500, 1)
             .addToWorld(this.world);
+    }
+
+    private void initScheduling() {
+        String namespace = "timedDifficulty";
+
+        // Every 2 seconds the difficulty gets increased
+        TaskManager.INSTANCE.scheduleTimer(namespace, 2, 2, this::difficultyIncrease);
+
+        // After 7 seconds it stops being increased
+        TaskManager.INSTANCE.scheduleTimer(namespace, 9, () -> {
+            TaskManager.INSTANCE.removeTimers(namespace);
+            System.out.println("Difficulty increasing stopped");
+        });
     }
 
     @Override
@@ -63,6 +84,12 @@ public class GameScreen extends AbstractScreen {
     public void resize(int width, int height) {
         super.resize(width, height);
         viewport.update(width, height, true);
+    }
+
+    public void difficultyIncrease() {
+        // Example implementation of difficulty increase: increasing gravity
+        System.out.println("Difficulty increased");
+        world.setGravity(world.getGravity().cpy().scl(5.5f));
     }
 
 }

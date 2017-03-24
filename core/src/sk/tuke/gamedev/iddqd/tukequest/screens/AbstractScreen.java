@@ -56,6 +56,7 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public void show() {
+        System.out.println("Scene " + this + " shown");
     }
 
     /**
@@ -71,7 +72,7 @@ public abstract class AbstractScreen implements Screen {
     }
 
     protected void actOnActors() {
-        Array<Body> worldBodies = new Array<Body>(0);
+        Array<Body> worldBodies = new Array<>(0);
         world.getBodies(worldBodies);
         for (Body body : worldBodies) {
             Actor actor = (Actor) body.getUserData();
@@ -86,7 +87,7 @@ public abstract class AbstractScreen implements Screen {
 
         // Draw the images of all Actors
         this.batch.begin();
-        Array<Body> worldBodies = new Array<Body>(0);
+        Array<Body> worldBodies = new Array<>(0);
         world.getBodies(worldBodies);
         for (Body body : worldBodies) {
             Actor actor = (Actor) body.getUserData();
@@ -103,7 +104,7 @@ public abstract class AbstractScreen implements Screen {
         world.step(1 / 60f, 6, 2);
 
         // Create an array to be filled with the bodies (it's better not to create a new one every time though)
-        Array<Body> worldBodies = new Array<Body>(0);
+        Array<Body> worldBodies = new Array<>(0);
         world.getBodies(worldBodies);
         for (Body body : worldBodies) {
             BodyActor actor = (BodyActor) body.getUserData();
