@@ -8,10 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
-import sk.tuke.gamedev.iddqd.tukequest.actors.BinaryVerticalWall;
-import sk.tuke.gamedev.iddqd.tukequest.actors.ExampleActor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.KeyboardGround;
-import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.*;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
@@ -41,6 +38,10 @@ public class GameScreen extends AbstractScreen {
             .addToWorld(this.world);
         new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 200, 150, 1, 50)
             .addToWorld(this.world);
+
+
+        // just sample platform
+        new Platform(300, 300, 2).addToWorld(world);
 
         // Places ground and two vertical walls above it
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
