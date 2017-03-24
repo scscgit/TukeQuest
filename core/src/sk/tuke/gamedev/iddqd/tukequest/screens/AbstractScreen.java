@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
@@ -27,7 +27,7 @@ public abstract class AbstractScreen implements Screen {
     private TukeQuestGame game;
     protected Camera camera;
     protected World world;
-    protected FitViewport viewport;
+    protected Viewport viewport;
 
     protected AbstractScreen(TukeQuestGame game) {
         batch = new SpriteBatch();
@@ -43,7 +43,7 @@ public abstract class AbstractScreen implements Screen {
 
     protected abstract Camera initCamera();
 
-    protected abstract FitViewport initViewport();
+    protected abstract Viewport initViewport();
 
     protected abstract World initWorld();
 

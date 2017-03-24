@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 
 import sk.tuke.gamedev.iddqd.tukequest.actors.*;
@@ -71,7 +72,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     @Override
-    protected FitViewport initViewport() {
+    protected Viewport initViewport() {
         // Setup the camera to support a virtual screen size, which always maintains the same aspect ratio
         return new FitViewport(500, 500, camera);
     }

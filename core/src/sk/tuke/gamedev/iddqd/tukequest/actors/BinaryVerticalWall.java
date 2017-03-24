@@ -24,9 +24,7 @@ public class BinaryVerticalWall extends RectangleActor {
             ANIMATION,
             BodyDef.BodyType.StaticBody,
             side == Side.LEFT ? 0 : SCREEN_WIDTH - ANIMATION.getWidth(),
-            y,
-            ANIMATION.getWidth(),
-            ANIMATION.getHeight()
+            y
         );
     }
 

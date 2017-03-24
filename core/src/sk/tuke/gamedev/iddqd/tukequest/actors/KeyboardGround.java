@@ -22,9 +22,7 @@ public class KeyboardGround extends RectangleActor {
             ANIMATION,
             BodyDef.BodyType.StaticBody,
             x,
-            y,
-            ANIMATION.getWidth(),
-            ANIMATION.getHeight()
+            y
         );
     }
 

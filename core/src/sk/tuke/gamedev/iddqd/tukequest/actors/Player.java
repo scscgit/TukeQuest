@@ -5,13 +5,16 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
  * Created by Ruza on 24.3.2017.
  */
 public class Player extends RectangleActor {
+
+    public static final Animation ANIMATION = new Animation("mario.png", 12, 1, 12, 0.2f);
 
     private static final float DENSITY = .5f;
     private static final float FRICTION = .4f;
@@ -21,7 +24,7 @@ public class Player extends RectangleActor {
     private Camera camera;
 
     public Player(float x, float y, Camera camera) {
-        super( new Animation("badlogic.jpg", 0.2f), BodyDef.BodyType.DynamicBody, x, y);
+        super(ANIMATION, BodyDef.BodyType.DynamicBody, x, y);
         this.camera = camera;
     }
 
