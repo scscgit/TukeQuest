@@ -5,7 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Shape;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
@@ -60,6 +63,8 @@ public class ExampleActor extends AbstractBodyActor {
     protected Shape createShape() {
         CircleShape shape = new CircleShape();
         shape.setRadius(getAnimation().getWidth() / 2);
+        // Shape radius will start in the center
+        shape.setPosition(new Vector2(getAnimation().getWidth() / 2, getAnimation().getHeight() / 2));
         return shape;
     }
 

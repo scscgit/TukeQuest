@@ -33,12 +33,13 @@ public abstract class AbstractBodyActor implements BodyActor {
     @Override
     public abstract void act();
 
-    public final void addToWorld(World world) {
+    public final BodyActor addToWorld(World world) {
         if (this.world != null) {
             throw new UnsupportedOperationException("The Actor is already in a World");
         }
         this.world = world;
         this.body = createBody(this.bodyType, world);
+        return this;
     }
 
     @Override

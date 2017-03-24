@@ -1,7 +1,9 @@
 package sk.tuke.gamedev.iddqd.tukequest.visual;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 
 /**
@@ -11,14 +13,19 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
  */
 public class Animation {
 
+    // Invisible animation does not provide width or height, attempt at accessing it is illegal
     public static final Animation INVISIBLE = new Animation((Texture) null);
 
-    private Texture texture;
-    private float scale;
+    private Sprite sprite;
 
     public Animation(Texture texture, float scale) {
-        this.texture = texture;
-        this.scale = scale;
+        if (texture == null) {
+            return;
+        }
+        this.sprite = new Sprite(texture);
+        // The origin needs to be at the starting corner in order for scaling to preserve position
+        this.sprite.setOrigin(0, 0);
+        this.sprite.setScale(scale, scale);
     }
 
     public Animation(String textureName, float scale) {
@@ -33,23 +40,34 @@ public class Animation {
         this(texture, 1);
     }
 
+    public Animation(Color color) {
+        this.sprite = new Sprite();
+        this.sprite.setColor(color);
+    }
+
     private static Texture getTexture(String textureName) {
         return textureName == null ? null : new Texture(textureName);
     }
 
+    public Sprite getSprite() {
+        return this.sprite;
+    }
+
     public float getWidth() {
-        return texture.getWidth() * scale;
+        return this.sprite.getWidth() * this.sprite.getScaleX();
     }
 
     public float getHeight() {
-        return texture.getHeight() * scale;
+        return this.sprite.getHeight() * this.sprite.getScaleY();
     }
 
     public void draw(Batch batch, BodyActor actor) {
-        if (texture == null) {
+        if (this.sprite == null) {
             return;
         }
-        batch.draw(texture, actor.getX(), actor.getY(), getWidth(), getHeight());
+        this.sprite.setPosition(actor.getX(), actor.getY());
+        this.sprite.setRotation(actor.getRotation());
+        this.sprite.draw(batch);
     }
 
 }

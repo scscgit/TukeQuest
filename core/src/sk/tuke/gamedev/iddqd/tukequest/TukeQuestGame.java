@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.ExampleActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 public class TukeQuestGame extends ApplicationAdapter {
@@ -47,6 +48,9 @@ public class TukeQuestGame extends ApplicationAdapter {
                 new Animation("badlogic.jpg", 0.5f), BodyDef.BodyType.DynamicBody, i * 150, 300, camera
             ).addToWorld(world);
         }
+        // Invisible ground
+        new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 0, 200, 500, 1)
+            .addToWorld(world);
     }
 
     @Override
@@ -108,7 +112,7 @@ public class TukeQuestGame extends ApplicationAdapter {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        viewport.update(width, height);
+        viewport.update(width, height, true);
     }
 
     @Override
