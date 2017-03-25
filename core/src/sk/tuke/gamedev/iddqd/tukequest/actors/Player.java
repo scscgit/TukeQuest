@@ -57,6 +57,11 @@ public class Player extends RectangleActor {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && Math.abs(getBody().getLinearVelocity().y) < 0.1f) {
             getBody().applyLinearImpulse(new Vector2(0, INPUT_FORCE_MULTIPLIER), getCenter(), true);
         }
+
+        // fixme: doesn't work properly
+        camera.position.x = this.getX();
+        camera.position.y = this.getY();
+        camera.update();
     }
 
     @Override
