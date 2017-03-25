@@ -79,7 +79,7 @@ public class Player extends RectangleActor {
 
 //        camera.position.x = this.getX();
         int calculatedY = (int) this.getY();
-        if (calculatedY - TukeQuestGame.SCREEN_HEIGHT <= 0) {
+        if (calculatedY - (TukeQuestGame.SCREEN_HEIGHT / 2) <= 0) {
             calculatedY = TukeQuestGame.SCREEN_HEIGHT / 2;
         }
         camera.position.y = calculatedY;
