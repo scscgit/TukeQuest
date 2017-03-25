@@ -15,7 +15,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class Player extends RectangleActor {
 
-    public static final Animation ANIMATION = new Animation("player.png", 3, 3, 0, 2, 0.2f);
+    public static final Animation ANIMATION = new Animation("custom_player.png", 3, 3, 0, 8, 0.2f);
 
     private static final float DENSITY = .5f;
     private static final float FRICTION = .4f;
