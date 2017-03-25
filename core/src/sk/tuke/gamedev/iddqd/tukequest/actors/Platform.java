@@ -1,17 +1,16 @@
 package sk.tuke.gamedev.iddqd.tukequest.actors;
 
-
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 public class Platform extends RectangleActor {
 
-    private static final Animation ANIMATION;
+    private final static Animation ANIMATION;
+
     static {
+        // Scales the animation to the full screen width
         ANIMATION = new Animation("jerusrockwallsml.jpg");
-        ANIMATION.getSprite().getTexture().setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
     }
 
     // length specifies how many blocks the platform consists of
@@ -24,8 +23,15 @@ public class Platform extends RectangleActor {
             ANIMATION.getWidth() * length,
             ANIMATION.getHeight()
         );
-        // fixme: nasty hack to aling libgdx object texture to box2d object
-        // does not work, since ANIMATION is static!!!
-//        ANIMATION.getSprite().setScale(length, 1);
     }
+
+    @Override
+    public void act() {
+        super.act();
+        if (PlatformManager.INSTANCE == null) {
+            throw new RuntimeException(PlatformManager.class.getSimpleName() + " instance is not initialized");
+        }
+        getBody().setActive(PlatformManager.INSTANCE.isPlatformActive(this));
+    }
+
 }

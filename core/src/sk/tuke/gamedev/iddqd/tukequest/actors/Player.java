@@ -18,7 +18,7 @@ public class Player extends RectangleActor {
 
     private static final float DENSITY = .5f;
     private static final float FRICTION = .4f;
-    private static final float INPUT_FORCE_MULTIPLIER = 500000f;
+    private static final float INPUT_FORCE_MULTIPLIER = 1_000_000f;
 
     private Camera camera;
 
@@ -55,8 +55,14 @@ public class Player extends RectangleActor {
 
         // Jump
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && Math.abs(getBody().getLinearVelocity().y) < 0.1f) {
-            getBody().setLinearVelocity(new Vector2(0, 1000_000f));
+            getBody().applyLinearImpulse(new Vector2(0, INPUT_FORCE_MULTIPLIER), getCenter(), true);
         }
+    }
+
+    @Override
+    protected void configureBodyDef(BodyDef bodyDef) {
+        // Player cannot rotate
+        bodyDef.fixedRotation = true;
     }
 
     @Override

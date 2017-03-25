@@ -15,6 +15,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.BinaryVerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Player;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
@@ -25,17 +26,17 @@ public class GameScreen extends AbstractScreen {
 
     public GameScreen(TukeQuestGame game) {
         super(game);
-        initActors();
-        initScheduling();
     }
 
     private void initActors() {
         // Create example Actors in the World
-        new Player(
+        Player player = new Player(
             50,
             300,
             camera
         ).addToWorld(this.world);
+
+        PlatformManager.INSTANCE = new PlatformManager(player);
 
         // Invisible grounds
         new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 0, 200, 200, 1)
@@ -45,11 +46,11 @@ public class GameScreen extends AbstractScreen {
 
 
         // just sample platform
-        new Platform(300, 300, 1).addToWorld(world);
+        new Platform(300, 100, 1).addToWorld(world);
 
-        new Platform(200, 350, 2).addToWorld(world);
+        new Platform(200, 200, 2).addToWorld(world);
 
-        new Platform(100, 400, 3).addToWorld(world);
+        new Platform(100, 300, 3).addToWorld(world);
 
         // Places ground and two vertical walls above it
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
@@ -61,7 +62,7 @@ public class GameScreen extends AbstractScreen {
         String namespace = "timedDifficulty";
 
         // Every 2 seconds the difficulty gets increased
-        TaskManager.INSTANCE.scheduleTimer(namespace, 2, 2, this::difficultyIncrease);
+//        TaskManager.INSTANCE.scheduleTimer(namespace, 2, 2, this::difficultyIncrease);
 
         // After 7 seconds it stops being increased
         TaskManager.INSTANCE.scheduleTimer(namespace, 9, () -> {
@@ -93,6 +94,8 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void show() {
         super.show();
+        initActors();
+        initScheduling();
     }
 
     /**

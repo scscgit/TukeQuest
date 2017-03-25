@@ -12,12 +12,28 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class RectangleActor extends AbstractBodyActor {
 
-    protected float width;
-    protected float height;
+    private float width;
+    private float height;
 
     public RectangleActor(Animation animation, BodyDef.BodyType bodyType, float x, float y, float width, float height) {
         super(animation, bodyType, x, y);
         this.width = width;
+        this.height = height;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    protected void setWidth(float width) {
+        this.width = width;
+    }
+
+    protected void setHeight(float height) {
         this.height = height;
     }
 
