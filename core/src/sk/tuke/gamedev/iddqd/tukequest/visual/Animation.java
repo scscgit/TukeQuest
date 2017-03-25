@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 
+import java.security.InvalidParameterException;
+
 /**
  * Actor's graphical representation, that can take any visual form, either a static image or animated.
  * <p>
@@ -30,24 +32,19 @@ public class Animation {
 
     // Static image constructors
 
+    public Animation(Sprite sprite, float scale) {
+        this.scale = scale;
+        setSprite(sprite);
+    }
+
     public Animation(Texture texture, float scale) {
+        // Special case of invisible animation that does not offer width or height
         if (texture == null) {
             return;
         }
         this.scale = scale;
         setSprite(new Sprite(texture));
     }
-
-    public Animation(String textureName, float scale, int width, int height) {
-        if (textureName == null) {
-            return;
-        }
-        Texture texture = getTexture(textureName);
-        this.scale = scale;
-        texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        setSprite(new Sprite(texture, width, height));
-    }
-
 
     public Animation(String textureName, float scale) {
         this(getTexture(textureName), scale);
@@ -61,13 +58,45 @@ public class Animation {
         this(texture, 1);
     }
 
+    /**
+     * Repeat-scaled texture.
+     *
+     * @param texture Texture.
+     * @param scale   Symmetrical scale multiplier for both horizontal and vertical dimensions.
+     * @param width   New width of the texture. If not equal to original width, it will get repeated.
+     * @param height  New height of the texture. If not equal to original width, it will get repeated.
+     */
+    public Animation(Texture texture, float scale, int width, int height) {
+        // Special case of invisible animation that does not offer width or height
+        if (texture == null) {
+            return;
+        }
+        this.scale = scale;
+        texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        setSprite(new Sprite(texture, width, height));
+    }
+
+    public Animation(String textureName, float scale, int width, int height) {
+        this(getTexture(textureName), scale, width, height);
+    }
+
     // Animated image constructors
 
     public Animation(com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> animationGdx) {
         setAnimationGdx(animationGdx);
     }
 
-    public Animation(Texture spriteSheet, int columns, int rows, int images, float frameDuration) {
+    /**
+     * An actual animation support.
+     *
+     * @param spriteSheet   Texture containing a grid of multiple evenly-spaced images to be used in animation.
+     * @param columns       Number of grid columns of images that the spriteSheet texture contains.
+     * @param rows          Number of grid rows of images that the spriteSheet texture contains.
+     * @param firstImage    Index of the first image to be used, starting from 0, maximum value of columns * rows - 1.
+     * @param lastImage     Index of the last image to be used, starting from 0, maximum value of columns * rows - 1.
+     * @param frameDuration Duration of the single animation frame.
+     */
+    public Animation(Texture spriteSheet, int columns, int rows, int firstImage, int lastImage, float frameDuration) {
         // Use the split utility method to create a 2D array of TextureRegions. This is
         // possible because this sprite sheet contains frames of equal size and they are all aligned.
         TextureRegion[][] splitSpriteSheet = TextureRegion.split(spriteSheet,
@@ -76,24 +105,43 @@ public class Animation {
 
         // Initialize the Animation with the frame interval and array of frames
         setAnimationGdx(new com.badlogic.gdx.graphics.g2d.Animation<>(
-            frameDuration, walkFrames(splitSpriteSheet, columns, rows, images)));
+            frameDuration, walkFrames(splitSpriteSheet, columns, rows, firstImage, lastImage)));
     }
 
-    private static TextureRegion[] walkFrames(TextureRegion[][] splitSpriteSheet, int columns, int rows, int images) {
-        // Place the regions into a 1D array in the correct order, starting from the top
-        // left, going across first. The Animation constructor requires a 1D array.
-        TextureRegion[] walkFrames = new TextureRegion[columns * rows];
+    public Animation(Texture spriteSheet, int columns, int rows, int images, float frameDuration) {
+        this(spriteSheet, columns, rows, 0, images, frameDuration);
+    }
+
+    /**
+     * Place the regions into a 1D array in the correct order, starting from the top
+     * left, going across first. The Animation constructor requires a 1D array.
+     */
+    private static TextureRegion[] walkFrames(TextureRegion[][] splitSpriteSheet,
+                                              int columns,
+                                              int rows,
+                                              int firstImage,
+                                              int lastImage) {
+        if (firstImage < 0 || lastImage > columns * rows - 1 || firstImage > lastImage) {
+            throw new InvalidParameterException("Invalid input values");
+        }
+        TextureRegion[] walkFrames = new TextureRegion[lastImage - firstImage + 1];
         int index = 0;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                walkFrames[index++] = splitSpriteSheet[i][j];
-                // TODO: check boundary input cases
-                if (index > images) {
+                if (index++ < firstImage) {
+                    continue;
+                }
+                walkFrames[index - 1] = splitSpriteSheet[i][j];
+                if (index > lastImage) {
                     return walkFrames;
                 }
             }
         }
         return walkFrames;
+    }
+
+    public Animation(String spriteSheet, int columns, int rows, int firstImage, int lastImage, float speed) {
+        this(getTexture(spriteSheet), columns, rows, firstImage, lastImage, speed);
     }
 
     public Animation(String spriteSheet, int columns, int rows, int images, float speed) {
