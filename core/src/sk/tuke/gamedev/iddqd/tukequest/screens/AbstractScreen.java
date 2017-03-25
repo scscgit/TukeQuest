@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -29,11 +31,17 @@ public abstract class AbstractScreen implements Screen {
     protected World world;
     protected Viewport viewport;
 
+    public static Texture backgroundTexture;
+    public static Sprite backgroundSprite;
+
     protected AbstractScreen(TukeQuestGame game) {
         batch = new SpriteBatch();
 
         // Physics debug renderer
         debugRenderer = new Box2DDebugRenderer();
+
+        backgroundTexture = new Texture("background.jpg");
+        backgroundSprite = new Sprite(backgroundTexture);
 
         this.game = game;
         this.camera = initCamera();
@@ -82,11 +90,12 @@ public abstract class AbstractScreen implements Screen {
 
     protected void renderGraphics() {
         // Reset the screen
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Draw the images of all Actors
         this.batch.begin();
+        renderBackground();
         this.batch.setProjectionMatrix(camera.combined);
         Array<Body> worldBodies = new Array<>(0);
         world.getBodies(worldBodies);
@@ -100,6 +109,12 @@ public abstract class AbstractScreen implements Screen {
         if (TukeQuestGame.debug) {
             debugRenderer.render(world, camera.combined);
         }
+    }
+
+    protected  void renderBackground() {
+        float imageX = camera.position.x - camera.viewportWidth / 2;
+        float imageY = camera.position.y - camera.viewportHeight / 2;
+        batch.draw(backgroundTexture, imageX, imageY);
     }
 
     protected void calculatePhysics() {
