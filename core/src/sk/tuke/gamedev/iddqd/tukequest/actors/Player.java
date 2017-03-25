@@ -74,8 +74,15 @@ public class Player extends RectangleActor {
     }
 
     private void levelCameraOnPlayerPosition() {
+
+        // make sure camera does not go below ground
+
 //        camera.position.x = this.getX();
-        camera.position.y = this.getY();
+        int calculatedY = (int) this.getY();
+        if (calculatedY - TukeQuestGame.SCREEN_HEIGHT <= 0) {
+            calculatedY = TukeQuestGame.SCREEN_HEIGHT / 2;
+        }
+        camera.position.y = calculatedY;
         camera.position.x = TukeQuestGame.SCREEN_WIDTH / 2;
         camera.update();
     }
