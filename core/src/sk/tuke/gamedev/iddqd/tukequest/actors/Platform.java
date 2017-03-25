@@ -14,7 +14,7 @@ public class Platform extends RectangleActor {
     }
 
     // length specifies how many blocks the platform consists of
-    public Platform(float x, float y, int length) {
+    public Platform(float x, float y) {
         super(
             ANIMATION,
             BodyDef.BodyType.StaticBody,

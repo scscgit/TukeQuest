@@ -15,6 +15,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.BinaryVerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Player;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
@@ -46,11 +47,9 @@ public class GameScreen extends AbstractScreen {
 
 
         // just sample platform
-        new Platform(300, 100, 1).addToWorld(world);
+        int PLATFORMS_STARTING_Y = 50;
 
-        new Platform(200, 200, 2).addToWorld(world);
-
-        new Platform(100, 300, 3).addToWorld(world);
+        PlatformGenerator.generateNext(PLATFORMS_STARTING_Y).forEach(platform -> platform.addToWorld(world));
 
         // Places ground and two vertical walls above it
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
