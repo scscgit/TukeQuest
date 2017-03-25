@@ -44,7 +44,11 @@ public class GameScreen extends AbstractScreen {
 
 
         // just sample platform
-        new Platform(300, 300, 2).addToWorld(world);
+        new Platform(300, 300, 1).addToWorld(world);
+
+        new Platform(200, 350, 2).addToWorld(world);
+
+        new Platform(100, 400, 3).addToWorld(world);
 
         // Places ground and two vertical walls above it
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
