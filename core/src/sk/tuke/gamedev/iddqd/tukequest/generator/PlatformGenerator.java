@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 public class PlatformGenerator {
+    private static final int PLATFORM_TEXTURE_CHANGE_RATE = 50;
 
     private static int platformCount = 0;
+    private static int currentTextureIndex;
 
     private  static final int Y_STEP = 64;
     public static int highestPlatformY;
@@ -24,16 +26,16 @@ public class PlatformGenerator {
 
         Random random = new Random();
         for (int i=0; i<count; i++) {
+            platformCount++;
             startingY  = startingY + Y_STEP;
             int randomNum = random.nextInt((X_COORDINATE_RANGE - WALL_WIDTH) + 1) + WALL_WIDTH;
-            platforms.add(new Platform(randomNum, startingY));
+            platforms.add(new Platform(randomNum, startingY, currentTextureIndex));
 
-            if (platformCount % 50 == 0) {
+            if (platformCount % PLATFORM_TEXTURE_CHANGE_RATE == 0) {
                 changePlatformType();
             }
         }
 
-        platformCount = platformCount + count;
         highestPlatformY = startingY;
 
         return platforms;
@@ -41,9 +43,18 @@ public class PlatformGenerator {
 
     private static void changePlatformType() {
         System.out.println("Should change platform type now!!!");
+        int texturesCount = Platform.ANIMATIONS.size();
+        int textureOrder = platformCount / PLATFORM_TEXTURE_CHANGE_RATE;
+
+        // this is to make sure there always is a texture
+        // this method allows for cyclic reuse of textures from first to last and over again
+        currentTextureIndex = textureOrder % texturesCount;
+
+
     }
 
     public static List<Platform> generateNext(int count) {
         return generateNext(count, highestPlatformY);
     }
+
 }
