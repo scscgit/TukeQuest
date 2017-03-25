@@ -11,8 +11,9 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class BinaryVerticalWall extends RectangleActor {
 
+    public static final Animation ANIMATION = new Animation("binary_vertical_wall.jpg");
+
     private static final int SCREEN_WIDTH = TukeQuestGame.SCREEN_WIDTH;
-    private static Animation ANIMATION = new Animation("binary_vertical_wall.jpg");
 
     public enum Side {
         LEFT, RIGHT
@@ -23,9 +24,7 @@ public class BinaryVerticalWall extends RectangleActor {
             ANIMATION,
             BodyDef.BodyType.StaticBody,
             side == Side.LEFT ? 0 : SCREEN_WIDTH - ANIMATION.getWidth(),
-            y,
-            ANIMATION.getWidth(),
-            ANIMATION.getHeight()
+            y
         );
     }
 

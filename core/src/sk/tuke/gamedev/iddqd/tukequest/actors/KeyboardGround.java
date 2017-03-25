@@ -9,7 +9,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class KeyboardGround extends RectangleActor {
 
-    private static Animation ANIMATION;
+    public static final Animation ANIMATION;
 
     static {
         // Scales the animation to the full screen width
@@ -22,9 +22,7 @@ public class KeyboardGround extends RectangleActor {
             ANIMATION,
             BodyDef.BodyType.StaticBody,
             x,
-            y,
-            ANIMATION.getWidth(),
-            ANIMATION.getHeight()
+            y
         );
     }
 

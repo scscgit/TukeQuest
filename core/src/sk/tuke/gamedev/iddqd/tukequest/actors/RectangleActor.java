@@ -12,13 +12,20 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class RectangleActor extends AbstractBodyActor {
 
-    private float width;
-    private float height;
+    protected float width;
+    protected float height;
 
     public RectangleActor(Animation animation, BodyDef.BodyType bodyType, float x, float y, float width, float height) {
         super(animation, bodyType, x, y);
         this.width = width;
         this.height = height;
+    }
+
+    /**
+     * Implicit animation size constructor.
+     */
+    public RectangleActor(Animation animation, BodyDef.BodyType bodyType, float x, float y) {
+        this(animation, bodyType, x, y, animation.getWidth(), animation.getHeight());
     }
 
     @Override
@@ -28,8 +35,13 @@ public class RectangleActor extends AbstractBodyActor {
     @Override
     protected Shape createShape() {
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(this.width / 2, this.height / 2, new Vector2(this.width / 2, this.height / 2), 0);
+        shape.setAsBox(this.width / 2, this.height / 2, getCenterOffset(), 0);
         return shape;
+    }
+
+    @Override
+    public Vector2 getCenterOffset() {
+        return new Vector2(this.width / 2, this.height / 2);
     }
 
     @Override

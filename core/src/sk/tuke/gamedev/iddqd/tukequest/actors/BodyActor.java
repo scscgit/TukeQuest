@@ -32,6 +32,10 @@ public interface BodyActor extends Actor {
 
     void setPosition(Vector2 position);
 
+    Vector2 getCenterOffset();
+
+    Vector2 getCenter();
+
     float getRotation();
 
     void setRotation(float rotationDegrees);
