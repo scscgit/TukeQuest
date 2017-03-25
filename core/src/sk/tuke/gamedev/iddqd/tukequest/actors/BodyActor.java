@@ -12,7 +12,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public interface BodyActor extends Actor {
 
-    BodyActor addToWorld(World world);
+    <T extends BodyActor> T addToWorld(World world);
 
     Animation getAnimation();
 

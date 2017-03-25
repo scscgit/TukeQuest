@@ -15,6 +15,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.BinaryVerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Player;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
@@ -25,17 +26,17 @@ public class GameScreen extends AbstractScreen {
 
     public GameScreen(TukeQuestGame game) {
         super(game);
-        initActors();
-        initScheduling();
     }
 
     private void initActors() {
         // Create example Actors in the World
-        new Player(
+        Player player = new Player(
             50,
             300,
             camera
         ).addToWorld(this.world);
+
+        PlatformManager.INSTANCE = new PlatformManager(player);
 
         // Invisible grounds
         new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 0, 200, 200, 1)
@@ -89,6 +90,8 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void show() {
         super.show();
+        initActors();
+        initScheduling();
     }
 
     /**

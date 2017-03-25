@@ -33,13 +33,14 @@ public abstract class AbstractBodyActor implements BodyActor {
     @Override
     public abstract void act();
 
-    public final BodyActor addToWorld(World world) {
+    @SuppressWarnings("unchecked")
+    public final <T extends BodyActor> T addToWorld(World world) {
         if (this.world != null) {
             throw new UnsupportedOperationException("The Actor is already in a World");
         }
         this.world = world;
         this.body = createBody(this.bodyType, world);
-        return this;
+        return (T) this;
     }
 
     @Override
@@ -138,6 +139,8 @@ public abstract class AbstractBodyActor implements BodyActor {
         // Set our body's starting position in the world
         bodyDef.position.set(getX(), getY());
 
+        configureBodyDef(bodyDef);
+
         // Create our body in the world using our body definition
         Body body = world.createBody(bodyDef);
 
@@ -146,6 +149,9 @@ public abstract class AbstractBodyActor implements BodyActor {
 
         body.setUserData(this);
         return body;
+    }
+
+    protected void configureBodyDef(BodyDef bodyDef) {
     }
 
     protected abstract Shape createShape();
