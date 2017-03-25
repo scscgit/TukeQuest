@@ -87,6 +87,7 @@ public abstract class AbstractScreen implements Screen {
 
         // Draw the images of all Actors
         this.batch.begin();
+        this.batch.setProjectionMatrix(camera.combined);
         Array<Body> worldBodies = new Array<>(0);
         world.getBodies(worldBodies);
         for (Body body : worldBodies) {
