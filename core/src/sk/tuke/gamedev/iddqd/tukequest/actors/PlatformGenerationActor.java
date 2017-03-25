@@ -1,6 +1,5 @@
 package sk.tuke.gamedev.iddqd.tukequest.actors;
 
-
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.World;
@@ -15,7 +14,6 @@ public class PlatformGenerationActor implements Actor {
     private Camera camera;
     private World world;
 
-
     public PlatformGenerationActor(Camera camera, World world) {
         this.camera = camera;
         this.world = world;
@@ -23,20 +21,20 @@ public class PlatformGenerationActor implements Actor {
 
     @Override
     public void draw(Batch batch) {
-
     }
 
     @Override
     public void act() {
-
-        float currentY = camera.position.y;
-
-        if (PlatformGenerator.highestPlatformY < currentY + TukeQuestGame.SCREEN_HEIGHT) {
-            PlatformGenerator.generateNext(1).forEach(platform -> platform.addToWorld(world));
-            System.out.println("PlatformGenerationActor generated new platform!");
+        if (PlatformGenerator.highestPlatformY < this.camera.position.y + TukeQuestGame.SCREEN_HEIGHT) {
+            generate(1);
         }
-
         // TODO: implement some cleanUp logic here
-
     }
+
+    public void generate(int platformCount) {
+        PlatformGenerator.generateNext(platformCount).forEach(platform -> platform.addToWorld(world));
+        System.out.println("PlatformGenerationActor generated "
+            + platformCount + " new platform" + (platformCount == 1 ? "" : "s") + "!");
+    }
+
 }

@@ -22,6 +22,4 @@ public class PlatformManager {
         return this.player.getY() >= platform.getY() + platform.getHeight();
     }
 
-
-
 }

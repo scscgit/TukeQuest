@@ -40,4 +40,5 @@ public class BinaryVerticalWall extends RectangleActor {
         this.getBody().getPosition().y = camera.position.y;
         super.act();
     }
+
 }

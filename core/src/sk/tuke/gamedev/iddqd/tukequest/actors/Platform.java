@@ -5,9 +5,7 @@ import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Platform extends RectangleActor {
 
@@ -24,7 +22,6 @@ public class Platform extends RectangleActor {
 
     }
 
-    // length specifies how many blocks the platform consists of
     public Platform(float x, float y, int texture) {
         super(
             ANIMATIONS.get(texture),

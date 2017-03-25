@@ -20,39 +20,15 @@ import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
  */
 public class GameScreen extends AbstractScreen {
 
+    /**
+     * Number of platforms displayed at once.
+     */
+    private static final int PLATFORMS_COUNT = 10;
+
+    private Player player;
+
     public GameScreen(TukeQuestGame game) {
         super(game);
-    }
-
-    private void initActors() {
-
-        // Places ground and two vertical walls above it
-        float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
-        new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, groundHeight, camera).addToWorld(this.world);
-        new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, groundHeight, camera).addToWorld(this.world);
-
-
-        // generate 10 platforms starting from groundHeight
-        int PLATFORMS_COUNT = 10;
-        int PLATFORMS_STARTING_Y = (int) groundHeight;
-
-        PlatformGenerator.generateNext(PLATFORMS_COUNT, PLATFORMS_STARTING_Y).forEach(platform -> platform.addToWorld(world));
-
-        // Create Player standing at the KeyboardGround in the middle of the screen
-        Player player = new Player(
-            TukeQuestGame.SCREEN_WIDTH / 2,
-            groundHeight,
-            camera
-        ).addToWorld(this.world);
-
-        PlatformManager.INSTANCE = new PlatformManager(player);
-
-        addActor(new PlatformGenerationActor(camera, world));
-    }
-
-
-
-    private void initScheduling() {
     }
 
     @Override
@@ -79,16 +55,35 @@ public class GameScreen extends AbstractScreen {
     public void show() {
         super.show();
         initActors();
-        initScheduling();
+        PlatformManager.INSTANCE = new PlatformManager(this.player);
+    }
+
+    private void initActors() {
+        // Place ground and two vertical walls above it
+        float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
+        new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, groundHeight, camera).addToWorld(this.world);
+        new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, groundHeight, camera).addToWorld(this.world);
+
+        // Generate platforms starting from height of the ground
+        // TODO: put all generation code into PlatformGenerationActor
+        PlatformGenerator.generateNext(PLATFORMS_COUNT, groundHeight).forEach(platform -> platform.addToWorld(world));
+        addActor(new PlatformGenerationActor(camera, world));
+
+        // Create Player standing at the KeyboardGround in the middle of the screen
+        this.player = new Player(
+            TukeQuestGame.SCREEN_WIDTH / 2 - Player.ANIMATION.getWidth() / 2,
+            groundHeight,
+            camera
+        ).addToWorld(this.world);
     }
 
     /**
-     * Screen resized event.
+     * Called when this screen is no longer the current screen for a {@link Game}.
      */
     @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        viewport.update(width, height, true);
+    public void hide() {
+        super.hide();
+        PlatformManager.INSTANCE = null;
     }
 
     public void difficultyIncrease() {

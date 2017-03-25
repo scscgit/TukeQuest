@@ -19,7 +19,7 @@ public class Player extends RectangleActor {
 
     private static final float DENSITY = .5f;
     private static final float FRICTION = .4f;
-    private static final float INPUT_FORCE_MULTIPLIER = 100_000f;
+    private static final float INPUT_FORCE_MULTIPLIER = 200_000f;
 
     private Camera camera;
     private boolean cameraDebugMovementEnabled = false;
@@ -56,55 +56,55 @@ public class Player extends RectangleActor {
         }
 
         // Jump
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && Math.abs(getBody().getLinearVelocity().y) < 0.1f) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && canJump()) {
             getBody().applyLinearImpulse(new Vector2(0, INPUT_FORCE_MULTIPLIER), getCenter(), true);
         }
 
-        // togle between camera debug mode and normal navigation
+        // Toggle between camera debug mode and normal navigation
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
-            cameraDebugMovementEnabled = !cameraDebugMovementEnabled;
+            this.cameraDebugMovementEnabled = !this.cameraDebugMovementEnabled;
         }
 
-        if (cameraDebugMovementEnabled) {
+        if (this.cameraDebugMovementEnabled) {
             debugCameraMovement();
-
         } else {
             levelCameraOnPlayerPosition();
         }
     }
 
+    private boolean canJump() {
+        // TODO: fix
+        return Math.abs(getBody().getLinearVelocity().y) < 0.1f;
+    }
+
+    /**
+     * Make sure camera does not go below ground.
+     */
     private void levelCameraOnPlayerPosition() {
-
-        // make sure camera does not go below ground
-
-//        camera.position.x = this.getX();
         int calculatedY = (int) this.getY();
         if (calculatedY - (TukeQuestGame.SCREEN_HEIGHT / 2) <= 0) {
             calculatedY = TukeQuestGame.SCREEN_HEIGHT / 2;
         }
-        camera.position.y = calculatedY;
-        camera.position.x = TukeQuestGame.SCREEN_WIDTH / 2;
-        camera.update();
+        this.camera.position.y = calculatedY;
+        this.camera.position.x = TukeQuestGame.SCREEN_WIDTH / 2;
+        this.camera.update();
     }
 
     private void debugCameraMovement() {
         // Apply force using keyboard
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            camera.position.y = camera.position.y + 10;
+            this.camera.position.y = this.camera.position.y + 10;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            camera.position.y = camera.position.y - 10;
+            this.camera.position.y = this.camera.position.y - 10;
         }
-
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            camera.position.x = camera.position.x + 10;
+            this.camera.position.x = this.camera.position.x + 10;
         }
-
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            camera.position.x = camera.position.x - 10;
+            this.camera.position.x = this.camera.position.x - 10;
         }
-
-        camera.update();
+        this.camera.update();
     }
 
     @Override

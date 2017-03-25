@@ -85,7 +85,6 @@ public abstract class AbstractBodyActor implements BodyActor {
         this.y = y;
     }
 
-
     /**
      * Convenience setter method instead of setX(x), setY(y).
      *

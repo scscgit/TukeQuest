@@ -7,7 +7,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -19,9 +18,7 @@ import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,31 +26,19 @@ import java.util.Set;
  */
 public abstract class AbstractScreen implements Screen {
 
-    private final SpriteBatch batch;
-    private final Box2DDebugRenderer debugRenderer;
-    private TukeQuestGame game;
+    public static Texture backgroundTexture = new Texture("background.jpg");
+
     protected Camera camera;
     protected World world;
     protected Viewport viewport;
-
-    public static Texture backgroundTexture;
-    public static Sprite backgroundSprite;
-
+    private final Array<Body> temporaryWorldBodies = new Array<>();
+    private SpriteBatch batch;
+    private Box2DDebugRenderer debugRenderer;
+    private TukeQuestGame game;
     private Set<Actor> actors = new HashSet<>();
 
     protected AbstractScreen(TukeQuestGame game) {
-        batch = new SpriteBatch();
-
-        // Physics debug renderer
-        debugRenderer = new Box2DDebugRenderer();
-
-        backgroundTexture = new Texture("background.jpg");
-        backgroundSprite = new Sprite(backgroundTexture);
-
         this.game = game;
-        this.camera = initCamera();
-        this.viewport = initViewport();
-        this.world = initWorld();
     }
 
     protected abstract Camera initCamera();
@@ -71,6 +56,14 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public void show() {
+        // Physics debug renderer
+        this.debugRenderer = new Box2DDebugRenderer();
+
+        this.batch = new SpriteBatch();
+        this.camera = initCamera();
+        this.viewport = initViewport();
+        this.world = initWorld();
+
         System.out.println("Screen " + this + " shown");
     }
 
@@ -86,25 +79,23 @@ public abstract class AbstractScreen implements Screen {
         calculatePhysics();
     }
 
-    // this method is used for adding actors that shouldn't be rendered, but their act() method should be called during each render
+    /**
+     * Adding any {@link Actor} other than {@link BodyActor}, that should have its callbacks run.
+     */
     public void addActor(Actor actor) {
         if (actor instanceof BodyActor) {
             throw new IllegalArgumentException("BodyActors should be added to world!");
         }
-
-        actors.add(actor);
+        this.actors.add(actor);
     }
 
-
     protected void actOnActors() {
-        Array<Body> worldBodies = new Array<>(0);
-        world.getBodies(worldBodies);
-        for (Body body : worldBodies) {
+        world.getBodies(this.temporaryWorldBodies);
+        for (Body body : this.temporaryWorldBodies) {
             Actor actor = (Actor) body.getUserData();
             actor.act();
         }
-
-        for (Actor actor : actors) {
+        for (Actor actor : this.actors) {
             actor.act();
         }
     }
@@ -117,24 +108,26 @@ public abstract class AbstractScreen implements Screen {
         // Draw the images of all Actors
         this.batch.begin();
         renderBackground();
-        this.batch.setProjectionMatrix(camera.combined);
-        Array<Body> worldBodies = new Array<>(0);
-        world.getBodies(worldBodies);
-        for (Body body : worldBodies) {
+        this.batch.setProjectionMatrix(this.camera.combined);
+        world.getBodies(this.temporaryWorldBodies);
+        for (Body body : this.temporaryWorldBodies) {
             Actor actor = (Actor) body.getUserData();
+            actor.draw(this.batch);
+        }
+        for (Actor actor : this.actors) {
             actor.draw(this.batch);
         }
         this.batch.end();
 
         // Debug
         if (TukeQuestGame.debug) {
-            debugRenderer.render(world, camera.combined);
+            debugRenderer.render(world, this.camera.combined);
         }
     }
 
     protected void renderBackground() {
-        float imageX = camera.position.x - camera.viewportWidth / 2;
-        float imageY = camera.position.y - camera.viewportHeight / 2;
+        float imageX = this.camera.position.x - this.camera.viewportWidth / 2;
+        float imageY = this.camera.position.y - this.camera.viewportHeight / 2;
         batch.draw(backgroundTexture, imageX, imageY);
     }
 
@@ -142,10 +135,8 @@ public abstract class AbstractScreen implements Screen {
         // Progress physics, libGDX recommends timestep either 1/45f (which is 1/45th of a second) or 1/300f
         world.step(1 / 60f, 6, 2);
 
-        // Create an array to be filled with the bodies (it's better not to create a new one every time though)
-        Array<Body> worldBodies = new Array<>(0);
-        world.getBodies(worldBodies);
-        for (Body body : worldBodies) {
+        world.getBodies(this.temporaryWorldBodies);
+        for (Body body : this.temporaryWorldBodies) {
             BodyActor actor = (BodyActor) body.getUserData();
             if (actor == null) {
                 System.out.println("Warning: non-physical actor has been added to the World");
@@ -163,6 +154,7 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public void resize(int width, int height) {
+        viewport.update(width, height, true);
         System.out.println("Screen " + this + " resized");
     }
 
@@ -195,9 +187,9 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public void dispose() {
-        batch.dispose();
-        debugRenderer.dispose();
-        world.dispose();
+        this.batch.dispose();
+        this.debugRenderer.dispose();
+        this.world.dispose();
         System.out.println("Screen " + this + " disposed");
     }
 

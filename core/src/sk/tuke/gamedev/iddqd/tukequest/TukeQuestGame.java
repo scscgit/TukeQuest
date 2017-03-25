@@ -18,9 +18,9 @@ public class TukeQuestGame extends Game {
         this.gameScreen = new GameScreen(this);
         setScreen(this.gameScreen);
 
-        // Delaying turning the debug on
-        debug = false;
+        // Delaying turning the debug on and try to reset the screen to test game stability. TODO: remove this.
         TaskManager.INSTANCE.scheduleTimer(null, 2, () -> debug = true);
+        TaskManager.INSTANCE.scheduleTimer(null, 1, () -> setScreen(new GameScreen(this)));
 
         System.out.println("Game " + this + " created");
     }
