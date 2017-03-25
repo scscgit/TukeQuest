@@ -15,11 +15,11 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class Player extends RectangleActor {
 
-    public static final Animation ANIMATION = new Animation("mario.png", 12, 1, 12, 0.2f);
+    public static final Animation ANIMATION = new Animation("player.png", 3, 3, 12, 0.2f);
 
     private static final float DENSITY = .5f;
     private static final float FRICTION = .4f;
-    private static final float INPUT_FORCE_MULTIPLIER = 1_000_000f;
+    private static final float INPUT_FORCE_MULTIPLIER = 100_000f;
 
     private Camera camera;
     private boolean cameraDebugMovementEnabled = false;
