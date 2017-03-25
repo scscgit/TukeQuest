@@ -1,8 +1,9 @@
-package sk.tuke.gamedev.iddqd.tukequest.actors;
+package sk.tuke.gamedev.iddqd.tukequest.actors.game;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**

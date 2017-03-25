@@ -1,4 +1,4 @@
-package sk.tuke.gamedev.iddqd.tukequest.actors;
+package sk.tuke.gamedev.iddqd.tukequest.actors.game.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**

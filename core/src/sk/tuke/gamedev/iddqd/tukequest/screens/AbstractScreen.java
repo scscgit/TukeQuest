@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.ActOnAdd;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 
@@ -84,9 +85,14 @@ public abstract class AbstractScreen implements Screen {
      */
     public void addActor(Actor actor) {
         if (actor instanceof BodyActor) {
-            throw new IllegalArgumentException("BodyActors should be added to world!");
+            ((BodyActor) actor).addToWorld(this.world);
+        } else {
+            this.actors.add(actor);
         }
-        this.actors.add(actor);
+        // NOTE: BodyActors will not execute this if they are just added using the method BodyActor:addToWorld
+        if (actor instanceof ActOnAdd) {
+            ((ActOnAdd) actor).onAddedToScreen(this);
+        }
     }
 
     protected void actOnActors() {

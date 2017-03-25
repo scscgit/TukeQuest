@@ -1,7 +1,7 @@
 package sk.tuke.gamedev.iddqd.tukequest.generator;
 
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
-import sk.tuke.gamedev.iddqd.tukequest.actors.Platform;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.Platform;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,10 @@
-package sk.tuke.gamedev.iddqd.tukequest.actors;
+package sk.tuke.gamedev.iddqd.tukequest.actors.game;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.World;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 
 /**

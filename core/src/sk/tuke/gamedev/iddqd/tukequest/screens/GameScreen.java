@@ -8,10 +8,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
-import sk.tuke.gamedev.iddqd.tukequest.actors.BinaryVerticalWall;
-import sk.tuke.gamedev.iddqd.tukequest.actors.KeyboardGround;
-import sk.tuke.gamedev.iddqd.tukequest.actors.PlatformGenerationActor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.Player;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.BinaryVerticalWall;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.PlatformGenerationActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 
