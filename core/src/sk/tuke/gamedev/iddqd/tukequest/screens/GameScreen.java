@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BinaryVerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.KeyboardGround;
+import sk.tuke.gamedev.iddqd.tukequest.actors.PlatformGenerationActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Player;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
@@ -45,7 +46,11 @@ public class GameScreen extends AbstractScreen {
         ).addToWorld(this.world);
 
         PlatformManager.INSTANCE = new PlatformManager(player);
+
+        addActor(new PlatformGenerationActor(camera, world));
     }
+
+
 
     private void initScheduling() {
     }

@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by macbook on 25/03/2017.
- */
 public class PlatformGenerator {
+
+    private static int platformCount = 0;
+
     private  static final int Y_STEP = 64;
+    public static int highestPlatformY;
 
     // TODO: maybe implement some LEVEL algorithm that will increase the difficulty given the value of Y
     public static List<Platform> generateNext(int count, int startingY) {
@@ -26,8 +27,23 @@ public class PlatformGenerator {
             startingY  = startingY + Y_STEP;
             int randomNum = random.nextInt((X_COORDINATE_RANGE - WALL_WIDTH) + 1) + WALL_WIDTH;
             platforms.add(new Platform(randomNum, startingY));
+
+            if (platformCount % 50 == 0) {
+                changePlatformType();
+            }
         }
 
+        platformCount = platformCount + count;
+        highestPlatformY = startingY;
+
         return platforms;
+    }
+
+    private static void changePlatformType() {
+        System.out.println("Should change platform type now!!!");
+    }
+
+    public static List<Platform> generateNext(int count) {
+        return generateNext(count, highestPlatformY);
     }
 }

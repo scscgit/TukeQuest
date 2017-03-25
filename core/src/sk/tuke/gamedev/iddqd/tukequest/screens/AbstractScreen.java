@@ -19,6 +19,11 @@ import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by Steve on 24.03.2017.
  */
@@ -33,6 +38,8 @@ public abstract class AbstractScreen implements Screen {
 
     public static Texture backgroundTexture;
     public static Sprite backgroundSprite;
+
+    private Set<Actor> actors = new HashSet<>();
 
     protected AbstractScreen(TukeQuestGame game) {
         batch = new SpriteBatch();
@@ -79,11 +86,25 @@ public abstract class AbstractScreen implements Screen {
         calculatePhysics();
     }
 
+    // this method is used for adding actors that shouldn't be rendered, but their act() method should be called during each render
+    public void addActor(Actor actor) {
+        if (actor instanceof BodyActor) {
+            throw new IllegalArgumentException("BodyActors should be added to world!");
+        }
+
+        actors.add(actor);
+    }
+
+
     protected void actOnActors() {
         Array<Body> worldBodies = new Array<>(0);
         world.getBodies(worldBodies);
         for (Body body : worldBodies) {
             Actor actor = (Actor) body.getUserData();
+            actor.act();
+        }
+
+        for (Actor actor : actors) {
             actor.act();
         }
     }
@@ -111,7 +132,7 @@ public abstract class AbstractScreen implements Screen {
         }
     }
 
-    protected  void renderBackground() {
+    protected void renderBackground() {
         float imageX = camera.position.x - camera.viewportWidth / 2;
         float imageY = camera.position.y - camera.viewportHeight / 2;
         batch.draw(backgroundTexture, imageX, imageY);
