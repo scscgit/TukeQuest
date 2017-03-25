@@ -24,10 +24,6 @@ public interface BodyActor extends Actor {
 
     Vector2 getPosition();
 
-    void setX(float x);
-
-    void setY(float y);
-
     void setPosition(float x, float y);
 
     void setPosition(Vector2 position);

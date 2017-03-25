@@ -73,16 +73,6 @@ public abstract class AbstractBodyActor implements BodyActor {
         return new Vector2(getX(), getY());
     }
 
-    @Override
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    @Override
-    public void setY(float y) {
-        this.y = y;
-    }
-
     /**
      * Convenience setter method instead of setX(x), setY(y).
      *
@@ -91,9 +81,10 @@ public abstract class AbstractBodyActor implements BodyActor {
      */
     @Override
     public final void setPosition(float x, float y) {
-        setX(x);
-        setY(y);
+        this.x = x;
+        this.y = y;
     }
+
 
     /**
      * Convenience setter method instead of setX(x), setY(y).
@@ -102,8 +93,8 @@ public abstract class AbstractBodyActor implements BodyActor {
      */
     @Override
     public void setPosition(Vector2 position) {
-        setX(position.x);
-        setY(position.y);
+        x = position.x;
+        y = position.y;
     }
 
     @Override

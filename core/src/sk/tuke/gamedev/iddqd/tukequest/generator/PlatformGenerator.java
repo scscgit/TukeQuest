@@ -11,7 +11,7 @@ import java.util.Random;
  * Created by macbook on 25/03/2017.
  */
 public class PlatformGenerator {
-    private  static final int Y_STEP = 70;
+    private  static final int Y_STEP = 64;
 
     // TODO: maybe implement some LEVEL algorithm that will increase the difficulty given the value of Y
     public static List<Platform> generateNext(int count, int startingY) {

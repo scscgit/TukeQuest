@@ -33,8 +33,8 @@ public class GameScreen extends AbstractScreen {
 
         // Places ground and two vertical walls above it
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
-        new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, groundHeight).addToWorld(this.world);
-        new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, groundHeight).addToWorld(this.world);
+        new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, groundHeight, camera).addToWorld(this.world);
+        new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, groundHeight, camera).addToWorld(this.world);
 
 
         // generate 10 platforms starting from groundHeight

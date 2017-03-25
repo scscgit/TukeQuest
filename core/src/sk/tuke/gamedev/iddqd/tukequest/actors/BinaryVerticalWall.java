@@ -21,7 +21,7 @@ public class BinaryVerticalWall extends RectangleActor {
         LEFT, RIGHT
     }
 
-    public BinaryVerticalWall(Side side, float y) {
+    private BinaryVerticalWall(Side side, float y) {
         super(
             ANIMATION,
             BodyDef.BodyType.StaticBody,
@@ -35,9 +35,9 @@ public class BinaryVerticalWall extends RectangleActor {
         this.camera = camera;
     }
 
-//    @Override
-//    public void act() {
-//        this.setY(camera.position.y);
-//        super.act();
-//    }
+    @Override
+    public void act() {
+        this.getBody().getPosition().y = camera.position.y;
+        super.act();
+    }
 }
