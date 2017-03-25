@@ -18,7 +18,6 @@ public class Player extends RectangleActor {
 
     private static final float DENSITY = .5f;
     private static final float FRICTION = .4f;
-    private static final float RESTITUTION = .6f;
     private static final float INPUT_FORCE_MULTIPLIER = 500000f;
 
     private Camera camera;
@@ -54,9 +53,9 @@ public class Player extends RectangleActor {
                 new Vector2(50 * Gdx.graphics.getDeltaTime() * INPUT_FORCE_MULTIPLIER, 0f), true);
         }
 
-        // Jump (fly)
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            getBody().applyLinearImpulse(new Vector2(0, 10000f), getCenter(), true);
+        // Jump
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && Math.abs(getBody().getLinearVelocity().y) < 0.1f) {
+            getBody().setLinearVelocity(new Vector2(0, 1000_000f));
         }
     }
 
@@ -64,8 +63,6 @@ public class Player extends RectangleActor {
     protected void configureFixtureDef(FixtureDef fixtureDef) {
         fixtureDef.density = DENSITY;
         fixtureDef.friction = FRICTION;
-        // Make it bounce a little bit
-        fixtureDef.restitution = RESTITUTION;
     }
 
 }
