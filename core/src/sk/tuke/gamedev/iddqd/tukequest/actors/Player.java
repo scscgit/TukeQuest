@@ -21,6 +21,7 @@ public class Player extends RectangleActor {
     private static final float INPUT_FORCE_MULTIPLIER = 1_000_000f;
 
     private Camera camera;
+    private boolean cameraDebugMovementEnabled = false;
 
     public Player(float x, float y, Camera camera) {
         super(ANIMATION, BodyDef.BodyType.DynamicBody, x, y);
@@ -58,9 +59,41 @@ public class Player extends RectangleActor {
             getBody().applyLinearImpulse(new Vector2(0, INPUT_FORCE_MULTIPLIER), getCenter(), true);
         }
 
-        // fixme: doesn't work properly
-        camera.position.x = this.getX();
+        // togle between camera debug mode and normal navigation
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+            cameraDebugMovementEnabled = !cameraDebugMovementEnabled;
+        }
+
+        if (cameraDebugMovementEnabled) {
+            debugCameraMovement();
+        } else {
+            levelCameraOnPlayerPosition();
+        }
+    }
+
+    private void levelCameraOnPlayerPosition() {
+//        camera.position.x = this.getX();
         camera.position.y = this.getY();
+        camera.update();
+    }
+
+    private void debugCameraMovement() {
+        // Apply force using keyboard
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            camera.position.y = camera.position.y + 10;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            camera.position.y = camera.position.y - 10;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            camera.position.x = camera.position.x + 10;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            camera.position.x = camera.position.x - 10;
+        }
+
         camera.update();
     }
 

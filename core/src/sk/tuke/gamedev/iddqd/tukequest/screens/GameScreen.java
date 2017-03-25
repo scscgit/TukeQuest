@@ -39,10 +39,10 @@ public class GameScreen extends AbstractScreen {
         PlatformManager.INSTANCE = new PlatformManager(player);
 
         // Invisible grounds
-        new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 0, 200, 200, 1)
-            .addToWorld(this.world);
-        new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 200, 150, 1, 50)
-            .addToWorld(this.world);
+//        new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 0, 200, 200, 1)
+//            .addToWorld(this.world);
+//        new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 200, 150, 1, 50)
+//            .addToWorld(this.world);
 
 
         // just sample platform
