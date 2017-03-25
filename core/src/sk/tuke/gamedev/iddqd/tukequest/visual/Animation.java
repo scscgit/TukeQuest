@@ -38,6 +38,17 @@ public class Animation {
         setSprite(new Sprite(texture));
     }
 
+    public Animation(String textureName, float scale, int width, int height) {
+        if (textureName == null) {
+            return;
+        }
+        Texture texture = getTexture(textureName);
+        this.scale = scale;
+        texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        setSprite(new Sprite(texture, width, height));
+    }
+
+
     public Animation(String textureName, float scale) {
         this(getTexture(textureName), scale);
     }

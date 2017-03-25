@@ -10,7 +10,7 @@ public class Platform extends RectangleActor {
 
     static {
         // Scales the animation to the full screen width
-        ANIMATION = new Animation("jerusrockwallsml.jpg");
+        ANIMATION = new Animation("jerusrockwallsml.jpg", 1f, 128, 32);
     }
 
     // length specifies how many blocks the platform consists of
@@ -20,7 +20,7 @@ public class Platform extends RectangleActor {
             BodyDef.BodyType.StaticBody,
             x,
             y,
-            ANIMATION.getWidth() * length,
+            ANIMATION.getWidth(),
             ANIMATION.getHeight()
         );
     }
