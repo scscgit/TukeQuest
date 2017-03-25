@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
@@ -66,6 +67,7 @@ public class Player extends RectangleActor {
 
         if (cameraDebugMovementEnabled) {
             debugCameraMovement();
+
         } else {
             levelCameraOnPlayerPosition();
         }
@@ -74,6 +76,7 @@ public class Player extends RectangleActor {
     private void levelCameraOnPlayerPosition() {
 //        camera.position.x = this.getX();
         camera.position.y = this.getY();
+        camera.position.x = TukeQuestGame.SCREEN_WIDTH / 2;
         camera.update();
     }
 

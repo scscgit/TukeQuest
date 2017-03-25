@@ -30,31 +30,27 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void initActors() {
-        // Create example Actors in the World
-        Player player = new Player(
-            50,
-            300,
-            camera
-        ).addToWorld(this.world);
-
-        PlatformManager.INSTANCE = new PlatformManager(player);
-
-        // Invisible grounds
-//        new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 0, 200, 200, 1)
-//            .addToWorld(this.world);
-//        new RectangleActor(Animation.INVISIBLE, BodyDef.BodyType.StaticBody, 200, 150, 1, 50)
-//            .addToWorld(this.world);
-
-
-        // just sample platform
-        int PLATFORMS_STARTING_Y = 50;
-
-        PlatformGenerator.generateNext(PLATFORMS_STARTING_Y).forEach(platform -> platform.addToWorld(world));
 
         // Places ground and two vertical walls above it
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
         new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, groundHeight).addToWorld(this.world);
         new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, groundHeight).addToWorld(this.world);
+
+
+        // generate 10 platforms starting from groundHeight
+        int PLATFORMS_COUNT = 10;
+        int PLATFORMS_STARTING_Y = (int) groundHeight;
+
+        PlatformGenerator.generateNext(PLATFORMS_COUNT, PLATFORMS_STARTING_Y).forEach(platform -> platform.addToWorld(world));
+
+        // Create Player standing at the KeyboardGround in the middle of the screen
+        Player player = new Player(
+            TukeQuestGame.SCREEN_WIDTH / 2,
+            groundHeight,
+            camera
+        ).addToWorld(this.world);
+
+        PlatformManager.INSTANCE = new PlatformManager(player);
     }
 
     private void initScheduling() {

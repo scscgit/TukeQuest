@@ -1,5 +1,6 @@
 package sk.tuke.gamedev.iddqd.tukequest.actors;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
@@ -11,9 +12,10 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class BinaryVerticalWall extends RectangleActor {
 
-    public static final Animation ANIMATION = new Animation("binary_vertical_wall.jpg");
+    // TODO: do not increase the size of walls this way, but move them around when camera moves
+    public static final Animation ANIMATION = new Animation("binary_vertical_wall.jpg", 1, 40, 904);
 
-    private static final int SCREEN_WIDTH = TukeQuestGame.SCREEN_WIDTH;
+    private Camera camera;
 
     public enum Side {
         LEFT, RIGHT
@@ -23,9 +25,19 @@ public class BinaryVerticalWall extends RectangleActor {
         super(
             ANIMATION,
             BodyDef.BodyType.StaticBody,
-            side == Side.LEFT ? 0 : SCREEN_WIDTH - ANIMATION.getWidth(),
+            side == Side.LEFT ? 0 : TukeQuestGame.SCREEN_WIDTH - ANIMATION.getWidth(),
             y
         );
     }
 
+    public BinaryVerticalWall(Side side, float y, Camera camera) {
+        this(side, y);
+        this.camera = camera;
+    }
+
+//    @Override
+//    public void act() {
+//        this.setY(camera.position.y);
+//        super.act();
+//    }
 }
