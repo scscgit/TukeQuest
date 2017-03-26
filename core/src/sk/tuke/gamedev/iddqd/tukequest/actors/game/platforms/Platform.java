@@ -1,6 +1,5 @@
 package sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms;
 
-
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.Ground;

@@ -22,13 +22,16 @@ public class Player extends RectangleActor implements RenderLast {
 
     public static final Animation ANIMATION = new Animation("custom_player.png", 3, 3, 0, 8, 0.2f);
 
-    private static final float DENSITY = .5f;
-    private static final float FRICTION = .4f;
-    private static final float INPUT_FORCE_MULTIPLIER = 200_000f;
+    private static final float DENSITY = .1f;
+    private static final float FRICTION = .0f;
+    private static final float INPUT_FORCE_MULTIPLIER = 20_000f;
+    private static final float SPRINT_VELOCITY_THRESHOLD = 50;
+    private static final float SPRINT_VELOCITY_BURST = 60;
 
     private Camera camera;
     private boolean cameraDebugMovementEnabled;
     private GroundContactListener groundContactListener;
+    private boolean sprint;
 
     public Player(float x, float y, Camera camera) {
         super(ANIMATION, BodyDef.BodyType.DynamicBody, x, y);
@@ -63,7 +66,7 @@ public class Player extends RectangleActor implements RenderLast {
 
         // Jump
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && canJump()) {
-            getBody().applyLinearImpulse(new Vector2(0, INPUT_FORCE_MULTIPLIER), getCenter(), true);
+            getBody().setLinearVelocity(new Vector2(getBody().getLinearVelocity().x, INPUT_FORCE_MULTIPLIER));
         }
 
         // Toggle between camera debug mode and normal navigation
@@ -76,10 +79,36 @@ public class Player extends RectangleActor implements RenderLast {
         } else {
             levelCameraOnPlayerPosition();
         }
+
+        if (canSprint()) {
+            sprint();
+        } else {
+            stopSprintIfSlow();
+        }
     }
 
     private boolean canJump() {
         return this.groundContactListener.isHitting();
+    }
+
+    private boolean canSprint() {
+        return !sprint && Math.abs(getBody().getLinearVelocity().x) > SPRINT_VELOCITY_THRESHOLD;
+    }
+
+    private void sprint() {
+        float horizontalSpeed = getBody().getLinearVelocity().x;
+        getBody().setLinearVelocity(
+            horizontalSpeed + Math.signum(horizontalSpeed) * SPRINT_VELOCITY_BURST,
+            getBody().getLinearVelocity().y);
+        sprint = true;
+        System.out.println(Player.class.getName() + " sprints");
+    }
+
+    private void stopSprintIfSlow() {
+        if (sprint && Math.abs(getBody().getLinearVelocity().x) < SPRINT_VELOCITY_THRESHOLD) {
+            sprint = false;
+            System.out.println(Player.class.getName() + " no longer sprints");
+        }
     }
 
     /**
