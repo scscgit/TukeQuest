@@ -24,7 +24,8 @@ public class Player extends RectangleActor implements RenderLast {
 
     private static final float DENSITY = .1f;
     private static final float FRICTION = .0f;
-    private static final float INPUT_FORCE_MULTIPLIER = 20_000f;
+    private static final float INPUT_FORCE_MULTIPLIER = 9_00f;
+    private static final float JUMP_FORCE = 25_000f;
     private static final float SPRINT_VELOCITY_THRESHOLD = 50;
     private static final float SPRINT_VELOCITY_BURST = 60;
 
@@ -66,7 +67,12 @@ public class Player extends RectangleActor implements RenderLast {
 
         // Jump
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && isOnGround()) {
-            getBody().setLinearVelocity(new Vector2(getBody().getLinearVelocity().x, INPUT_FORCE_MULTIPLIER));
+            // TODO: jump height should increase if player is moving sideways (sprinting}
+            float xVelocityJumpCoeficient = Math.abs(getBody().getLinearVelocity().x) / 40;
+            System.out.println("Linear velocity beofre jump : " + Math.abs(getBody().getLinearVelocity().x) / 40);
+
+            getBody().applyForceToCenter(new Vector2(0, JUMP_FORCE * xVelocityJumpCoeficient), true);
+//            getBody().setLinearVelocity(new Vector2(getBody().getLinearVelocity().x, INPUT_FORCE_MULTIPLIER));
         }
 
         // Toggle between camera debug mode and normal navigation

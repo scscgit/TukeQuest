@@ -13,7 +13,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public abstract class AbstractBodyActor extends AbstractAnimatedActor implements BodyActor {
 
-    public static final float SCALE_FROM_PHYSICS = 1.02f;
+    public static final float SCALE_FROM_PHYSICS = 5f;
     public static final float SCALE_TO_PHYSICS = 1 / SCALE_FROM_PHYSICS;
 
     private BodyType bodyType;
