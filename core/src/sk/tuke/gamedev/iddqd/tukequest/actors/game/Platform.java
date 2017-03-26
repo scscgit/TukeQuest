@@ -16,11 +16,10 @@ public class Platform extends RectangleActor {
         // Scales the animation to the full screen width
 //        ANIMATION = new Animation("jerusrockwallsml.jpg", 1f, 128, 24);
         ANIMATIONS = new ArrayList<>();
+        ANIMATIONS.add(new Animation("maths_texture.jpg", 1f, 128, 24));
         ANIMATIONS.add(new Animation("binary_vertical_wall.jpg", 1f, 128, 24));
         ANIMATIONS.add(new Animation("jerusrockwallsml.jpg", 1f, 128, 24));
         ANIMATIONS.add(new Animation("cabin_chimney_side.jpg", 1f, 128, 24));
-
-
     }
 
     public Platform(float x, float y, int texture) {
