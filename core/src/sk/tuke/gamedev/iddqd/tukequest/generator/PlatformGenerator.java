@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+// TODO: integrate to the PlatformManager; don't use static fields, as this breaks when scene changes
 public class PlatformGenerator {
 
     private static final int PLATFORM_TEXTURE_CHANGE_RATE = 50;
@@ -52,8 +53,13 @@ public class PlatformGenerator {
         currentTextureIndex = textureOrder % texturesCount;
     }
 
+    @Deprecated
     public static List<Platform> generateNext(int count) {
         return generateNext(count, highestPlatformY);
+    }
+
+    public static Platform generateNext() {
+        return generateNext(1, highestPlatformY).get(0);
     }
 
 }

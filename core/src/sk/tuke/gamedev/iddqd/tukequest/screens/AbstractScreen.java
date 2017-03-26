@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -17,17 +16,17 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.ActOnAdd;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderFirst;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Steve on 24.03.2017.
  */
 public abstract class AbstractScreen implements Screen {
-
-    public static Texture backgroundTexture = new Texture("background.jpg");
 
     protected Camera camera;
     protected World world;
@@ -36,7 +35,8 @@ public abstract class AbstractScreen implements Screen {
     private SpriteBatch batch;
     private Box2DDebugRenderer debugRenderer;
     private TukeQuestGame game;
-    private Set<Actor> actors = new HashSet<>();
+    private List<Actor> actors = new LinkedList<>();
+    private List<Actor> newActors = new LinkedList<>();
 
     protected AbstractScreen(TukeQuestGame game) {
         this.game = game;
@@ -50,6 +50,10 @@ public abstract class AbstractScreen implements Screen {
 
     protected TukeQuestGame getGame() {
         return this.game;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     /**
@@ -83,25 +87,49 @@ public abstract class AbstractScreen implements Screen {
     /**
      * Adding any {@link Actor} other than {@link BodyActor}, that should have its callbacks run.
      */
-    public void addActor(Actor actor) {
+    public Actor addActor(Actor actor) {
         if (actor instanceof BodyActor) {
             ((BodyActor) actor).addToWorld(this.world);
         } else {
-            this.actors.add(actor);
+            // Adds them to an intermediate queue
+            this.newActors.add(actor);
         }
         // NOTE: BodyActors will not execute this if they are just added using the method BodyActor:addToWorld
         if (actor instanceof ActOnAdd) {
             ((ActOnAdd) actor).onAddedToScreen(this);
         }
+        return actor;
+    }
+
+    public AnimatedActor addActor(AnimatedActor actor) {
+        addActor((Actor) actor);
+        return actor;
+    }
+
+    public BodyActor addActor(BodyActor actor) {
+        addActor((Actor) actor);
+        return actor;
     }
 
     protected void actOnActors() {
+        // Processes intermediate queue
+        if (!this.newActors.isEmpty()) {
+            for (Actor actor : this.newActors) {
+                if (actor instanceof RenderFirst) {
+                    this.actors.add(0, actor);
+                } else {
+                    this.actors.add(actor);
+                }
+            }
+            this.newActors.clear();
+        }
+
+        for (Actor actor : this.actors) {
+            actor.act();
+        }
         world.getBodies(this.temporaryWorldBodies);
         for (Body body : this.temporaryWorldBodies) {
             Actor actor = (Actor) body.getUserData();
-            actor.act();
-        }
-        for (Actor actor : this.actors) {
             actor.act();
         }
     }
@@ -113,14 +141,13 @@ public abstract class AbstractScreen implements Screen {
 
         // Draw the images of all Actors
         this.batch.begin();
-        renderBackground();
         this.batch.setProjectionMatrix(this.camera.combined);
+        for (Actor actor : this.actors) {
+            actor.draw(this.batch);
+        }
         world.getBodies(this.temporaryWorldBodies);
         for (Body body : this.temporaryWorldBodies) {
             Actor actor = (Actor) body.getUserData();
-            actor.draw(this.batch);
-        }
-        for (Actor actor : this.actors) {
             actor.draw(this.batch);
         }
         this.batch.end();
@@ -129,12 +156,6 @@ public abstract class AbstractScreen implements Screen {
         if (TukeQuestGame.debug) {
             debugRenderer.render(world, this.camera.combined);
         }
-    }
-
-    protected void renderBackground() {
-        float imageX = this.camera.position.x - this.camera.viewportWidth / 2;
-        float imageY = this.camera.position.y - this.camera.viewportHeight / 2;
-        batch.draw(backgroundTexture, imageX, imageY);
     }
 
     protected void calculatePhysics() {
@@ -185,6 +206,7 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public void hide() {
+        this.actors.clear();
         System.out.println("Screen " + this + " hidden");
     }
 

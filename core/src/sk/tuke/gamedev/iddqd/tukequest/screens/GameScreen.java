@@ -8,10 +8,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.BinaryVerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.PlatformGenerationActor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.WallGenerationActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
@@ -60,20 +58,22 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void initActors() {
-        // Place ground and two vertical walls above it
+        // Place the ground as a basis below which no actors can be created
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
 
-//        new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, groundHeight, camera).addToWorld(this.world);
-//        new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, groundHeight, camera).addToWorld(this.world);
+        addActor(new VerticalActorGenerator(
+            this.camera, this, groundHeight, VerticalActorGenerator.BACKGROUND_FACTORY));
 
         // Generate platforms starting from height of the ground
-        // TODO: put all generation code into PlatformGenerationActor
-        PlatformGenerator.generateNext(PLATFORMS_COUNT, groundHeight).forEach(platform -> platform.addToWorld(world));
-        addActor(new PlatformGenerationActor(camera, world));
+        PlatformGenerator.highestPlatformY = groundHeight;
+        addActor(new VerticalActorGenerator(
+            this.camera, this, groundHeight, VerticalActorGenerator.PLATFORM_FACTORY));
 
-        // WallGenerationActor generates walls at the sides as the camera moves
-        WallGenerationActor.highestWallStartingY = (int) groundHeight;
-        addActor(new WallGenerationActor(camera, world));
+        // Generate walls at the sides as the camera moves
+        addActor(new VerticalActorGenerator(
+            this.camera, this, groundHeight, VerticalActorGenerator.LEFT_WALL_FACTORY));
+        addActor(new VerticalActorGenerator(
+            this.camera, this, groundHeight, VerticalActorGenerator.RIGHT_WALL_FACTORY));
 
         // Create Player standing at the KeyboardGround in the middle of the screen
         this.player = new Player(

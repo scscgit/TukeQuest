@@ -3,38 +3,19 @@ package sk.tuke.gamedev.iddqd.tukequest.actors;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
  * {@link Actor} that can be placed in a physical {@link World}.
  * <p>
  * Created by Steve on 08.03.2017.
  */
-public interface BodyActor extends Actor {
+public interface BodyActor extends AnimatedActor {
 
     <T extends BodyActor> T addToWorld(World world);
-
-    Animation getAnimation();
-
-    void setAnimation(Animation animation);
-
-    float getX();
-
-    float getY();
-
-    Vector2 getPosition();
-
-    void setPosition(float x, float y);
-
-    void setPosition(Vector2 position);
 
     Vector2 getCenterOffset();
 
     Vector2 getCenter();
-
-    float getRotation();
-
-    void setRotation(float rotationDegrees);
 
     Body getBody();
 

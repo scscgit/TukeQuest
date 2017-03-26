@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 
 import java.security.InvalidParameterException;
@@ -185,7 +186,7 @@ public class Animation {
         return this.sprite.getHeight() * this.sprite.getScaleY();
     }
 
-    public void draw(Batch batch, BodyActor actor) {
+    public void draw(Batch batch, AnimatedActor actor) {
         if (this.animationGdx != null) {
             drawAnimationGdx(batch, actor);
         } else if (this.sprite != null) {
@@ -193,7 +194,7 @@ public class Animation {
         }
     }
 
-    private void drawAnimationGdx(Batch batch, BodyActor actor) {
+    private void drawAnimationGdx(Batch batch, AnimatedActor actor) {
         // Accumulate elapsed animation time
         this.animationTime += Gdx.graphics.getDeltaTime();
         TextureRegion frame = this.animationGdx.getKeyFrame(this.animationTime, true);
@@ -201,7 +202,7 @@ public class Animation {
         drawSprite(batch, actor);
     }
 
-    private void drawSprite(Batch batch, BodyActor actor) {
+    private void drawSprite(Batch batch, AnimatedActor actor) {
         this.sprite.setPosition(actor.getX(), actor.getY());
         this.sprite.setRotation(actor.getRotation());
         this.sprite.draw(batch);
