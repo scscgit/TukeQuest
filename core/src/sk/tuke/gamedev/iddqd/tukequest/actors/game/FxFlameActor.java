@@ -15,11 +15,12 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class FxFlameActor extends RectangleActor implements RenderLast, ActOnAdd {
 
-    public static final Animation ANIMATION = new Animation("flame_fx.png", 1, 5, 0, 4, 0.25f);
+    public static final Animation ANIMATION = new Animation("flame_fx.png", 1, 5, 0, 4, 0.65f);
 
     static {
         // Scales the animation to the full screen width
-        ANIMATION.setScale(TukeQuestGame.SCREEN_WIDTH / ANIMATION.getWidth());
+        // TODO: remove the +100 after hardcoded flames in GameScreen get deleted
+        ANIMATION.setScale((TukeQuestGame.SCREEN_WIDTH + 100) / ANIMATION.getWidth());
     }
 
     private Player player;

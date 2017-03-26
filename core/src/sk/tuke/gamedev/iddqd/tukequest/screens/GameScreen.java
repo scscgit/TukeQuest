@@ -3,11 +3,13 @@ package sk.tuke.gamedev.iddqd.tukequest.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
@@ -83,7 +85,28 @@ public class GameScreen extends AbstractScreen {
             camera
         ).addToWorld(this);
 
-        new FxFlameActor(this.player, 0, -1000).addToWorld(this);
+        // Flame spawning
+        addActor(new Actor() {
+
+            private boolean waiting = true;
+
+            @Override
+            public void draw(Batch batch) {
+            }
+
+            @Override
+            public void act() {
+                if (waiting && GameScreen.this.player.getY() > 500) {
+                    new FxFlameActor(GameScreen.this.player, 0, -100).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -80, -150).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -50, -200).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -30, -250).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -10, -350).addToWorld(GameScreen.this);
+                    waiting = false;
+                }
+            }
+
+        });
     }
 
     /**

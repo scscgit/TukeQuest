@@ -3,8 +3,6 @@ package sk.tuke.gamedev.iddqd.tukequest.actors.game.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -33,10 +31,12 @@ public class Player extends RectangleActor implements RenderLast {
     private boolean cameraDebugMovementEnabled;
     private GroundContactListener groundContactListener;
     private boolean sprint;
+    private MovementController movementController;
 
     public Player(float x, float y, Camera camera) {
         super(ANIMATION, BodyDef.BodyType.DynamicBody, x, y);
         this.camera = camera;
+        this.movementController = new MovementController(INPUT_FORCE_MULTIPLIER, JUMP_FORCE, this, camera);
     }
 
     public void killedByFlame() {
@@ -46,45 +46,8 @@ public class Player extends RectangleActor implements RenderLast {
 
     @Override
     public void act() {
-        // Apply force using mouse
-        if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            // Transform touch/mouse position coordinates to our camera's coordinate system
-            this.camera.unproject(touchPos);
-
-            //setX(touchPos.x + 64);
-            float moveX = (touchPos.x - camera.viewportWidth / 2) / camera.viewportWidth * INPUT_FORCE_MULTIPLIER;
-            getBody().applyForceToCenter(new Vector2(moveX, 0f), true);
-        }
-
-        // Apply force using keyboard
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            //setX(getX() - 5 * Gdx.graphics.getDeltaTime());
-            getBody().applyForceToCenter(
-                new Vector2(-50 * Gdx.graphics.getDeltaTime() * INPUT_FORCE_MULTIPLIER, 0f), true);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            //setX(getX() + 5 * Gdx.graphics.getDeltaTime());
-            getBody().applyForceToCenter(
-                new Vector2(50 * Gdx.graphics.getDeltaTime() * INPUT_FORCE_MULTIPLIER, 0f), true);
-        }
-
-        // Jump
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && isOnGround()) {
-            // TODO: jump height should increase if player is moving sideways (sprinting}
-            float xVelocityJumpCoeficient = Math.abs(getBody().getLinearVelocity().x) / 40;
-
-            // this is to make sure we won't reduce jump height if the player is just standing there
-            float jumpForceAppliedInThisJump = JUMP_FORCE;
-            if (xVelocityJumpCoeficient * JUMP_FORCE > JUMP_FORCE) {
-                jumpForceAppliedInThisJump = xVelocityJumpCoeficient * JUMP_FORCE;
-            }
-            System.out.println("Linear velocity beofre jump : " + Math.abs(getBody().getLinearVelocity().x) / 40);
-
-            getBody().applyForceToCenter(new Vector2(0, jumpForceAppliedInThisJump), true);
-//            getBody().setLinearVelocity(new Vector2(getBody().getLinearVelocity().x, INPUT_FORCE_MULTIPLIER));
-        }
+        // Movement
+        this.movementController.act();
 
         // Toggle between camera debug mode and normal navigation
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
@@ -104,7 +67,7 @@ public class Player extends RectangleActor implements RenderLast {
         }
     }
 
-    private boolean isOnGround() {
+    public boolean isOnGround() {
         return this.groundContactListener.isHitting();
     }
 
