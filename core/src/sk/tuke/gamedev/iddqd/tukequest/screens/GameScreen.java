@@ -39,7 +39,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     @Override
-    protected Viewport initViewport() {
+    protected Viewport initViewport(Camera camera) {
         // Setup the camera to support a virtual screen size, which always maintains the same aspect ratio
         return new FitViewport(500, 500, camera);
     }

@@ -44,7 +44,7 @@ public class FxFlameActor extends RectangleActor implements RenderLast, ActOnAdd
 
     @Override
     public void onAddedToScreen(AbstractScreen screen) {
-        setFlameVelocity(20);
+        setFlameVelocity(16);
     }
 
     public void setFlameVelocity(float velocity) {

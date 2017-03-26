@@ -9,8 +9,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderLast;
+import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.GroundContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
+import sk.tuke.gamedev.iddqd.tukequest.screens.GameOverScreen;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
@@ -32,6 +34,7 @@ public class Player extends RectangleActor implements RenderLast {
     private GroundContactListener groundContactListener;
     private boolean sprint;
     private MovementController movementController;
+    private boolean alive = true;
 
     public Player(float x, float y, Camera camera) {
         super(ANIMATION, BodyDef.BodyType.DynamicBody, x, y);
@@ -40,14 +43,22 @@ public class Player extends RectangleActor implements RenderLast {
     }
 
     public void killedByFlame() {
-        System.out.println("Game over");
-        getBody().setActive(false);
+        if (this.alive) {
+            this.alive = false;
+            System.out.println("Game over");
+            getBody().getFixtureList().get(0).setSensor(true);
+            this.movementController = null;
+            TaskManager.INSTANCE.scheduleTimer("gameOverCountdown", 5,
+                () -> TukeQuestGame.THIS.setScreen(new GameOverScreen(TukeQuestGame.THIS)));
+        }
     }
 
     @Override
     public void act() {
         // Movement
-        this.movementController.act();
+        if (this.movementController != null) {
+            this.movementController.act();
+        }
 
         // Toggle between camera debug mode and normal navigation
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {

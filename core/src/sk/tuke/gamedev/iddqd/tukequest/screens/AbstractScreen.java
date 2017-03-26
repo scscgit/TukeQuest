@@ -47,7 +47,7 @@ public abstract class AbstractScreen implements Screen {
 
     protected abstract Camera initCamera();
 
-    protected abstract Viewport initViewport();
+    protected abstract Viewport initViewport(Camera camera);
 
     protected abstract World initWorld();
 
@@ -73,10 +73,12 @@ public abstract class AbstractScreen implements Screen {
 
         this.batch = new SpriteBatch();
         this.camera = initCamera();
-        this.viewport = initViewport();
+        this.viewport = initViewport(this.camera);
         this.world = initWorld();
-        this.worldContactListener = new MyContactListener();
-        this.world.setContactListener(this.worldContactListener);
+        if (this.world != null) {
+            this.worldContactListener = new MyContactListener();
+            this.world.setContactListener(this.worldContactListener);
+        }
 
         System.out.println("Screen " + this + " shown");
     }
@@ -151,7 +153,10 @@ public abstract class AbstractScreen implements Screen {
         for (Actor actor : this.actors) {
             actor.act();
         }
-        world.getBodies(this.temporaryWorldBodies);
+        if (this.world == null) {
+            return;
+        }
+        this.world.getBodies(this.temporaryWorldBodies);
         for (Body body : this.temporaryWorldBodies) {
             Actor actor = (Actor) body.getUserData();
             actor.act();
@@ -174,14 +179,16 @@ public abstract class AbstractScreen implements Screen {
             }
             actor.draw(this.batch);
         }
-        world.getBodies(this.temporaryWorldBodies);
-        for (Body body : this.temporaryWorldBodies) {
-            Actor actor = (Actor) body.getUserData();
-            if (actor instanceof RenderLast) {
-                lastRenderedActors.add(actor);
-                continue;
+        if (this.world != null) {
+            this.world.getBodies(this.temporaryWorldBodies);
+            for (Body body : this.temporaryWorldBodies) {
+                Actor actor = (Actor) body.getUserData();
+                if (actor instanceof RenderLast) {
+                    lastRenderedActors.add(actor);
+                    continue;
+                }
+                actor.draw(this.batch);
             }
-            actor.draw(this.batch);
         }
         for (Actor lastRenderedActor : lastRenderedActors) {
             lastRenderedActor.draw(this.batch);
@@ -189,16 +196,19 @@ public abstract class AbstractScreen implements Screen {
         this.batch.end();
 
         // Debug
-        if (TukeQuestGame.debug) {
-            debugRenderer.render(world, this.camera.combined.cpy().scl(AbstractBodyActor.SCALE_FROM_PHYSICS));
+        if (TukeQuestGame.debug && this.world != null) {
+            this.debugRenderer.render(this.world, this.camera.combined.cpy().scl(AbstractBodyActor.SCALE_FROM_PHYSICS));
         }
     }
 
     protected void calculatePhysics() {
+        if (this.world == null) {
+            return;
+        }
         // Progress physics, libGDX recommends timestep either 1/45f (which is 1/45th of a second) or 1/300f
-        world.step(1 / 60f, 6, 2);
+        this.world.step(1 / 60f, 6, 2);
 
-        world.getBodies(this.temporaryWorldBodies);
+        this.world.getBodies(this.temporaryWorldBodies);
         for (Body body : this.temporaryWorldBodies) {
             BodyActor actor = (BodyActor) body.getUserData();
             if (actor == null) {

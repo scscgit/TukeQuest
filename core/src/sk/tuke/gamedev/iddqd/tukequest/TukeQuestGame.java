@@ -9,18 +9,21 @@ public class TukeQuestGame extends Game {
     public static final int SCREEN_WIDTH = 500;
     public static final int SCREEN_HEIGHT = 500;
 
+    // Only Player uses this when he dies
+    public static TukeQuestGame THIS;
+
     public static boolean debug;
 
     private GameScreen gameScreen;
 
     @Override
     public void create() {
+        THIS = this;
         this.gameScreen = new GameScreen(this);
         setScreen(this.gameScreen);
 
-        // Delaying turning the debug on and try to reset the screen to test game stability. TODO: remove this.
-        TaskManager.INSTANCE.scheduleTimer(null, 2, () -> debug = true);
-        TaskManager.INSTANCE.scheduleTimer(null, 1, () -> setScreen(new GameScreen(this)));
+        // Delaying turning the debug on
+        TaskManager.INSTANCE.scheduleTimer(null, 1, () -> debug = true);
 
         System.out.println("Game " + this + " created");
     }
