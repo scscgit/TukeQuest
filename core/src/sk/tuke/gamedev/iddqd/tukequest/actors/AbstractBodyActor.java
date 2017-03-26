@@ -15,6 +15,7 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
 
     private BodyType bodyType;
     private Body body;
+    private ActorContactHandler actorContactHandler;
 
     protected AbstractBodyActor(Animation animation, BodyType bodyType, float x, float y) {
         super(animation, x, y);
@@ -42,8 +43,14 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
         return getPosition().cpy().add(getCenterOffset());
     }
 
+    @Override
     public Body getBody() {
         return body;
+    }
+
+    @Override
+    public boolean collides(BodyActor actor) {
+        return this.actorContactHandler.collides(actor);
     }
 
     private Body createBody(BodyType bodyType, AbstractScreen screen) {
@@ -79,7 +86,8 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
      * @param fixture         Give this important treasure to your handler.
      */
     protected void addContactHandlers(MyContactListener contactListener, Fixture fixture) {
-        contactListener.addHandler(new ActorContactHandler(fixture));
+        this.actorContactHandler = new ActorContactHandler(fixture);
+        contactListener.addHandler(this.actorContactHandler);
     }
 
     private Fixture createFixture(Shape shape, Body body) {

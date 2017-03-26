@@ -1,8 +1,8 @@
 package sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms;
 
-
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.Ground;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Platform extends RectangleActor {
+public class Platform extends RectangleActor implements Ground {
 
     private final static List<String> PLATFORM_TEXTURE_NAMES = new ArrayList<>();
     private final static Map<PlatformSize, List<Animation>> ANIMATIONS = new HashMap<>();

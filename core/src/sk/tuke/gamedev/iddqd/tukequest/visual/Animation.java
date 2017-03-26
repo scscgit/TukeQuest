@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 
 import java.security.InvalidParameterException;
 
@@ -17,8 +16,15 @@ import java.security.InvalidParameterException;
  */
 public class Animation {
 
+    public enum ScaleType {
+        SCALE_WIDTH, SCALE_HEIGHT
+    }
+
     // Invisible animation does not provide width or height, attempt at accessing it is illegal
     public static final Animation INVISIBLE = new Animation((Texture) null);
+
+    // A very, very nasty workaround or the java super constructor call
+    private static float tempScale;
 
     private float scale;
 
@@ -79,6 +85,35 @@ public class Animation {
 
     public Animation(String textureName, float scale, int width, int height) {
         this(getTexture(textureName), scale, width, height);
+    }
+
+    /**
+     * Scales the texture symmetrically to a certain size by modifying the width or height.
+     *
+     * @param texture       Texture to be scaled.
+     * @param scaleType     Defines whether the width or height will be changed.
+     * @param widthOrHeight New width or height.
+     */
+    public Animation(Texture texture, ScaleType scaleType, int widthOrHeight) {
+        this(texture,
+            tempScale = scaleTexture(texture, scaleType, widthOrHeight),
+            (int) tempScale * texture.getWidth(),
+            (int) tempScale * texture.getHeight());
+    }
+
+    private static float scaleTexture(Texture texture, ScaleType scaleType, int widthOrHeight) {
+        switch (scaleType) {
+            case SCALE_WIDTH:
+                return widthOrHeight / texture.getWidth();
+            case SCALE_HEIGHT:
+                return widthOrHeight / texture.getHeight();
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
+
+    public Animation(String textureName, ScaleType scaleType, int widthOrHeight) {
+        this(getTexture(textureName), scaleType, widthOrHeight);
     }
 
     // Animated image constructors
