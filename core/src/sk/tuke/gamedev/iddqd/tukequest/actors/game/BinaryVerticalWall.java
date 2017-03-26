@@ -14,8 +14,10 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class BinaryVerticalWall extends RectangleActor {
 
+    public static final int WALL_WIDTH = 40;
+
     // TODO: do not increase the size of walls this way, but move them around when camera moves
-    public static final Animation ANIMATION = new Animation("binary_vertical_wall.jpg", 1, 40, 452);
+    public static final Animation ANIMATION = new Animation("binary_vertical_wall.jpg", 1, WALL_WIDTH, 452);
 
     public enum Side {
         LEFT, RIGHT

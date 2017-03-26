@@ -1,6 +1,6 @@
 package sk.tuke.gamedev.iddqd.tukequest.managers;
 
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.Platform;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 
 /**
