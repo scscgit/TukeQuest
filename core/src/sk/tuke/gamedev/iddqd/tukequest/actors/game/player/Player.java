@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderLast;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.GroundContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
@@ -17,7 +18,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 /**
  * Created by Ruza on 24.3.2017.
  */
-public class Player extends RectangleActor {
+public class Player extends RectangleActor implements RenderLast {
 
     public static final Animation ANIMATION = new Animation("custom_player.png", 3, 3, 0, 8, 0.2f);
 

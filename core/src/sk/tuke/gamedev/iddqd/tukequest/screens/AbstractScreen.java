@@ -19,6 +19,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderFirst;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderLast;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 
 import java.util.LinkedList;
@@ -90,6 +91,7 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public final void render(float delta) {
+        addQueuedActors();
         actOnActors();
         renderGraphics();
         calculatePhysics();
@@ -130,19 +132,25 @@ public abstract class AbstractScreen implements Screen {
         return actor;
     }
 
-    protected void actOnActors() {
-        // Processes intermediate queue
-        if (!this.newActors.isEmpty()) {
-            for (Actor actor : this.newActors) {
-                if (actor instanceof RenderFirst) {
-                    this.actors.add(0, actor);
-                } else {
-                    this.actors.add(actor);
-                }
-            }
-            this.newActors.clear();
+    /**
+     * Processes intermediate queue.
+     */
+    private void addQueuedActors() {
+        if (this.newActors.isEmpty()) {
+            return;
         }
+        for (Actor actor : this.newActors) {
+            // Actors meant to render first are moved back in the queue
+            if (actor instanceof RenderFirst) {
+                this.actors.add(0, actor);
+            } else {
+                this.actors.add(actor);
+            }
+        }
+        this.newActors.clear();
+    }
 
+    protected void actOnActors() {
         for (Actor actor : this.actors) {
             actor.act();
         }
@@ -161,13 +169,25 @@ public abstract class AbstractScreen implements Screen {
         // Draw the images of all Actors
         this.batch.begin();
         this.batch.setProjectionMatrix(this.camera.combined);
+        List<Actor> lastRenderedActors = new LinkedList<>();
         for (Actor actor : this.actors) {
+            if (actor instanceof RenderLast) {
+                lastRenderedActors.add(actor);
+                continue;
+            }
             actor.draw(this.batch);
         }
         world.getBodies(this.temporaryWorldBodies);
         for (Body body : this.temporaryWorldBodies) {
             Actor actor = (Actor) body.getUserData();
+            if (actor instanceof RenderLast) {
+                lastRenderedActors.add(actor);
+                continue;
+            }
             actor.draw(this.batch);
+        }
+        for (Actor lastRenderedActor : lastRenderedActors) {
+            lastRenderedActor.draw(this.batch);
         }
         this.batch.end();
 

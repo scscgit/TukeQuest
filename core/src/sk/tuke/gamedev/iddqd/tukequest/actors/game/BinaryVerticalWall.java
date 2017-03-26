@@ -1,6 +1,5 @@
 package sk.tuke.gamedev.iddqd.tukequest.actors.game;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
@@ -32,10 +31,7 @@ public class BinaryVerticalWall extends RectangleActor {
 
     @Override
     protected void configureFixtureDef(FixtureDef fixtureDef) {
-//        fixtureDef.density = 0.5f;
+        super.configureFixtureDef(fixtureDef);
         fixtureDef.restitution = 0.8f;
-//        super.configureFixtureDef(fixtureDef);
     }
-
-
 }
