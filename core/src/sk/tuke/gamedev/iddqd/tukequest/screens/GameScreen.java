@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
@@ -60,6 +61,8 @@ public class GameScreen extends AbstractScreen {
     private void initActors() {
         // Place the ground as a basis below which no actors can be created
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this).getAnimation().getHeight();
+
+        new FxFlameActor(0, -100).addToWorld(this);
 
         addActor(new VerticalActorGenerator(
             this.camera, this, groundHeight, VerticalActorGenerator.BACKGROUND_FACTORY));
