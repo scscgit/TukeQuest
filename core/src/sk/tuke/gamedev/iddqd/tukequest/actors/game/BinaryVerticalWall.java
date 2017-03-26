@@ -14,7 +14,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 public class BinaryVerticalWall extends RectangleActor {
 
     // TODO: do not increase the size of walls this way, but move them around when camera moves
-    public static final Animation ANIMATION = new Animation("binary_vertical_wall.jpg", 1, 40, 904);
+    public static final Animation ANIMATION = new Animation("binary_vertical_wall.jpg", 1, 40, 452);
 
     private Camera camera;
 
@@ -38,7 +38,9 @@ public class BinaryVerticalWall extends RectangleActor {
 
     @Override
     public void act() {
+        // fixme: this does not work, maybe because the wall is StaticBody?
         this.getBody().getPosition().y = camera.position.y;
+        this.getPosition().y = camera.position.y;
         super.act();
     }
 

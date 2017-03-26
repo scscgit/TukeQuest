@@ -11,6 +11,7 @@ import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.BinaryVerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.PlatformGenerationActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.WallGenerationActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
@@ -61,13 +62,18 @@ public class GameScreen extends AbstractScreen {
     private void initActors() {
         // Place ground and two vertical walls above it
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
-        new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, groundHeight, camera).addToWorld(this.world);
-        new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, groundHeight, camera).addToWorld(this.world);
+
+//        new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, groundHeight, camera).addToWorld(this.world);
+//        new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, groundHeight, camera).addToWorld(this.world);
 
         // Generate platforms starting from height of the ground
         // TODO: put all generation code into PlatformGenerationActor
         PlatformGenerator.generateNext(PLATFORMS_COUNT, groundHeight).forEach(platform -> platform.addToWorld(world));
         addActor(new PlatformGenerationActor(camera, world));
+
+        // WallGenerationActor generates walls at the sides as the camera moves
+        WallGenerationActor.highestWallStartingY = (int) groundHeight;
+        addActor(new WallGenerationActor(camera, world));
 
         // Create Player standing at the KeyboardGround in the middle of the screen
         this.player = new Player(
