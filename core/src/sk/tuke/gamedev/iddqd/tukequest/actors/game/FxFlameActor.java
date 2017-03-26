@@ -8,7 +8,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 /**
  * Created by macbook on 26/03/2017.
  */
-public class FxFlameActor extends RectangleActor {
+public class FxFlameActor extends RectangleActor implements RenderLast {
 
     public static final Animation ANIMATION = new Animation("flame_fx.png", 1, 5, 0, 4, 0.25f);
 
