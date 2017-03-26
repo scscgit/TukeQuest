@@ -23,9 +23,6 @@ public class Animation {
     // Invisible animation does not provide width or height, attempt at accessing it is illegal
     public static final Animation INVISIBLE = new Animation((Texture) null);
 
-    // A very, very nasty workaround or the java super constructor call
-    private static float tempScale;
-
     private float scale;
 
     /**
@@ -95,18 +92,15 @@ public class Animation {
      * @param widthOrHeight New width or height.
      */
     public Animation(Texture texture, ScaleType scaleType, int widthOrHeight) {
-        this(texture,
-            tempScale = scaleTexture(texture, scaleType, widthOrHeight),
-            (int) tempScale * texture.getWidth(),
-            (int) tempScale * texture.getHeight());
+        this(texture, scaleTexture(texture, scaleType, widthOrHeight), texture.getWidth(), texture.getHeight());
     }
 
     private static float scaleTexture(Texture texture, ScaleType scaleType, int widthOrHeight) {
         switch (scaleType) {
             case SCALE_WIDTH:
-                return widthOrHeight / texture.getWidth();
+                return (float) widthOrHeight / texture.getWidth();
             case SCALE_HEIGHT:
-                return widthOrHeight / texture.getHeight();
+                return (float) widthOrHeight / texture.getHeight();
             default:
                 throw new UnsupportedOperationException();
         }
