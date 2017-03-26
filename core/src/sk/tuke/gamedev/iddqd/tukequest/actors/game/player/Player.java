@@ -38,6 +38,11 @@ public class Player extends RectangleActor implements RenderLast {
         this.camera = camera;
     }
 
+    public void killedByFlame() {
+        System.out.println("Game over");
+        getBody().setActive(false);
+    }
+
     @Override
     public void act() {
         // Apply force using mouse

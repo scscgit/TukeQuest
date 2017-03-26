@@ -30,8 +30,8 @@ public class ActorContactHandler extends OneTypeContactHandler {
     void onBegin(Contact contact, Fixture fixture1, Fixture fixture2) {
         super.onBegin(contact, fixture1, fixture2);
         if (fixture1 != null && fixture2 != null) {
-            BodyActor actor1 = (BodyActor) fixture1.getUserData();
-            BodyActor actor2 = (BodyActor) fixture2.getUserData();
+            BodyActor actor1 = (BodyActor) fixture1.getBody().getUserData();
+            BodyActor actor2 = (BodyActor) fixture2.getBody().getUserData();
             if (fixture1 != this.getFixture()) {
                 this.contacts.add(actor1);
             } else {
@@ -43,8 +43,8 @@ public class ActorContactHandler extends OneTypeContactHandler {
     void onEnd(Contact contact, Fixture fixture1, Fixture fixture2) {
         super.onEnd(contact, fixture1, fixture2);
         if (fixture1 != null && fixture2 != null) {
-            BodyActor actor1 = (BodyActor) fixture1.getUserData();
-            BodyActor actor2 = (BodyActor) fixture2.getUserData();
+            BodyActor actor1 = (BodyActor) fixture1.getBody().getUserData();
+            BodyActor actor2 = (BodyActor) fixture2.getBody().getUserData();
             if (fixture1 != this.getFixture()) {
                 this.contacts.remove(actor1);
             } else {
