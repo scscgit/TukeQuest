@@ -14,10 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
-import sk.tuke.gamedev.iddqd.tukequest.actors.ActOnAdd;
-import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.*;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderFirst;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderLast;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
@@ -193,7 +190,7 @@ public abstract class AbstractScreen implements Screen {
 
         // Debug
         if (TukeQuestGame.debug) {
-            debugRenderer.render(world, this.camera.combined);
+            debugRenderer.render(world, this.camera.combined.cpy().scl(AbstractBodyActor.SCALE_FROM_PHYSICS));
         }
     }
 
@@ -209,7 +206,7 @@ public abstract class AbstractScreen implements Screen {
                 continue;
             }
             // Update the entities/sprites position and angle
-            actor.setPosition(body.getPosition());
+            actor.setPositionFromBody();
             // We need to convert our angle from radians to degrees
             actor.setRotation(MathUtils.radiansToDegrees * body.getAngle());
         }

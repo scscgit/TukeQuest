@@ -47,7 +47,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     protected World initWorld() {
         // Initialize the World with a gravitation
-        return new World(new Vector2(0, -20), true);
+        return new World(new Vector2(0, -50), true);
     }
 
     /**

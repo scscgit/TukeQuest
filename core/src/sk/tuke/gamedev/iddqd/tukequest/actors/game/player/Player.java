@@ -65,7 +65,7 @@ public class Player extends RectangleActor implements RenderLast {
         }
 
         // Jump
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && canJump()) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && isOnGround()) {
             getBody().setLinearVelocity(new Vector2(getBody().getLinearVelocity().x, INPUT_FORCE_MULTIPLIER));
         }
 
@@ -87,12 +87,12 @@ public class Player extends RectangleActor implements RenderLast {
         }
     }
 
-    private boolean canJump() {
+    private boolean isOnGround() {
         return this.groundContactListener.isHitting();
     }
 
     private boolean canSprint() {
-        return !sprint && Math.abs(getBody().getLinearVelocity().x) > SPRINT_VELOCITY_THRESHOLD;
+        return !sprint && isOnGround() && Math.abs(getBody().getLinearVelocity().x) > SPRINT_VELOCITY_THRESHOLD;
     }
 
     private void sprint() {

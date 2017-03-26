@@ -13,13 +13,18 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public abstract class AbstractBodyActor extends AbstractAnimatedActor implements BodyActor {
 
+    public static final float SCALE_FROM_PHYSICS = 1.02f;
+    public static final float SCALE_TO_PHYSICS = 1 / SCALE_FROM_PHYSICS;
+
     private BodyType bodyType;
     private Body body;
     private ActorContactHandler actorContactHandler;
+    private boolean settingPositionBlocked;
 
     protected AbstractBodyActor(Animation animation, BodyType bodyType, float x, float y) {
         super(animation, x, y);
         this.bodyType = bodyType;
+        settingPositionBlocked = true;
     }
 
     @SuppressWarnings("unchecked")
@@ -49,6 +54,21 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
     }
 
     @Override
+    public void setPositionFromBody() {
+        this.settingPositionBlocked = false;
+        setPosition(body.getPosition().cpy().scl(SCALE_FROM_PHYSICS));
+        this.settingPositionBlocked = true;
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        if (this.settingPositionBlocked) {
+            throw new UnsupportedOperationException("Can not set position directly to the BodyActor");
+        }
+        super.setPosition(x, y);
+    }
+
+    @Override
     public boolean collides(BodyActor actor) {
         return this.actorContactHandler.collides(actor);
     }
@@ -59,7 +79,7 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
         bodyDef.type = bodyType;
 
         // Set our body's starting position in the world
-        bodyDef.position.set(getX(), getY());
+        bodyDef.position.set(getX() * SCALE_TO_PHYSICS, getY() * SCALE_TO_PHYSICS);
 
         configureBodyDef(bodyDef);
 
@@ -67,7 +87,7 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
         Body body = screen.getWorld().createBody(bodyDef);
 
         // Create a shape and a fixture definition to apply our shape to
-        addContactHandlers(screen.getWorldContactListener(), createFixture(createShape(), body));
+        addContactHandlers(screen.getWorldContactListener(), createFixture(createShape(SCALE_TO_PHYSICS), body));
 
         body.setUserData(this);
         return body;
@@ -77,7 +97,13 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
     protected void configureBodyDef(BodyDef bodyDef) {
     }
 
-    protected abstract Shape createShape();
+    /**
+     * Create a physical shape that will act as a collider.
+     *
+     * @param scaleMultiplier Size of the shape must be multiplied by this coefficient.
+     * @return Created shape.
+     */
+    protected abstract Shape createShape(float scaleMultiplier);
 
     /**
      * Registration place for all contact Actor's handlers.

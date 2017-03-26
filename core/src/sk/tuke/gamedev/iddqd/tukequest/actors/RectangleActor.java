@@ -29,14 +29,6 @@ public class RectangleActor extends AbstractBodyActor {
         return height;
     }
 
-    protected void setWidth(float width) {
-        this.width = width;
-    }
-
-    protected void setHeight(float height) {
-        this.height = height;
-    }
-
     /**
      * Implicit animation size constructor.
      */
@@ -49,9 +41,9 @@ public class RectangleActor extends AbstractBodyActor {
     }
 
     @Override
-    protected Shape createShape() {
+    protected Shape createShape(float scaleMultiplier) {
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(this.width / 2, this.height / 2, getCenterOffset(), 0);
+        shape.setAsBox(scaleMultiplier * this.width / 2, scaleMultiplier * this.height / 2, getCenterOffset(), 0);
         return shape;
     }
 

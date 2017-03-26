@@ -20,6 +20,8 @@ public interface BodyActor extends AnimatedActor {
 
     Body getBody();
 
+    void setPositionFromBody();
+
     boolean collides(BodyActor actor);
 
 }

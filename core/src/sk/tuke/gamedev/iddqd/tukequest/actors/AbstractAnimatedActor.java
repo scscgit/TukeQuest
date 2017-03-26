@@ -64,7 +64,7 @@ public abstract class AbstractAnimatedActor implements AnimatedActor {
      * @param y Actor's Y axis
      */
     @Override
-    public final void setPosition(float x, float y) {
+    public void setPosition(float x, float y) {
         this.x = x;
         this.y = y;
     }
@@ -75,9 +75,8 @@ public abstract class AbstractAnimatedActor implements AnimatedActor {
      * @param position Actor's axes
      */
     @Override
-    public void setPosition(Vector2 position) {
-        x = position.x;
-        y = position.y;
+    public final void setPosition(Vector2 position) {
+        setPosition(position.x, position.y);
     }
 
     @Override
