@@ -16,7 +16,6 @@ public class GroundContactListener extends OneTypeContactHandler {
     @Override
     void onBegin(Contact contact, Fixture fixture1, Fixture fixture2) {
         super.onBegin(contact, fixture1, fixture2);
-        System.out.println("contact");
     }
 
 }

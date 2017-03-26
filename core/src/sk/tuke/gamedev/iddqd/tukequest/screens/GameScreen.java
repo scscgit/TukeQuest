@@ -8,12 +8,14 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
+import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 
 /**
  * Created by Steve on 24.03.2017.
@@ -62,7 +64,7 @@ public class GameScreen extends AbstractScreen {
         // Place the ground as a basis below which no actors can be created
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this).getAnimation().getHeight();
 
-        new FxFlameActor(0, -100).addToWorld(this);
+
 
         addActor(new VerticalActorGenerator(
             this.camera, this, groundHeight, VerticalActorGenerator.BACKGROUND_FACTORY));
@@ -84,6 +86,10 @@ public class GameScreen extends AbstractScreen {
             groundHeight,
             camera
         ).addToWorld(this);
+
+        FxFlameActor flameActor = new FxFlameActor(0, -100).addToWorld(this);
+
+        // todo: move flames
     }
 
     /**
