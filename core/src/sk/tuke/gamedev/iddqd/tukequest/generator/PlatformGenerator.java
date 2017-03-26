@@ -11,7 +11,7 @@ import java.util.Random;
 public class PlatformGenerator {
 
     private static final int PLATFORM_TEXTURE_CHANGE_RATE = 50;
-    private static final int Y_STEP = 64;
+    public static final int Y_DISTANCE_BETWEEN_PLATFORMS = 64;
 
     public static float highestPlatformY;
 
@@ -29,7 +29,7 @@ public class PlatformGenerator {
         Random random = new Random();
         for (int i = 0; i < count; i++) {
             platformCount++;
-            startingY = startingY + Y_STEP;
+            startingY = startingY + Y_DISTANCE_BETWEEN_PLATFORMS;
             int randomNum = random.nextInt((X_COORDINATE_RANGE - WALL_WIDTH) + 1) + WALL_WIDTH;
             platforms.add(new Platform(randomNum, startingY, currentTextureIndex));
 
