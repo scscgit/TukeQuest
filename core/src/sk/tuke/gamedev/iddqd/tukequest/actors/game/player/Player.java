@@ -74,9 +74,15 @@ public class Player extends RectangleActor implements RenderLast {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && isOnGround()) {
             // TODO: jump height should increase if player is moving sideways (sprinting}
             float xVelocityJumpCoeficient = Math.abs(getBody().getLinearVelocity().x) / 40;
+
+            // this is to make sure we won't reduce jump height if the player is just standing there
+            float jumpForceAppliedInThisJump = JUMP_FORCE;
+            if (xVelocityJumpCoeficient * JUMP_FORCE > JUMP_FORCE) {
+                jumpForceAppliedInThisJump = xVelocityJumpCoeficient * JUMP_FORCE;
+            }
             System.out.println("Linear velocity beofre jump : " + Math.abs(getBody().getLinearVelocity().x) / 40);
 
-            getBody().applyForceToCenter(new Vector2(0, JUMP_FORCE * xVelocityJumpCoeficient), true);
+            getBody().applyForceToCenter(new Vector2(0, jumpForceAppliedInThisJump), true);
 //            getBody().setLinearVelocity(new Vector2(getBody().getLinearVelocity().x, INPUT_FORCE_MULTIPLIER));
         }
 

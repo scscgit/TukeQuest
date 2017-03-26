@@ -83,7 +83,7 @@ public class GameScreen extends AbstractScreen {
             camera
         ).addToWorld(this);
 
-        new FxFlameActor(this.player, 0, -100).addToWorld(this);
+        new FxFlameActor(this.player, 0, -1000).addToWorld(this);
     }
 
     /**

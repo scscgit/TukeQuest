@@ -43,7 +43,7 @@ public class RectangleActor extends AbstractBodyActor {
     @Override
     protected Shape createShape(float scaleMultiplier) {
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(scaleMultiplier * this.width / 2, scaleMultiplier * this.height / 2, getCenterOffset(), 0);
+        shape.setAsBox(scaleMultiplier * this.width / 2, scaleMultiplier * this.height / 2, getCenterOffset().scl(scaleMultiplier), 0);
         return shape;
     }
 
