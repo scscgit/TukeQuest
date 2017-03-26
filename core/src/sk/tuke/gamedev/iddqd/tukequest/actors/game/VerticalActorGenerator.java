@@ -21,12 +21,12 @@ public class VerticalActorGenerator implements Actor {
         screen.addActor(new Background(y));
 
     public static final ActorFactory LEFT_WALL_FACTORY = (screen, y) ->
-        new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, y).addToWorld(screen.getWorld());
+        new BinaryVerticalWall(BinaryVerticalWall.Side.LEFT, y).addToWorld(screen);
     public static final ActorFactory RIGHT_WALL_FACTORY = (screen, y) ->
-        new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, y).addToWorld(screen.getWorld());
+        new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, y).addToWorld(screen);
 
     public static final ActorFactory PLATFORM_FACTORY = (screen, y) ->
-        PlatformGenerator.generateNext().addToWorld(screen.getWorld());
+        PlatformGenerator.generateNext().addToWorld(screen);
 
     private Camera camera;
     private AbstractScreen screen;

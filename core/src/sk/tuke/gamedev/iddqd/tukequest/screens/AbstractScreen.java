@@ -19,11 +19,14 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderFirst;
+import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 
 import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Enriches Screen by a physical interaction support and a default lifecycle implementation.
+ * <p>
  * Created by Steve on 24.03.2017.
  */
 public abstract class AbstractScreen implements Screen {
@@ -35,8 +38,10 @@ public abstract class AbstractScreen implements Screen {
     private SpriteBatch batch;
     private Box2DDebugRenderer debugRenderer;
     private TukeQuestGame game;
+    private MyContactListener worldContactListener;
     private List<Actor> actors = new LinkedList<>();
     private List<Actor> newActors = new LinkedList<>();
+    private boolean addingActor;
 
     protected AbstractScreen(TukeQuestGame game) {
         this.game = game;
@@ -48,12 +53,16 @@ public abstract class AbstractScreen implements Screen {
 
     protected abstract World initWorld();
 
+    public World getWorld() {
+        return this.world;
+    }
+
     protected TukeQuestGame getGame() {
         return this.game;
     }
 
-    public World getWorld() {
-        return world;
+    public MyContactListener getWorldContactListener() {
+        return this.worldContactListener;
     }
 
     /**
@@ -68,6 +77,8 @@ public abstract class AbstractScreen implements Screen {
         this.camera = initCamera();
         this.viewport = initViewport();
         this.world = initWorld();
+        this.worldContactListener = new MyContactListener();
+        this.world.setContactListener(this.worldContactListener);
 
         System.out.println("Screen " + this + " shown");
     }
@@ -85,19 +96,27 @@ public abstract class AbstractScreen implements Screen {
     }
 
     /**
-     * Adding any {@link Actor} other than {@link BodyActor}, that should have its callbacks run.
+     * @return true if the addActor() is being currently processed to aggressively prevent breaking encapsulation.
+     */
+    public boolean isAddingActor() {
+        return addingActor;
+    }
+
+    /**
+     * Adding any {@link Actor} other than {@link BodyActor}, that should have its callbacks run during the game.
      */
     public Actor addActor(Actor actor) {
+        this.addingActor = true;
         if (actor instanceof BodyActor) {
-            ((BodyActor) actor).addToWorld(this.world);
+            ((BodyActor) actor).addToWorld(this);
         } else {
             // Adds them to an intermediate queue
             this.newActors.add(actor);
         }
-        // NOTE: BodyActors will not execute this if they are just added using the method BodyActor:addToWorld
         if (actor instanceof ActOnAdd) {
             ((ActOnAdd) actor).onAddedToScreen(this);
         }
+        this.addingActor = false;
         return actor;
     }
 

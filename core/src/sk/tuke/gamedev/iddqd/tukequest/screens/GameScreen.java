@@ -59,7 +59,7 @@ public class GameScreen extends AbstractScreen {
 
     private void initActors() {
         // Place the ground as a basis below which no actors can be created
-        float groundHeight = new KeyboardGround(0, 0).addToWorld(this.world).getAnimation().getHeight();
+        float groundHeight = new KeyboardGround(0, 0).addToWorld(this).getAnimation().getHeight();
 
         addActor(new VerticalActorGenerator(
             this.camera, this, groundHeight, VerticalActorGenerator.BACKGROUND_FACTORY));
@@ -80,7 +80,7 @@ public class GameScreen extends AbstractScreen {
             TukeQuestGame.SCREEN_WIDTH / 2 - Player.ANIMATION.getWidth() / 2,
             groundHeight,
             camera
-        ).addToWorld(this.world);
+        ).addToWorld(this);
     }
 
     /**
@@ -92,6 +92,7 @@ public class GameScreen extends AbstractScreen {
         PlatformManager.INSTANCE = null;
     }
 
+    @Deprecated
     public void difficultyIncrease() {
         // Example implementation of difficulty increase: increasing gravity
         System.out.println("Gravity increased");

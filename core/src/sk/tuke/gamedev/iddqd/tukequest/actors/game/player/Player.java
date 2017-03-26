@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.GroundContactListener;
+import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
@@ -23,7 +26,8 @@ public class Player extends RectangleActor {
     private static final float INPUT_FORCE_MULTIPLIER = 200_000f;
 
     private Camera camera;
-    private boolean cameraDebugMovementEnabled = false;
+    private boolean cameraDebugMovementEnabled;
+    private GroundContactListener groundContactListener;
 
     public Player(float x, float y, Camera camera) {
         super(ANIMATION, BodyDef.BodyType.DynamicBody, x, y);
@@ -74,8 +78,7 @@ public class Player extends RectangleActor {
     }
 
     private boolean canJump() {
-        // TODO: fix
-        return Math.abs(getBody().getLinearVelocity().y) < 0.1f;
+        return this.groundContactListener.isHitting();
     }
 
     /**
@@ -112,6 +115,13 @@ public class Player extends RectangleActor {
     protected void configureBodyDef(BodyDef bodyDef) {
         // Player cannot rotate
         bodyDef.fixedRotation = true;
+    }
+
+    @Override
+    protected void addContactHandlers(MyContactListener contactListener, Fixture fixture) {
+        super.addContactHandlers(contactListener, fixture);
+        this.groundContactListener = new GroundContactListener(fixture);
+        contactListener.addHandler(this.groundContactListener);
     }
 
     @Override

@@ -8,7 +8,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Platform extends RectangleActor {
+public class Platform extends RectangleActor implements Ground {
 
     public final static List<Animation> ANIMATIONS;
 
