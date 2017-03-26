@@ -3,6 +3,9 @@ package sk.tuke.gamedev.iddqd.tukequest.actors;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.ActorContactHandler;
+import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
+import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
@@ -11,7 +14,6 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 public abstract class AbstractBodyActor extends AbstractAnimatedActor implements BodyActor {
 
     private BodyType bodyType;
-    private World world;
     private Body body;
 
     protected AbstractBodyActor(Animation animation, BodyType bodyType, float x, float y) {
@@ -20,12 +22,12 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
     }
 
     @SuppressWarnings("unchecked")
-    public final <T extends BodyActor> T addToWorld(World world) {
-        if (this.world != null) {
-            throw new UnsupportedOperationException("The Actor is already in a World");
+    public final <T extends BodyActor> T addToWorld(AbstractScreen screen) {
+        if (!screen.isAddingActor()) {
+            // Go call the screen and get called back one more time
+            return (T) screen.addActor(this);
         }
-        this.world = world;
-        this.body = createBody(this.bodyType, world);
+        this.body = createBody(this.bodyType, screen);
         return (T) this;
     }
 
@@ -44,7 +46,7 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
         return body;
     }
 
-    private Body createBody(BodyType bodyType, World world) {
+    private Body createBody(BodyType bodyType, AbstractScreen screen) {
         // First we create a body definition
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
@@ -55,31 +57,43 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
         configureBodyDef(bodyDef);
 
         // Create our body in the world using our body definition
-        Body body = world.createBody(bodyDef);
+        Body body = screen.getWorld().createBody(bodyDef);
 
         // Create a shape and a fixture definition to apply our shape to
-        createFixture(createShape(), body);
+        addContactHandlers(screen.getWorldContactListener(), createFixture(createShape(), body));
 
         body.setUserData(this);
         return body;
     }
 
+    // Maybe not needed, usually these properties can be accessed using {@Body} class too
     protected void configureBodyDef(BodyDef bodyDef) {
     }
 
     protected abstract Shape createShape();
 
-    private void createFixture(Shape shape, Body body) {
+    /**
+     * Registration place for all contact Actor's handlers.
+     *
+     * @param contactListener Provides a way to add a new handler.
+     * @param fixture         Give this important treasure to your handler.
+     */
+    protected void addContactHandlers(MyContactListener contactListener, Fixture fixture) {
+        contactListener.addHandler(new ActorContactHandler(fixture));
+    }
+
+    private Fixture createFixture(Shape shape, Body body) {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         configureFixtureDef(fixtureDef);
 
         // Create our fixture and attach it to the body
-        body.createFixture(fixtureDef);
+        Fixture fixture = body.createFixture(fixtureDef);
 
         // Remember to dispose of any shapes after you're done with them!
         // BodyDef and FixtureDef don't need disposing, but shapes do.
         shape.dispose();
+        return fixture;
     }
 
     protected abstract void configureFixtureDef(FixtureDef fixtureDef);
