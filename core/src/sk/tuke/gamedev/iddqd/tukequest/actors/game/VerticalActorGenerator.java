@@ -5,8 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
+
+import java.util.Random;
 
 /**
  * Created by Steve on 26.03.2017.
@@ -25,8 +28,17 @@ public class VerticalActorGenerator implements Actor {
     public static final ActorFactory RIGHT_WALL_FACTORY = (screen, y) ->
         new BinaryVerticalWall(BinaryVerticalWall.Side.RIGHT, y).addToWorld(screen);
 
-    public static final ActorFactory PLATFORM_FACTORY = (screen, y) ->
-        PlatformGenerator.generateNext().addToWorld(screen);
+    public static final ActorFactory PLATFORM_FACTORY = (screen, y) -> {
+        BodyActor platform = PlatformGenerator.generateNext().addToWorld(screen);
+        if (new Random().nextInt(22) == 0) {
+            new Surprise(screen,
+                platform.getX() + platform.getAnimation().getWidth() / 2,
+                platform.getY() + platform.getAnimation().getHeight()
+            ).addToWorld(screen);
+            System.out.println("Surprise spawned");
+        }
+        return platform;
+    };
 
     private Camera camera;
     private AbstractScreen screen;

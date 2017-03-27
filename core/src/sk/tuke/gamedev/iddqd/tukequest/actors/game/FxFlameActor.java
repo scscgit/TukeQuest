@@ -51,6 +51,10 @@ public class FxFlameActor extends RectangleActor implements RenderLast, ActOnAdd
         getBody().setLinearVelocity(new Vector2(0, velocity));
     }
 
+    public void increaseFlameVelocity(float velocity) {
+        getBody().setLinearVelocity(new Vector2(0, getBody().getLinearVelocity().y + velocity));
+    }
+
     @Override
     public void act() {
         if (collides(this.player)) {

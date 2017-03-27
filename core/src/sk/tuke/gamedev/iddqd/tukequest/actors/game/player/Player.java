@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderLast;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.Surprise;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.GroundContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
@@ -187,6 +188,10 @@ public class Player extends RectangleActor implements RenderLast {
     protected void configureFixtureDef(FixtureDef fixtureDef) {
         fixtureDef.density = DENSITY;
         fixtureDef.friction = FRICTION;
+    }
+
+    public void collected(Surprise surprise) {
+        getBody().applyForceToCenter(new Vector2(0f, 123456f), true);
     }
 
 }

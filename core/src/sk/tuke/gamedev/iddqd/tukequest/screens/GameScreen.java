@@ -16,6 +16,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
+import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 
 /**
  * Created by Steve on 24.03.2017.
@@ -31,6 +32,10 @@ public class GameScreen extends AbstractScreen {
 
     public GameScreen(TukeQuestGame game) {
         super(game);
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     @Override
@@ -58,6 +63,7 @@ public class GameScreen extends AbstractScreen {
         super.show();
         initActors();
         PlatformManager.INSTANCE = new PlatformManager(this.player);
+        TaskManager.INSTANCE.removeTimers("difficultyIncrease");
     }
 
     private void initActors() {
@@ -102,7 +108,14 @@ public class GameScreen extends AbstractScreen {
                     new FxFlameActor(GameScreen.this.player, -50, -200).addToWorld(GameScreen.this);
                     new FxFlameActor(GameScreen.this.player, -30, -250).addToWorld(GameScreen.this);
                     new FxFlameActor(GameScreen.this.player, -10, -350).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -10, -450).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -10, -550).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -10, -650).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -10, -750).addToWorld(GameScreen.this);
+                    TaskManager.INSTANCE.scheduleTimer(
+                        "difficultyIncrease", 15, 15, GameScreen.this::difficultyIncrease);
                     waiting = false;
+                    System.out.println("Flames started");
                 }
             }
 
@@ -118,11 +131,20 @@ public class GameScreen extends AbstractScreen {
         PlatformManager.INSTANCE = null;
     }
 
-    @Deprecated
     public void difficultyIncrease() {
-        // Example implementation of difficulty increase: increasing gravity
-        System.out.println("Gravity increased");
-        world.setGravity(world.getGravity().cpy().scl(1.7f));
+        // Example implementation of difficulty increase: increasing gravity and speed of flames
+        // NOTE: to be fair, maximum gravity should always allow player to jump vertically on a next platform
+        this.world.setGravity(this.world.getGravity().cpy().scl(2.9f));
+        if (this.world.getGravity().y < -94) {
+            this.world.setGravity(new Vector2(0, -94));
+        }
+        for (Actor actor : getActors()) {
+            if (actor instanceof FxFlameActor) {
+                FxFlameActor flame = (FxFlameActor) actor;
+                flame.increaseFlameVelocity(5);
+            }
+        }
+        System.out.println("Difficulty increased, gravity is " + this.world.getGravity().y);
     }
 
 }

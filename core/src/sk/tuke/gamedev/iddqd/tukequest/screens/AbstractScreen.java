@@ -55,6 +55,10 @@ public abstract class AbstractScreen implements Screen {
         return this.world;
     }
 
+    protected List<Actor> getActors() {
+        return actors;
+    }
+
     protected TukeQuestGame getGame() {
         return this.game;
     }
