@@ -155,14 +155,15 @@ public class Animation {
             throw new InvalidParameterException("Invalid input values");
         }
         TextureRegion[] walkFrames = new TextureRegion[lastImage - firstImage + 1];
-        int index = 0;
+        int sheetIndex = 0;
+        int frameIndex = 0;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                if (index++ < firstImage) {
+                if (sheetIndex++ < firstImage) {
                     continue;
                 }
-                walkFrames[index - 1] = splitSpriteSheet[i][j];
-                if (index > lastImage) {
+                walkFrames[frameIndex++] = splitSpriteSheet[i][j];
+                if (sheetIndex > lastImage) {
                     return walkFrames;
                 }
             }

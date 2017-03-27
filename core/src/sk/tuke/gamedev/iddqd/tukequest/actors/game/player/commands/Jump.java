@@ -32,6 +32,7 @@ public class Jump extends AbstractCommand {
                 + Math.abs(player.getBody().getLinearVelocity().x) / 40);
 
             player.getBody().applyForceToCenter(new Vector2(0, jumpForceAppliedInThisJump), true);
+            player.setJumping(true);
         }
         runNextCommand(player);
     }

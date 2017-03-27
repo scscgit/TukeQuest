@@ -27,6 +27,12 @@ public class HorizontalMovement extends AbstractCommand {
         if (direction != 0) {
             player.getBody().applyForceToCenter(
                 new Vector2(direction * 50 * Gdx.graphics.getDeltaTime() * this.forceMultiplier, 0f), true);
+
+            if (direction < 0) {
+                player.setAnimation(player.isJumping() ? Player.ANIMATION_LEFT_JUMP : Player.ANIMATION_LEFT_WALK);
+            } else {
+                player.setAnimation(player.isJumping() ? Player.ANIMATION_RIGHT_JUMP : Player.ANIMATION_RIGHT_WALK);
+            }
         }
         runNextCommand(player);
     }

@@ -34,6 +34,7 @@ public class BinaryVerticalWall extends RectangleActor {
     @Override
     protected void configureFixtureDef(FixtureDef fixtureDef) {
         super.configureFixtureDef(fixtureDef);
-        fixtureDef.restitution = 0.8f;
+        fixtureDef.restitution = 0.7f;
     }
+
 }

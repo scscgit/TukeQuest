@@ -3,6 +3,7 @@ package sk.tuke.gamedev.iddqd.tukequest.actors.game.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -20,14 +21,24 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class Player extends RectangleActor implements RenderLast {
 
-    public static final Animation ANIMATION = new Animation("custom_player.png", 3, 3, 0, 8, 0.2f);
+    //public static final Animation ANIMATION = new Animation("custom_player.png", 3, 3, 0, 8, 0.2f);
+
+    public static final Animation ANIMATION_RIGHT_WALK = new Animation("pixeljoint.png", 8, 4, 0, 9, 0.2f);
+    public static final Animation ANIMATION_RIGHT_JUMP = new Animation("pixeljoint.png", 8, 4, 10, 10, 0.2f);
+    public static final Animation ANIMATION_RIGHT_STAND = new Animation("pixeljoint.png", 8, 4, 11, 12, 0.2f);
+
+    public static final Animation ANIMATION_LEFT_WALK = new Animation("pixeljoint.png", 8, 4, 16, 25, 0.2f);
+    public static final Animation ANIMATION_LEFT_JUMP = new Animation("pixeljoint.png", 8, 4, 26, 26, 0.2f);
+    public static final Animation ANIMATION_LEFT_STAND = new Animation("pixeljoint.png", 8, 4, 27, 28, 0.2f);
+
+    public static final Animation ANIMATION = ANIMATION_RIGHT_STAND;
 
     private static final float DENSITY = .1f;
     private static final float FRICTION = .0f;
     private static final float INPUT_FORCE_MULTIPLIER = 9_00f;
     private static final float JUMP_FORCE = 25_000f;
     private static final float SPRINT_VELOCITY_THRESHOLD = 50;
-    private static final float SPRINT_VELOCITY_BURST = 60;
+    private static final float SPRINT_BURST = 15_000f;
 
     private Camera camera;
     private boolean cameraDebugMovementEnabled;
@@ -35,11 +46,33 @@ public class Player extends RectangleActor implements RenderLast {
     private boolean sprint;
     private MovementController movementController;
     private boolean alive = true;
+    private boolean jumping;
 
     public Player(float x, float y, Camera camera) {
         super(ANIMATION, BodyDef.BodyType.DynamicBody, x, y);
         this.camera = camera;
         this.movementController = new MovementController(INPUT_FORCE_MULTIPLIER, JUMP_FORCE, this, camera);
+    }
+
+    public boolean isJumping() {
+        return jumping;
+    }
+
+    public void setJumping(boolean jumping) {
+        this.jumping = jumping;
+        if (jumping) {
+            if (getAnimation().equals(ANIMATION_LEFT_STAND) || getAnimation().equals(ANIMATION_LEFT_WALK)) {
+                setAnimation(ANIMATION_LEFT_JUMP);
+            } else if (getAnimation().equals(ANIMATION_RIGHT_STAND) || getAnimation().equals(ANIMATION_RIGHT_WALK)) {
+                setAnimation(ANIMATION_RIGHT_JUMP);
+            }
+        } else {
+            if (getAnimation().equals(ANIMATION_LEFT_JUMP)) {
+                setAnimation(ANIMATION_LEFT_STAND);
+            } else if (getAnimation().equals(ANIMATION_RIGHT_JUMP)) {
+                setAnimation(ANIMATION_RIGHT_STAND);
+            }
+        }
     }
 
     public void killedByFlame() {
@@ -55,6 +88,10 @@ public class Player extends RectangleActor implements RenderLast {
 
     @Override
     public void act() {
+        if (isOnGround()) {
+            setJumping(false);
+        }
+
         // Movement
         if (this.movementController != null) {
             this.movementController.act();
@@ -88,9 +125,10 @@ public class Player extends RectangleActor implements RenderLast {
 
     private void sprint() {
         float horizontalSpeed = getBody().getLinearVelocity().x;
-        getBody().setLinearVelocity(
-            horizontalSpeed + Math.signum(horizontalSpeed) * SPRINT_VELOCITY_BURST,
-            getBody().getLinearVelocity().y);
+        getBody().applyForceToCenter(new Vector2(
+                horizontalSpeed + Math.signum(horizontalSpeed) * SPRINT_BURST,
+                0),
+            true);
         sprint = true;
         System.out.println(Player.class.getName() + " sprints");
     }
