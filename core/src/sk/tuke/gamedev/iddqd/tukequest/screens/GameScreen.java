@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
@@ -108,10 +110,10 @@ public class GameScreen extends AbstractScreen {
                     new FxFlameActor(GameScreen.this.player, -50, -200).addToWorld(GameScreen.this);
                     new FxFlameActor(GameScreen.this.player, -30, -250).addToWorld(GameScreen.this);
                     new FxFlameActor(GameScreen.this.player, -10, -350).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -10, -450).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -10, -550).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -10, -650).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -10, -750).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -50, -450).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -40, -550).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -20, -650).addToWorld(GameScreen.this);
+                    new FxFlameActor(GameScreen.this.player, -90, -750).addToWorld(GameScreen.this);
                     TaskManager.INSTANCE.scheduleTimer(
                         "difficultyIncrease", 15, 15, GameScreen.this::difficultyIncrease);
                     waiting = false;
@@ -134,14 +136,17 @@ public class GameScreen extends AbstractScreen {
     public void difficultyIncrease() {
         // Example implementation of difficulty increase: increasing gravity and speed of flames
         // NOTE: to be fair, maximum gravity should always allow player to jump vertically on a next platform
-        this.world.setGravity(this.world.getGravity().cpy().scl(2.9f));
+        this.world.setGravity(this.world.getGravity().cpy().scl(1.3f));
         if (this.world.getGravity().y < -94) {
             this.world.setGravity(new Vector2(0, -94));
         }
-        for (Actor actor : getActors()) {
-            if (actor instanceof FxFlameActor) {
-                FxFlameActor flame = (FxFlameActor) actor;
-                flame.increaseFlameVelocity(5);
+        Array<Body> temporaryBodies = new Array<>();
+        getWorld().getBodies(temporaryBodies);
+        // TODO: probably use getActors() instead, which means addActor will add them to actors field of Screen
+        for (Body body : temporaryBodies) {
+            if (body.getUserData() instanceof FxFlameActor) {
+                FxFlameActor flame = (FxFlameActor) body.getUserData();
+                flame.increaseFlameVelocity(0.9f);
             }
         }
         System.out.println("Difficulty increased, gravity is " + this.world.getGravity().y);

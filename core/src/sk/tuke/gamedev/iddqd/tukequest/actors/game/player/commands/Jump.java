@@ -10,6 +10,8 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
  */
 public class Jump extends AbstractCommand {
 
+    private static final float JUMP_SPRINT_FACTOR = 1.5f;
+
     private float jumpForce;
 
     public Jump(float jumpForce, Command command) {
@@ -28,9 +30,11 @@ public class Jump extends AbstractCommand {
             if (xVelocityJumpCoeficient * this.jumpForce > this.jumpForce) {
                 jumpForceAppliedInThisJump = xVelocityJumpCoeficient * this.jumpForce;
             }
-            System.out.println("Linear velocity before jump : "
-                + Math.abs(player.getBody().getLinearVelocity().x) / 40);
+            //System.out.println("Linear velocity before jump: " + Math.abs(player.getBody().getLinearVelocity().x)/40);
 
+            if (player.isSprinting()) {
+                jumpForceAppliedInThisJump *= JUMP_SPRINT_FACTOR;
+            }
             player.getBody().applyForceToCenter(new Vector2(0, jumpForceAppliedInThisJump), true);
             player.setJumping(true);
         }

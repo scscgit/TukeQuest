@@ -26,7 +26,7 @@ public class HorizontalMovement extends AbstractCommand {
         float direction = keyboardInput() + mouseInput(this.camera);
         if (direction != 0) {
             player.getBody().applyForceToCenter(
-                new Vector2(direction * 50 * Gdx.graphics.getDeltaTime() * this.forceMultiplier, 0f), true);
+                new Vector2(direction * 12.5f * Gdx.graphics.getDeltaTime() * this.forceMultiplier, 0f), true);
 
             if (direction < 0) {
                 player.setAnimation(player.isJumping() ? Player.ANIMATION_LEFT_JUMP : Player.ANIMATION_LEFT_WALK);

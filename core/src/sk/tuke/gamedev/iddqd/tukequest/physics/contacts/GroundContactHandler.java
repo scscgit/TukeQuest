@@ -7,9 +7,9 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.Ground;
 /**
  * Created by Steve on 26.03.2017.
  */
-public class GroundContactListener extends OneTypeContactHandler {
+public class GroundContactHandler extends OneTypeContactHandler {
 
-    public GroundContactListener(Fixture fixture) {
+    public GroundContactHandler(Fixture fixture) {
         super(fixture, Ground.class);
     }
 

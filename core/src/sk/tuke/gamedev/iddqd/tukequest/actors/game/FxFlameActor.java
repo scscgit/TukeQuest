@@ -44,7 +44,7 @@ public class FxFlameActor extends RectangleActor implements RenderLast, ActOnAdd
 
     @Override
     public void onAddedToScreen(AbstractScreen screen) {
-        setFlameVelocity(16);
+        setFlameVelocity(4);
     }
 
     public void setFlameVelocity(float velocity) {
@@ -52,7 +52,7 @@ public class FxFlameActor extends RectangleActor implements RenderLast, ActOnAdd
     }
 
     public void increaseFlameVelocity(float velocity) {
-        getBody().setLinearVelocity(new Vector2(0, getBody().getLinearVelocity().y + velocity));
+        setFlameVelocity(getBody().getLinearVelocity().y + velocity);
     }
 
     @Override

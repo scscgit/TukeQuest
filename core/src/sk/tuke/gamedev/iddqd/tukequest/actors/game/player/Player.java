@@ -12,7 +12,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderLast;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.Surprise;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
-import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.GroundContactListener;
+import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.GroundContactHandler;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.screens.GameOverScreen;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
@@ -35,16 +35,16 @@ public class Player extends RectangleActor implements RenderLast {
     public static final Animation ANIMATION = ANIMATION_RIGHT_STAND;
 
     private static final float DENSITY = .1f;
-    private static final float FRICTION = .0f;
-    private static final float INPUT_FORCE_MULTIPLIER = 9_00f;
-    private static final float JUMP_FORCE = 25_000f;
-    private static final float SPRINT_VELOCITY_THRESHOLD = 50;
-    private static final float SPRINT_BURST = 15_000f;
+    private static final float FRICTION = .7f;
+    private static final float INPUT_FORCE_MULTIPLIER = 200f;
+    private static final float JUMP_FORCE = 900f;
+    private static final float SPRINT_VELOCITY_THRESHOLD = 10f;
+    private static final float SPRINT_BURST = 100f;
 
     private Camera camera;
     private boolean cameraDebugMovementEnabled;
-    private GroundContactListener groundContactListener;
-    private boolean sprint;
+    private GroundContactHandler groundContactHandler;
+    private boolean sprinting;
     private MovementController movementController;
     private boolean alive = true;
     private boolean jumping;
@@ -117,11 +117,15 @@ public class Player extends RectangleActor implements RenderLast {
     }
 
     public boolean isOnGround() {
-        return this.groundContactListener.isHitting();
+        return this.groundContactHandler.isHitting();
+    }
+
+    public boolean isSprinting() {
+        return sprinting;
     }
 
     private boolean canSprint() {
-        return !sprint && isOnGround() && Math.abs(getBody().getLinearVelocity().x) > SPRINT_VELOCITY_THRESHOLD;
+        return !sprinting && isOnGround() && Math.abs(getBody().getLinearVelocity().x) > SPRINT_VELOCITY_THRESHOLD;
     }
 
     private void sprint() {
@@ -130,13 +134,13 @@ public class Player extends RectangleActor implements RenderLast {
                 horizontalSpeed + Math.signum(horizontalSpeed) * SPRINT_BURST,
                 0),
             true);
-        sprint = true;
+        sprinting = true;
         System.out.println(Player.class.getName() + " sprints");
     }
 
     private void stopSprintIfSlow() {
-        if (sprint && Math.abs(getBody().getLinearVelocity().x) < SPRINT_VELOCITY_THRESHOLD) {
-            sprint = false;
+        if (sprinting && Math.abs(getBody().getLinearVelocity().x) < SPRINT_VELOCITY_THRESHOLD) {
+            sprinting = false;
             System.out.println(Player.class.getName() + " no longer sprints");
         }
     }
@@ -180,8 +184,8 @@ public class Player extends RectangleActor implements RenderLast {
     @Override
     protected void addContactHandlers(MyContactListener contactListener, Fixture fixture) {
         super.addContactHandlers(contactListener, fixture);
-        this.groundContactListener = new GroundContactListener(fixture);
-        contactListener.addHandler(this.groundContactListener);
+        this.groundContactHandler = new GroundContactHandler(fixture);
+        contactListener.addHandler(this.groundContactHandler);
     }
 
     @Override
@@ -191,7 +195,7 @@ public class Player extends RectangleActor implements RenderLast {
     }
 
     public void collected(Surprise surprise) {
-        getBody().applyForceToCenter(new Vector2(0f, 123456f), true);
+        getBody().applyForceToCenter(new Vector2(0f, 2_000f), true);
     }
 
 }
