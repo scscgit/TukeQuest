@@ -13,7 +13,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 public class Jump extends AbstractCommand {
 
     private static final float JUMP_SPRINT_FACTOR = 1.5f;
-    private Music jumpSound = TukeQuestGame.manager.get("audio/sounds/jump.wav",Music.class);
+    private Music jumpSound = TukeQuestGame.manager.get("audio/sounds/jump.mp3",Music.class);
 
     private float jumpForce;
 

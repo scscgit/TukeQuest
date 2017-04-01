@@ -37,9 +37,9 @@ public class TukeQuestGame extends Game {
     private void loadAudio() {
         manager = new AssetManager();
         manager.load("audio/music/backgroundmusic.mp3",Music.class);
-        manager.load("audio/music/gameover.wav",Music.class);
-        manager.load("audio/sounds/bonus.wav",Music.class);
-        manager.load("audio/sounds/jump.wav",Music.class);
+        manager.load("audio/music/gameover.mp3",Music.class);
+        manager.load("audio/sounds/bonus.mp3",Music.class);
+        manager.load("audio/sounds/jump.mp3",Music.class);
         manager.finishLoading();
 
     }

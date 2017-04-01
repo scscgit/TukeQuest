@@ -20,7 +20,7 @@ public class GameOverScreen extends AbstractScreen {
         "gameover.jpg", Animation.ScaleType.SCALE_WIDTH, TukeQuestGame.SCREEN_WIDTH);
 
     public GameOverScreen(TukeQuestGame game) {
-        super(game,TukeQuestGame.manager.get("audio/music/gameover.wav",Music.class));
+        super(game,TukeQuestGame.manager.get("audio/music/gameover.mp3",Music.class));
     }
 
     @Override

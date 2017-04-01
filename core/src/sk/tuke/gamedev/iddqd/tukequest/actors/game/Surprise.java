@@ -22,7 +22,7 @@ public class Surprise extends RectangleActor {
     public Surprise(AbstractScreen screen, float x, float y) {
         super(ANIMATION, BodyDef.BodyType.KinematicBody, x, y);
         this.screen = (GameScreen) screen;
-        music = TukeQuestGame.manager.get("audio/sounds/bonus.wav",Music.class);
+        music = TukeQuestGame.manager.get("audio/sounds/bonus.mp3",Music.class);
     }
 
     @Override
