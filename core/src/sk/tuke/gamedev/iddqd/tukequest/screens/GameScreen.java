@@ -1,6 +1,7 @@
 package sk.tuke.gamedev.iddqd.tukequest.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -33,7 +34,7 @@ public class GameScreen extends AbstractScreen {
     private Player player;
 
     public GameScreen(TukeQuestGame game) {
-        super(game);
+        super(game,TukeQuestGame.manager.get("audio/music/backgroundmusic.mp3",Music.class));
     }
 
     public Player getPlayer() {

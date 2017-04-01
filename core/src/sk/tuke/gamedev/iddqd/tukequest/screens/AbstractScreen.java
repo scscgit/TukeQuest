@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,9 +41,12 @@ public abstract class AbstractScreen implements Screen {
     private List<Actor> actors = new LinkedList<>();
     private List<Actor> newActors = new LinkedList<>();
     private boolean addingActor;
+    private Music music;
 
-    protected AbstractScreen(TukeQuestGame game) {
+    protected AbstractScreen(TukeQuestGame game, Music music) {
         this.game = game;
+        this.music = music;
+        music.setLooping(true);
     }
 
     protected abstract Camera initCamera();
@@ -83,7 +87,7 @@ public abstract class AbstractScreen implements Screen {
             this.worldContactListener = new MyContactListener();
             this.world.setContactListener(this.worldContactListener);
         }
-
+         this.music.play();
         System.out.println("Screen " + this + " shown");
     }
 
@@ -257,6 +261,7 @@ public abstract class AbstractScreen implements Screen {
     @Override
     public void hide() {
         this.actors.clear();
+        this.music.stop();
         System.out.println("Screen " + this + " hidden");
     }
 

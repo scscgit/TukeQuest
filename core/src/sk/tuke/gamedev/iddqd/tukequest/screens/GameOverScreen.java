@@ -1,5 +1,6 @@
 package sk.tuke.gamedev.iddqd.tukequest.screens;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.World;
@@ -19,7 +20,7 @@ public class GameOverScreen extends AbstractScreen {
         "gameover.jpg", Animation.ScaleType.SCALE_WIDTH, TukeQuestGame.SCREEN_WIDTH);
 
     public GameOverScreen(TukeQuestGame game) {
-        super(game);
+        super(game,TukeQuestGame.manager.get("audio/music/gameover.wav",Music.class));
     }
 
     @Override

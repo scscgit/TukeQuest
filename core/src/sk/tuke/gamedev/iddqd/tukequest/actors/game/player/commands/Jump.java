@@ -2,7 +2,9 @@ package sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
+import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 
 /**
@@ -11,6 +13,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 public class Jump extends AbstractCommand {
 
     private static final float JUMP_SPRINT_FACTOR = 1.5f;
+    private Music jumpSound = TukeQuestGame.manager.get("audio/sounds/jump.wav",Music.class);
 
     private float jumpForce;
 
@@ -22,6 +25,8 @@ public class Jump extends AbstractCommand {
     @Override
     public void execute(Player player) {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && player.isOnGround()) {
+            jumpSound.play();
+
             // TODO: jump height should increase if player is moving sideways (sprinting}
             float xVelocityJumpCoeficient = Math.abs(player.getBody().getLinearVelocity().x) / 40;
 
