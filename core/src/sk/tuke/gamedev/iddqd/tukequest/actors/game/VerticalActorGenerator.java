@@ -6,6 +6,7 @@ import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Surprise;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 

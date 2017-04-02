@@ -8,22 +8,21 @@ import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
 
 public class TukeQuestGame extends Game {
 
-    public static final int SCREEN_WIDTH = 500;
+    public static final int SCREEN_WIDTH = 700;
     public static final int SCREEN_HEIGHT = 500;
 
     // Only Player uses this when he dies
     public static TukeQuestGame THIS;
 
+    public static AssetManager manager;
     public static boolean debug;
 
     private GameScreen gameScreen;
 
-    public static AssetManager manager;
-
     @Override
     public void create() {
         THIS = this;
-        loadAudio();
+        TukeQuestGame.manager = loadAssets();
 
         this.gameScreen = new GameScreen(this);
         setScreen(this.gameScreen);
@@ -34,14 +33,20 @@ public class TukeQuestGame extends Game {
         System.out.println("Game " + this + " created");
     }
 
-    private void loadAudio() {
+    private AssetManager loadAssets() {
         manager = new AssetManager();
-        manager.load("audio/music/backgroundmusic.mp3",Music.class);
-        manager.load("audio/music/gameover.mp3",Music.class);
-        manager.load("audio/sounds/bonus.mp3",Music.class);
-        manager.load("audio/sounds/jump.mp3",Music.class);
+        loadAudio(manager);
         manager.finishLoading();
+        System.out.println("All assets loaded");
+        return manager;
+    }
 
+    private void loadAudio(AssetManager manager) {
+        manager.load("audio/music/backgroundmusic.mp3", Music.class);
+        manager.load("audio/music/gameover.mp3", Music.class);
+        manager.load("audio/sounds/bonus.mp3", Music.class);
+        manager.load("audio/sounds/jump.mp3", Music.class);
+        System.out.println("Audio loaded");
     }
 
     @Override

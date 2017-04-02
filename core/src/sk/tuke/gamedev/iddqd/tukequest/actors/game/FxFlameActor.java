@@ -16,6 +16,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 public class FxFlameActor extends RectangleActor implements RenderLast, ActOnAdd {
 
     public static final Animation ANIMATION = new Animation("flame_fx.png", 1, 5, 0, 4, 0.65f);
+    public static final float INITIAL_SPEED = 2;
 
     static {
         // Scales the animation to the full screen width
@@ -44,7 +45,7 @@ public class FxFlameActor extends RectangleActor implements RenderLast, ActOnAdd
 
     @Override
     public void onAddedToScreen(AbstractScreen screen) {
-        setFlameVelocity(4);
+        setFlameVelocity(INITIAL_SPEED);
     }
 
     public void setFlameVelocity(float velocity) {

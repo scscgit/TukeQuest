@@ -87,7 +87,7 @@ public abstract class AbstractScreen implements Screen {
             this.worldContactListener = new MyContactListener();
             this.world.setContactListener(this.worldContactListener);
         }
-         this.music.play();
+        this.music.play();
         System.out.println("Screen " + this + " shown");
     }
 

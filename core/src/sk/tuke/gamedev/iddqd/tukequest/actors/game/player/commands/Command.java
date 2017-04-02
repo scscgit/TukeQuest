@@ -9,4 +9,6 @@ public interface Command {
 
     void execute(Player player);
 
+    Command setNext(Command nextCommand);
+
 }

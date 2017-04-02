@@ -17,10 +17,10 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 public class GameOverScreen extends AbstractScreen {
 
     public static final Animation GAME_OVER_BACKGROUND = new Animation(
-        "gameover.jpg", Animation.ScaleType.SCALE_WIDTH, TukeQuestGame.SCREEN_WIDTH);
+        "gameover.jpg", Animation.ScaleType.SCALE_WIDTH, TukeQuestGame.SCREEN_HEIGHT);
 
     public GameOverScreen(TukeQuestGame game) {
-        super(game,TukeQuestGame.manager.get("audio/music/gameover.mp3",Music.class));
+        super(game, TukeQuestGame.manager.get("audio/music/gameover.mp3", Music.class));
     }
 
     @Override
@@ -30,7 +30,7 @@ public class GameOverScreen extends AbstractScreen {
 
     @Override
     protected Viewport initViewport(Camera camera) {
-        return new FitViewport(500, 500, camera);
+        return new FitViewport(TukeQuestGame.SCREEN_WIDTH, TukeQuestGame.SCREEN_HEIGHT, camera);
     }
 
     @Override
@@ -44,8 +44,11 @@ public class GameOverScreen extends AbstractScreen {
 
         // Displaying Game Over image for a moment
         float emptyHeight = TukeQuestGame.SCREEN_HEIGHT - GAME_OVER_BACKGROUND.getHeight();
+        float emptyWidth = TukeQuestGame.SCREEN_WIDTH - GAME_OVER_BACKGROUND.getWidth();
         addActor(new GameOverBackground(
-            GAME_OVER_BACKGROUND, 0, emptyHeight > 0 ? emptyHeight / 2 : 0) {
+            GAME_OVER_BACKGROUND,
+            emptyWidth > 0 ? emptyWidth / 2 : 0,
+            emptyHeight > 0 ? emptyHeight / 2 : 0) {
         });
 
         // Schedule game restart

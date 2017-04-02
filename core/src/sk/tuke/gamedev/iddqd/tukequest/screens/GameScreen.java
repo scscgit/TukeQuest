@@ -26,15 +26,19 @@ import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
  */
 public class GameScreen extends AbstractScreen {
 
+    private static final float GRAVITY = 75;
+    private static final float GRAVITY_LIMIT = GRAVITY * 1.88f;
+
     /**
      * Number of platforms displayed at once.
      */
+    @Deprecated
     private static final int PLATFORMS_COUNT = 10;
 
     private Player player;
 
     public GameScreen(TukeQuestGame game) {
-        super(game,TukeQuestGame.manager.get("audio/music/backgroundmusic.mp3",Music.class));
+        super(game, TukeQuestGame.manager.get("audio/music/backgroundmusic.mp3", Music.class));
     }
 
     public Player getPlayer() {
@@ -49,13 +53,13 @@ public class GameScreen extends AbstractScreen {
     @Override
     protected Viewport initViewport(Camera camera) {
         // Setup the camera to support a virtual screen size, which always maintains the same aspect ratio
-        return new FitViewport(500, 500, camera);
+        return new FitViewport(TukeQuestGame.SCREEN_WIDTH, TukeQuestGame.SCREEN_HEIGHT, camera);
     }
 
     @Override
     protected World initWorld() {
         // Initialize the World with a gravitation
-        return new World(new Vector2(0, -50), true);
+        return new World(new Vector2(0, -GRAVITY), true);
     }
 
     /**
@@ -89,7 +93,7 @@ public class GameScreen extends AbstractScreen {
 
         // Create Player standing at the KeyboardGround in the middle of the screen
         this.player = new Player(
-            TukeQuestGame.SCREEN_WIDTH / 2 - Player.ANIMATION.getWidth() / 2,
+            TukeQuestGame.SCREEN_WIDTH / 2 - Player.ANIMATION_STAND.getWidth() / 2,
             groundHeight,
             camera
         ).addToWorld(this);
@@ -135,11 +139,14 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void difficultyIncrease() {
+        float gravityMultiplier = 1.3f;
+        float flameIncrease = 0.5f;
+
         // Example implementation of difficulty increase: increasing gravity and speed of flames
         // NOTE: to be fair, maximum gravity should always allow player to jump vertically on a next platform
-        this.world.setGravity(this.world.getGravity().cpy().scl(1.3f));
-        if (this.world.getGravity().y < -94) {
-            this.world.setGravity(new Vector2(0, -94));
+        this.world.setGravity(this.world.getGravity().cpy().scl(gravityMultiplier));
+        if (this.world.getGravity().y < -GRAVITY * GRAVITY_LIMIT) {
+            this.world.setGravity(new Vector2(0, -GRAVITY_LIMIT));
         }
         Array<Body> temporaryBodies = new Array<>();
         getWorld().getBodies(temporaryBodies);
@@ -147,7 +154,7 @@ public class GameScreen extends AbstractScreen {
         for (Body body : temporaryBodies) {
             if (body.getUserData() instanceof FxFlameActor) {
                 FxFlameActor flame = (FxFlameActor) body.getUserData();
-                flame.increaseFlameVelocity(0.9f);
+                flame.increaseFlameVelocity(flameIncrease);
             }
         }
         System.out.println("Difficulty increased, gravity is " + this.world.getGravity().y);
