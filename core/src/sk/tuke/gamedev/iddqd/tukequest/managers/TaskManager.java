@@ -1,10 +1,12 @@
 package sk.tuke.gamedev.iddqd.tukequest.managers;
 
 import com.badlogic.gdx.utils.Timer;
+import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Manages asynchronous tasks and provides an easy way to cancel them based on String name.
@@ -35,7 +37,14 @@ public enum TaskManager {
         Timer.Task task = new Timer.Task() {
             @Override
             public void run() {
+                Log.t(this, type + "run started");
                 action.run();
+                if (!this.isScheduled()) {
+                    removeTask(type, this);
+                    Log.i(TaskManager.this, type + " ran and was removed");
+                } else {
+                    Log.i(TaskManager.this, type + " ran");
+                }
             }
         };
         if (type != null) {
@@ -44,18 +53,40 @@ public enum TaskManager {
             }
             taskMap.get(type).add(task);
         }
+        Log.i(this, type + " scheduled");
         return task;
+    }
+
+    public void removeTask(String type, Timer.Task task) {
+        if (type == null) {
+            return;
+        }
+        List<Timer.Task> tasks = taskMap.get(type);
+        if (tasks == null) {
+            Log.w(this, "Invalid state, taskMap contained empty list during removeTask for " + type);
+            return;
+        }
+        tasks.remove(task);
+        if (tasks.isEmpty()) {
+            taskMap.remove(type);
+        }
     }
 
     public void removeTimers(String type) {
         List<Timer.Task> tasks = taskMap.get(type);
         if (tasks == null) {
+            Log.w(this, "Invalid state, taskMap contained empty list during removeTimers for " + type);
             return;
         }
         for (Timer.Task task : tasks) {
             task.cancel();
         }
         taskMap.remove(type);
+        Log.i(this, type + " was removed");
+    }
+
+    public Set<String> scheduledTimers() {
+        return taskMap.keySet();
     }
 
 }

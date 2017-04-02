@@ -9,6 +9,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Surprise;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
+import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 
 import java.util.Random;
 
@@ -36,7 +37,7 @@ public class VerticalActorGenerator implements Actor {
                 platform.getX() + platform.getAnimation().getWidth() / 2,
                 platform.getY() + platform.getAnimation().getHeight()
             ).addToWorld(screen);
-            System.out.println("Surprise spawned");
+            Log.d(screen, "Surprise spawned");
         }
         return platform;
     };
@@ -61,7 +62,7 @@ public class VerticalActorGenerator implements Actor {
     public void act() {
         if (this.nextStartingY < this.camera.position.y + TukeQuestGame.SCREEN_HEIGHT) {
             AnimatedActor actor = this.factory.createActor(this.screen, this.nextStartingY);
-            System.out.println("Generated next " + actor.getClass().getSimpleName() + " at " + this.nextStartingY);
+            Log.d(this, "Generated next " + actor.getClass().getSimpleName() + " at " + this.nextStartingY);
             this.nextStartingY += actor.getAnimation().getHeight();
         }
         // TODO: implement some cleanUp logic here

@@ -16,12 +16,13 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.*;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderFirst;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderLast;
+import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
+import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Enriches Screen by a physical interaction support and a default lifecycle implementation.
@@ -88,7 +89,7 @@ public abstract class AbstractScreen implements Screen {
             this.world.setContactListener(this.worldContactListener);
         }
         this.music.play();
-        System.out.println("Screen " + this + " shown");
+        Log.i(this, "Screen shown");
     }
 
     /**
@@ -220,7 +221,7 @@ public abstract class AbstractScreen implements Screen {
         for (Body body : this.temporaryWorldBodies) {
             BodyActor actor = (BodyActor) body.getUserData();
             if (actor == null) {
-                System.out.println("Warning: non-physical actor has been added to the World");
+                Log.w(this, "Non-physical actor has been added to the World");
                 continue;
             }
             // Update the entities/sprites position and angle
@@ -236,7 +237,7 @@ public abstract class AbstractScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-        System.out.println("Screen " + this + " resized");
+        Log.i(this, "Screen resized");
     }
 
     /**
@@ -244,7 +245,9 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public void pause() {
-        System.out.println("Screen " + this + " paused");
+        Set<String> timers = TaskManager.INSTANCE.scheduledTimers();
+        Log.i(this, "Screen paused" + (timers.size() == 0 ? "" : ", scheduled tasks:"));
+        timers.forEach(timer -> System.out.println("> task " + timer));
     }
 
     /**
@@ -252,7 +255,9 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public void resume() {
-        System.out.println("Screen " + this + " resumed");
+        Set<String> timers = TaskManager.INSTANCE.scheduledTimers();
+        Log.i(this, "Screen resumed" + (timers.size() == 0 ? "" : ", scheduled tasks:"));
+        timers.forEach(timer -> System.out.println("> task " + timer));
     }
 
     /**
@@ -262,7 +267,7 @@ public abstract class AbstractScreen implements Screen {
     public void hide() {
         this.actors.clear();
         this.music.stop();
-        System.out.println("Screen " + this + " hidden");
+        Log.i(this, "Screen hidden");
     }
 
     /**
@@ -273,7 +278,7 @@ public abstract class AbstractScreen implements Screen {
         this.batch.dispose();
         this.debugRenderer.dispose();
         this.world.dispose();
-        System.out.println("Screen " + this + " disposed");
+        Log.i(this, "Screen disposed");
     }
 
 }

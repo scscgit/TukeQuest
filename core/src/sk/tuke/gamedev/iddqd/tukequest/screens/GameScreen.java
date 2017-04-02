@@ -20,14 +20,17 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
+import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 
 /**
  * Created by Steve on 24.03.2017.
  */
 public class GameScreen extends AbstractScreen {
 
+    // Vertical jump goes up 4 platforms
     private static final float GRAVITY = 75;
-    private static final float GRAVITY_LIMIT = GRAVITY * 1.88f;
+    // Vertical jump goes up 1 platform
+    private static final float GRAVITY_LIMIT = 170;
 
     /**
      * Number of platforms displayed at once.
@@ -109,7 +112,7 @@ public class GameScreen extends AbstractScreen {
 
             @Override
             public void act() {
-                if (waiting && GameScreen.this.player.getY() > 500) {
+                if (waiting && GameScreen.this.player.getY() > 800) {
                     new FxFlameActor(GameScreen.this.player, 0, -100).addToWorld(GameScreen.this);
                     new FxFlameActor(GameScreen.this.player, -80, -150).addToWorld(GameScreen.this);
                     new FxFlameActor(GameScreen.this.player, -50, -200).addToWorld(GameScreen.this);
@@ -122,7 +125,7 @@ public class GameScreen extends AbstractScreen {
                     TaskManager.INSTANCE.scheduleTimer(
                         "difficultyIncrease", 15, 15, GameScreen.this::difficultyIncrease);
                     waiting = false;
-                    System.out.println("Flames started");
+                    Log.i(GameScreen.this, "Flames started");
                 }
             }
 
@@ -145,7 +148,7 @@ public class GameScreen extends AbstractScreen {
         // Example implementation of difficulty increase: increasing gravity and speed of flames
         // NOTE: to be fair, maximum gravity should always allow player to jump vertically on a next platform
         this.world.setGravity(this.world.getGravity().cpy().scl(gravityMultiplier));
-        if (this.world.getGravity().y < -GRAVITY * GRAVITY_LIMIT) {
+        if (this.world.getGravity().y < -GRAVITY_LIMIT) {
             this.world.setGravity(new Vector2(0, -GRAVITY_LIMIT));
         }
         Array<Body> temporaryBodies = new Array<>();
@@ -157,7 +160,7 @@ public class GameScreen extends AbstractScreen {
                 flame.increaseFlameVelocity(flameIncrease);
             }
         }
-        System.out.println("Difficulty increased, gravity is " + this.world.getGravity().y);
+        Log.i(this, "Difficulty increased, gravity is " + this.world.getGravity().y);
     }
 
 }

@@ -1,4 +1,4 @@
-package sk.tuke.gamedev.iddqd.tukequest.actors.game;
+package sk.tuke.gamedev.iddqd.tukequest.actors;
 
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 

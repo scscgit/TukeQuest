@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.RenderLast;
+import sk.tuke.gamedev.iddqd.tukequest.actors.RenderLast;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Surprise;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.CameraFollow;
@@ -18,6 +18,7 @@ import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.GroundContactHandler;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.screens.GameOverScreen;
+import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
@@ -39,7 +40,7 @@ public class Player extends RectangleActor implements RenderLast {
 
     private static final float DENSITY = .1f;
     private static final float FRICTION = 0f;
-    private static final float LINEAR_DAMPING = 0.8f;
+    private static final float LINEAR_DAMPING = 1f;
     private static final float INPUT_FORCE_MULTIPLIER = 30f;
     private static final float JUMP_FORCE = 250f;
     private static final float SPRINT_VELOCITY_THRESHOLD = 6f;
@@ -86,10 +87,10 @@ public class Player extends RectangleActor implements RenderLast {
     public void killedByFlame() {
         if (this.alive) {
             this.alive = false;
-            System.out.println("Game over");
+            Log.i(this, "Game Over");
             getBody().getFixtureList().get(0).setSensor(true);
             this.commandChain = this.commandChainOnDeath;
-            TaskManager.INSTANCE.scheduleTimer("gameOverCountdown", 5,
+            TaskManager.INSTANCE.scheduleTimer("gameOverCountdown", 3,
                 () -> TukeQuestGame.THIS.setScreen(new GameOverScreen(TukeQuestGame.THIS)));
         }
     }
@@ -125,13 +126,13 @@ public class Player extends RectangleActor implements RenderLast {
                 0),
             true);
         sprinting = true;
-        System.out.println(Player.class.getName() + " sprints");
+        Log.i(this, "Sprints");
     }
 
     private void stopSprintIfSlow() {
         if (sprinting && Math.abs(getBody().getLinearVelocity().x) < SPRINT_VELOCITY_THRESHOLD) {
             sprinting = false;
-            System.out.println(Player.class.getName() + " no longer sprints");
+            Log.i(this, "No longer sprints");
         }
     }
 

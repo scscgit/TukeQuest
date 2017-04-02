@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.ActOnAdd;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.RenderLast;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;

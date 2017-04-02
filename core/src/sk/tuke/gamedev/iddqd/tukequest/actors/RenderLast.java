@@ -1,6 +1,4 @@
-package sk.tuke.gamedev.iddqd.tukequest.actors.game;
-
-import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
+package sk.tuke.gamedev.iddqd.tukequest.actors;
 
 /**
  * Flagged {@link Actor} will be rendered last.

@@ -2,7 +2,7 @@ package sk.tuke.gamedev.iddqd.tukequest.physics.contacts;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.Ground;
+import sk.tuke.gamedev.iddqd.tukequest.actors.Ground;
 
 /**
  * Created by Steve on 26.03.2017.

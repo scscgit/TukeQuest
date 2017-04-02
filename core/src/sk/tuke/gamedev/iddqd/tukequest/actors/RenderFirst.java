@@ -1,7 +1,5 @@
-package sk.tuke.gamedev.iddqd.tukequest.actors.game;
+package sk.tuke.gamedev.iddqd.tukequest.actors;
 
-import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 
 /**
