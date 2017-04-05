@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
+import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
@@ -13,22 +14,22 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public abstract class AbstractTeacher extends RectangleActor {
 
-    private Player player;
+    private GameScreen screen;
     private Music welcomeSound;
     private Music otherSound;
     private Boolean isVisited = false;
     private Boolean playingSound = false;
 
-    protected AbstractTeacher(Player player, Animation animation, float x, float y, Music welcomeSound) {
+    protected AbstractTeacher(GameScreen screen, Animation animation, float x, float y, Music welcomeSound) {
         super(animation, BodyDef.BodyType.StaticBody, x, y);
-        this.player = player;
+        this.screen = screen;
         this.welcomeSound = welcomeSound;
         this.otherSound = welcomeSound;
     }
 
-    protected AbstractTeacher(Player player, Animation animation, float x, float y, Music welcomeSound, Music otherSound) {
+    protected AbstractTeacher(GameScreen screen, Animation animation, float x, float y, Music welcomeSound, Music otherSound) {
         super(animation, BodyDef.BodyType.StaticBody, x, y);
-        this.player = player;
+        this.screen = screen;
         this.welcomeSound = welcomeSound;
         this.otherSound = otherSound;
     }
@@ -41,7 +42,7 @@ public abstract class AbstractTeacher extends RectangleActor {
     }
 
     protected Player getPlayer() {
-        return player;
+        return this.screen.getPlayer();
     }
 
     protected void playSound() {
@@ -49,18 +50,24 @@ public abstract class AbstractTeacher extends RectangleActor {
             otherSound.play();
         } else {
             welcomeSound.play();
-            isVisited = false;
+            isVisited = true;
         }
     }
 
     @Override
     public void act() {
-        if (collides(this.player) && !playingSound) {
+        if (collides(getPlayer()) && !playingSound) {
             playSound();
             playingSound = true;
+            this.screen.setMusicVolume(GameScreen.SILENT_MUSIC_VOLUME);
             // Allow the sound again in a few seconds
-            TaskManager.INSTANCE.scheduleTimer("teacherSound", 3, () -> playingSound = false);
+            TaskManager.INSTANCE.scheduleTimer("teacherSound", soundDuration(), () -> playingSound = false);
+            TaskManager.INSTANCE.removeTimers("teacherBackgroundMute");
+            TaskManager.INSTANCE.scheduleTimer("teacherBackgroundMute", soundDuration(),
+                () -> this.screen.setMusicVolume(GameScreen.DEFAULT_MUSIC_VOLUME));
         }
     }
+
+    protected abstract int soundDuration();
 
 }

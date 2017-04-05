@@ -18,6 +18,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Genci;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
@@ -27,6 +28,9 @@ import sk.tuke.gamedev.iddqd.tukequest.util.Log;
  * Created by Steve on 24.03.2017.
  */
 public class GameScreen extends AbstractScreen {
+
+    public static final float DEFAULT_MUSIC_VOLUME = 0.2f;
+    public static final float SILENT_MUSIC_VOLUME = 0.04f;
 
     // Vertical jump goes up 4 platforms
     private static final float GRAVITY = 75;
@@ -133,7 +137,10 @@ public class GameScreen extends AbstractScreen {
 
         });
 
-        new Genci(this.player, TukeQuestGame.SCREEN_WIDTH * 3.3f / 5f, groundHeight)
+        new Genci(this, TukeQuestGame.SCREEN_WIDTH * 3.7f / 5f, groundHeight)
+            .addToWorld(this);
+
+        new Poruban(this, TukeQuestGame.SCREEN_WIDTH * 1.3f / 5f, groundHeight)
             .addToWorld(this);
     }
 

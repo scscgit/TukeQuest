@@ -3,10 +3,7 @@ package sk.tuke.gamedev.iddqd.tukequest.managers;
 import com.badlogic.gdx.utils.Timer;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Manages asynchronous tasks and provides an easy way to cancel them based on String name.
@@ -57,7 +54,7 @@ public enum TaskManager {
         return task;
     }
 
-    public void removeTask(String type, Timer.Task task) {
+    private void removeTask(String type, Timer.Task task) {
         if (type == null) {
             return;
         }
@@ -75,7 +72,6 @@ public enum TaskManager {
     public void removeTimers(String type) {
         List<Timer.Task> tasks = taskMap.get(type);
         if (tasks == null) {
-            Log.w(this, "Invalid state, taskMap contained empty list during removeTimers for " + type);
             return;
         }
         for (Timer.Task task : tasks) {
@@ -83,6 +79,14 @@ public enum TaskManager {
         }
         taskMap.remove(type);
         Log.i(this, type + " was removed");
+    }
+
+    @Deprecated
+    public void removeAllTimers() {
+        Set<String> keys = new HashSet<>();
+        keys.addAll(taskMap.keySet());
+        keys.forEach(this::removeTimers);
+        Log.i(this, "All timers were removed");
     }
 
     public Set<String> scheduledTimers() {

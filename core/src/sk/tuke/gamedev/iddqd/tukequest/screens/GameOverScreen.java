@@ -53,7 +53,7 @@ public class GameOverScreen extends AbstractScreen {
 
         // Schedule game restart
         TaskManager.INSTANCE.scheduleTimer(
-            "gameRestart", 6, () -> getGame().setScreen(new GameScreen(getGame())));
+            "gameRestart", 7, () -> getGame().setScreen(new GameScreen(getGame())));
     }
 
 }

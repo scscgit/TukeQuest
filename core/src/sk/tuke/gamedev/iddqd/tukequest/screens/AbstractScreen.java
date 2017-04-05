@@ -282,9 +282,11 @@ public abstract class AbstractScreen implements Screen {
         Log.i(this, "Screen disposed");
     }
 
-    public void setMusicVolume(Float musicVolume){
-        if(musicVolume<0||musicVolume>1)
+    public void setMusicVolume(float musicVolume) {
+        if (musicVolume < 0 || musicVolume > 1) {
             throw new InvalidParameterException();
+        }
         music.setVolume(musicVolume);
     }
+
 }
