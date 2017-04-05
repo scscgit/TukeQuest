@@ -20,6 +20,7 @@ import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 
+import java.security.InvalidParameterException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -281,4 +282,9 @@ public abstract class AbstractScreen implements Screen {
         Log.i(this, "Screen disposed");
     }
 
+    public void setMusicVolume(Float musicVolume){
+        if(musicVolume<0||musicVolume>1)
+            throw new InvalidParameterException();
+        music.setVolume(musicVolume);
+    }
 }

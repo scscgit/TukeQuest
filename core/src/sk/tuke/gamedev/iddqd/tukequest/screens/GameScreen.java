@@ -43,6 +43,7 @@ public class GameScreen extends AbstractScreen {
 
     public GameScreen(TukeQuestGame game) {
         super(game, TukeQuestGame.manager.get("audio/music/backgroundmusic.mp3", Music.class));
+        setMusicVolume(0.2f);
     }
 
     public Player getPlayer() {
