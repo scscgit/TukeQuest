@@ -9,6 +9,6 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  */
 public class Genci extends AbstracTeacher{
     protected Genci(Animation animation, float x, float y) {
-        super(new Animation("pixeljoint.png", 8, 4, 0, 9, 0.2f), x, y, TukeQuestGame.manager.get("audio/sounds/genci1.wma", Music.class));
+        super(new Animation("pixeljoint.png", 8, 4, 0, 9, 0.2f), x, y, TukeQuestGame.manager.get("audio/sounds/genci1.mp3", Music.class));
     }
 }

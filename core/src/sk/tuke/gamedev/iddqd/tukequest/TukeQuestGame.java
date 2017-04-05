@@ -46,8 +46,8 @@ public class TukeQuestGame extends Game {
         manager.load("audio/music/gameover.mp3", Music.class);
         manager.load("audio/sounds/bonus.mp3", Music.class);
         manager.load("audio/sounds/jump.mp3", Music.class);
-        manager.load("audio/sounds/poruban1.wma", Music.class);
-        manager.load("audio/sounds/genci1.wma", Music.class);
+        manager.load("audio/sounds/poruban1.mp3", Music.class);
+        manager.load("audio/sounds/genci1.mp3", Music.class);
         System.out.println("Audio loaded");
     }
 
