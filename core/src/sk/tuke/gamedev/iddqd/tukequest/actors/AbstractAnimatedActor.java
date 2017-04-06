@@ -3,6 +3,10 @@ package sk.tuke.gamedev.iddqd.tukequest.actors;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
+import sk.tuke.gamedev.iddqd.tukequest.visual.particles.Particle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Steve on 26.03.2017.
@@ -13,6 +17,7 @@ public abstract class AbstractAnimatedActor implements AnimatedActor {
     private float x;
     private float y;
     private float rotationDegrees;
+    private List<Particle> particles;
 
     protected AbstractAnimatedActor(Animation animation, float x, float y) {
         setAnimation(animation);
@@ -22,6 +27,9 @@ public abstract class AbstractAnimatedActor implements AnimatedActor {
     @Override
     public void draw(Batch batch) {
         this.animation.draw(batch, this);
+        if (this.particles != null) {
+            this.particles.forEach(particle -> particle.draw(batch, this));
+        }
     }
 
     @Override
@@ -87,6 +95,13 @@ public abstract class AbstractAnimatedActor implements AnimatedActor {
     @Override
     public void setRotation(float rotationDegrees) {
         this.rotationDegrees = rotationDegrees;
+    }
+
+    public void addParticle(Particle particle) {
+        if (this.particles == null) {
+            this.particles = new ArrayList<>();
+        }
+        this.particles.add(particle);
     }
 
 }

@@ -20,6 +20,7 @@ import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.screens.GameOverScreen;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
+import sk.tuke.gamedev.iddqd.tukequest.visual.particles.FlameFootParticle;
 
 /**
  * Created by Ruza on 24.3.2017.
@@ -61,6 +62,7 @@ public class Player extends RectangleActor implements RenderLast {
             .setNext(new Jump(JUMP_FORCE, JUMP_SPRINT_FACTOR))
             .setNext(new CameraFollow(camera));
         this.commandChainOnDeath = new CameraFollow(camera);
+        addParticle(new FlameFootParticle(this::isSprinting));
     }
 
     public boolean isJumping() {
