@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -16,9 +17,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.*;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.FullScreenImage;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
+import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 import java.security.InvalidParameterException;
 import java.util.LinkedList;
@@ -32,6 +35,8 @@ import java.util.Set;
  */
 public abstract class AbstractScreen implements Screen {
 
+    public static final Animation PAUSED_ANIMATION = new Animation(
+        "paused.jpg", Animation.ScaleType.SCALE_WIDTH, TukeQuestGame.SCREEN_HEIGHT);
     protected Camera camera;
     protected World world;
     protected Viewport viewport;
@@ -44,6 +49,7 @@ public abstract class AbstractScreen implements Screen {
     private List<Actor> newActors = new LinkedList<>();
     private boolean addingActor;
     private Music music;
+    private boolean paused;
 
     protected AbstractScreen(TukeQuestGame game, Music music) {
         this.game = game;
@@ -73,6 +79,10 @@ public abstract class AbstractScreen implements Screen {
         return this.worldContactListener;
     }
 
+    public boolean isPaused() {
+        return this.paused;
+    }
+
     /**
      * Called when this screen becomes the current screen for a {@link Game}.
      */
@@ -100,10 +110,28 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public final void render(float delta) {
-        addQueuedActors();
-        actOnActors();
-        renderGraphics();
-        calculatePhysics();
+        resetScreenColor();
+        if (!isPaused()) {
+            addQueuedActors();
+            actOnActors();
+        }
+        this.batch.begin();
+        this.batch.setProjectionMatrix(this.camera.combined);
+        if (isPaused()) {
+            new FullScreenImage(PAUSED_ANIMATION, this.camera).draw(this.batch);
+        } else {
+            renderGraphics(this.batch);
+        }
+        this.batch.end();
+        if (!isPaused()) {
+            renderDebug();
+            calculatePhysics();
+        }
+    }
+
+    protected void resetScreenColor() {
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     /**
@@ -173,21 +201,15 @@ public abstract class AbstractScreen implements Screen {
         }
     }
 
-    protected void renderGraphics() {
-        // Reset the screen
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+    protected void renderGraphics(Batch batch) {
         // Draw the images of all Actors
-        this.batch.begin();
-        this.batch.setProjectionMatrix(this.camera.combined);
         List<Actor> lastRenderedActors = new LinkedList<>();
         for (Actor actor : this.actors) {
             if (actor instanceof RenderLast) {
                 lastRenderedActors.add(actor);
                 continue;
             }
-            actor.draw(this.batch);
+            actor.draw(batch);
         }
         if (this.world != null) {
             this.world.getBodies(this.temporaryWorldBodies);
@@ -197,15 +219,15 @@ public abstract class AbstractScreen implements Screen {
                     lastRenderedActors.add(actor);
                     continue;
                 }
-                actor.draw(this.batch);
+                actor.draw(batch);
             }
         }
         for (Actor lastRenderedActor : lastRenderedActors) {
-            lastRenderedActor.draw(this.batch);
+            lastRenderedActor.draw(batch);
         }
-        this.batch.end();
+    }
 
-        // Debug
+    protected void renderDebug() {
         if (TukeQuestGame.debug && this.world != null) {
             this.debugRenderer.render(this.world, this.camera.combined.cpy().scl(AbstractBodyActor.SCALE_FROM_PHYSICS));
         }
@@ -249,6 +271,7 @@ public abstract class AbstractScreen implements Screen {
         Set<String> timers = TaskManager.INSTANCE.scheduledTimers();
         Log.i(this, "Screen paused" + (timers.size() == 0 ? "" : ", scheduled tasks:"));
         timers.forEach(timer -> System.out.println("> task " + timer));
+        this.paused = true;
     }
 
     /**
@@ -259,6 +282,7 @@ public abstract class AbstractScreen implements Screen {
         Set<String> timers = TaskManager.INSTANCE.scheduledTimers();
         Log.i(this, "Screen resumed" + (timers.size() == 0 ? "" : ", scheduled tasks:"));
         timers.forEach(timer -> System.out.println("> task " + timer));
+        this.paused = false;
     }
 
     /**

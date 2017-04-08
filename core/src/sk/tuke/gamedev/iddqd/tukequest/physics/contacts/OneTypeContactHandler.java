@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 /**
  * Extracted from sk.tuke.gamelib2.physics.contacts.
  */
-class OneTypeContactHandler extends BeginEndContactHandler {
+public class OneTypeContactHandler extends BeginEndContactHandler {
 
     private Class clazz;
 

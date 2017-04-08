@@ -32,8 +32,8 @@ public class GameScreen extends AbstractScreen {
     public static final float DEFAULT_MUSIC_VOLUME = 0.2f;
     public static final float SILENT_MUSIC_VOLUME = 0.04f;
 
-    // Vertical jump goes up 4 platforms
-    private static final float GRAVITY = 75;
+    // Vertical jump goes up 3 platforms
+    private static final float GRAVITY = 70;
     // Vertical jump goes up 1 platform
     private static final float GRAVITY_LIMIT = 170;
 

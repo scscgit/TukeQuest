@@ -6,8 +6,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.Ground;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RenderLast;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Surprise;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.CameraFollow;
@@ -15,8 +17,8 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.Command;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.HorizontalMovement;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.Jump;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
-import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.GroundContactHandler;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
+import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.OneTypeContactHandler;
 import sk.tuke.gamedev.iddqd.tukequest.screens.GameOverScreen;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
@@ -43,18 +45,23 @@ public class Player extends RectangleActor implements RenderLast {
     private static final float FRICTION = 0f;
     private static final float LINEAR_DAMPING = 1f;
     private static final float INPUT_FORCE_MULTIPLIER = 30f;
-    private static final float JUMP_FORCE = 250f;
-    private static final float SPRINT_VELOCITY_THRESHOLD = 6f;
+    private static final float JUMP_FORCE = 500f;
+    private static final float SPRINT_VELOCITY_THRESHOLD = 9f;
     private static final float SPRINT_BURST = 50f;
     private static final float JUMP_SPRINT_FACTOR = 1.5f;
+    private static final float WALL_HIT_HORIZONTAL_SPEED_PRESERVED = 0.75f;
 
-    private GroundContactHandler groundContactHandler;
+    private OneTypeContactHandler groundContactHandler;
+    private OneTypeContactHandler wallContactHandler;
     private Command commandChain;
 
     private boolean sprinting;
     private boolean alive = true;
     private boolean jumping;
     private Command commandChainOnDeath;
+    private FlameFootParticle particle;
+    private boolean wasHittingWall;
+    private float horizontalSpeedInLastAct;
 
     public Player(float x, float y, Camera camera) {
         super(ANIMATION_STAND, BodyDef.BodyType.DynamicBody, x, y);
@@ -62,7 +69,13 @@ public class Player extends RectangleActor implements RenderLast {
             .setNext(new Jump(JUMP_FORCE, JUMP_SPRINT_FACTOR))
             .setNext(new CameraFollow(camera));
         this.commandChainOnDeath = new CameraFollow(camera);
-        addParticle(new FlameFootParticle(this::isSprinting));
+        this.particle = new FlameFootParticle(this::isSprinting);
+        addParticle(this.particle);
+        getParticle().setImage(FlameFootParticle.ParticleImage.ASSEMBLER);
+    }
+
+    public FlameFootParticle getParticle() {
+        return particle;
     }
 
     public boolean isJumping() {
@@ -86,8 +99,12 @@ public class Player extends RectangleActor implements RenderLast {
         }
     }
 
+    public boolean isAlive() {
+        return this.alive;
+    }
+
     public void killedByFlame() {
-        if (this.alive) {
+        if (isAlive()) {
             this.alive = false;
             Log.i(this, "Game Over");
             getBody().getFixtureList().get(0).setSensor(true);
@@ -99,9 +116,25 @@ public class Player extends RectangleActor implements RenderLast {
 
     @Override
     public void act() {
+        // Executes all movement commands
         if (this.commandChain != null) {
             this.commandChain.execute(this);
         }
+
+        // Receives a boost when hitting wall during a sprint
+        if (this.wasHittingWall && !isHittingWall()) {
+            this.wasHittingWall = false;
+            Log.t(this, "No longer hitting the wall");
+        } else if (!this.wasHittingWall && isHittingWall() && isSprinting()) {
+            this.wasHittingWall = true;
+            Log.d(this, "Hit the wall during sprint");
+            // Neutralizes the downward fall (if any) and reverses the previous horizontal direction
+            getBody().setLinearVelocity(new Vector2(
+                -this.horizontalSpeedInLastAct * WALL_HIT_HORIZONTAL_SPEED_PRESERVED,
+                getBody().getLinearVelocity().y > 0 ? getBody().getLinearVelocity().y : 0));
+        }
+        this.horizontalSpeedInLastAct = getBody().getLinearVelocity().x;
+
         if (canSprint()) {
             sprint();
         } else {
@@ -111,6 +144,10 @@ public class Player extends RectangleActor implements RenderLast {
 
     public boolean isOnGround() {
         return this.groundContactHandler.isHitting();
+    }
+
+    public boolean isHittingWall() {
+        return this.wallContactHandler.isHitting();
     }
 
     public boolean isSprinting() {
@@ -149,8 +186,10 @@ public class Player extends RectangleActor implements RenderLast {
     @Override
     protected void addContactHandlers(MyContactListener contactListener, Fixture fixture) {
         super.addContactHandlers(contactListener, fixture);
-        this.groundContactHandler = new GroundContactHandler(fixture);
+        this.groundContactHandler = new OneTypeContactHandler(fixture, Ground.class);
+        this.wallContactHandler = new OneTypeContactHandler(fixture, VerticalWall.class);
         contactListener.addHandler(this.groundContactHandler);
+        contactListener.addHandler(this.wallContactHandler);
     }
 
     @Override
@@ -161,7 +200,7 @@ public class Player extends RectangleActor implements RenderLast {
 
     public void collected(Collectable collectable) {
         if (collectable instanceof Surprise) {
-            float force = getBody().getLinearVelocity().y <= 0 ? JUMP_FORCE * 4 : JUMP_FORCE;
+            float force = getBody().getLinearVelocity().y <= 0 ? JUMP_FORCE * 2 : JUMP_FORCE;
             getBody().applyForceToCenter(new Vector2(0f, force), true);
         }
         collectable.collected(this);

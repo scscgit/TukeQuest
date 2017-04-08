@@ -23,7 +23,7 @@ public class Jump extends AbstractCommand {
 
     @Override
     public void onExecute(Player player) {
-        if (!player.isOnGround()) {
+        if (!player.isOnGround() || player.getBody().getLinearVelocity().y > 0) {
             return;
         }
         if (InputHelper.isJump()) {

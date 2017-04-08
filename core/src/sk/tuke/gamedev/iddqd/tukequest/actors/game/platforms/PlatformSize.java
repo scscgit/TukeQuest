@@ -1,7 +1,7 @@
 package sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms;
 
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.BinaryVerticalWall;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +13,7 @@ public enum PlatformSize {
 
     SMALL(96),
     MEDIUM(128),
-    LEVEL(TukeQuestGame.SCREEN_WIDTH - (BinaryVerticalWall.WALL_WIDTH * 2));
+    LEVEL(TukeQuestGame.SCREEN_WIDTH - (VerticalWall.WALL_WIDTH * 2));
 
     private int platformWidth;
 

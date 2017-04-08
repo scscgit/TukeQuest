@@ -1,7 +1,7 @@
 package sk.tuke.gamedev.iddqd.tukequest.generator;
 
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.BinaryVerticalWall;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
 
@@ -25,7 +25,7 @@ public class PlatformGenerator {
     // TODO: maybe implement some LEVEL algorithm that will increase the difficulty given the value of Y
     public static List<Platform> generateNext(int count, float startingY) {
         int PLATFORM_WIDTH = 128;
-        int X_COORDINATE_RANGE = TukeQuestGame.SCREEN_WIDTH - PLATFORM_WIDTH - 2 * BinaryVerticalWall.WALL_WIDTH;
+        int X_COORDINATE_RANGE = TukeQuestGame.SCREEN_WIDTH - PLATFORM_WIDTH - 2 * VerticalWall.WALL_WIDTH;
 
         List<Platform> platforms = new ArrayList<>();
 
@@ -35,9 +35,9 @@ public class PlatformGenerator {
 
             if (platformCount % PLATFORM_TEXTURE_CHANGE_RATE == 0) {
                 changePlatformType();
-                platforms.add(new Platform(BinaryVerticalWall.WALL_WIDTH + 1, startingY, PlatformSize.LEVEL, currentTextureIndex));
+                platforms.add(new Platform(VerticalWall.WALL_WIDTH + 1, startingY, PlatformSize.LEVEL, currentTextureIndex));
             } else {
-                int randomStartingX = random.nextInt((X_COORDINATE_RANGE - BinaryVerticalWall.WALL_WIDTH) + 1) + BinaryVerticalWall.WALL_WIDTH;
+                int randomStartingX = random.nextInt((X_COORDINATE_RANGE - VerticalWall.WALL_WIDTH) + 1) + VerticalWall.WALL_WIDTH;
                 platforms.add(createSmallOrMediumPlatform(randomStartingX, startingY));
 
             }

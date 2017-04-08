@@ -23,4 +23,5 @@ public class Poruban extends AbstractTeacher {
     protected int soundDuration() {
         return 9;
     }
+
 }

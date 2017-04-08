@@ -56,16 +56,17 @@ public abstract class AbstractTeacher extends RectangleActor {
 
     @Override
     public void act() {
-        if (collides(getPlayer()) && !playingSound) {
-            playSound();
-            playingSound = true;
-            this.screen.setMusicVolume(GameScreen.SILENT_MUSIC_VOLUME);
-            // Allow the sound again in a few seconds
-            TaskManager.INSTANCE.scheduleTimer("teacherSound", soundDuration(), () -> playingSound = false);
-            TaskManager.INSTANCE.removeTimers("teacherBackgroundMute");
-            TaskManager.INSTANCE.scheduleTimer("teacherBackgroundMute", soundDuration(),
-                () -> this.screen.setMusicVolume(GameScreen.DEFAULT_MUSIC_VOLUME));
+        if (!getPlayer().isAlive() || !collides(getPlayer()) || playingSound) {
+            return;
         }
+        playSound();
+        playingSound = true;
+        this.screen.setMusicVolume(GameScreen.SILENT_MUSIC_VOLUME);
+        // Allow the sound again in a few seconds
+        TaskManager.INSTANCE.scheduleTimer("teacherSound", soundDuration(), () -> playingSound = false);
+        TaskManager.INSTANCE.removeTimers("teacherBackgroundMute");
+        TaskManager.INSTANCE.scheduleTimer("teacherBackgroundMute", soundDuration(),
+            () -> this.screen.setMusicVolume(GameScreen.DEFAULT_MUSIC_VOLUME));
     }
 
     protected abstract int soundDuration();

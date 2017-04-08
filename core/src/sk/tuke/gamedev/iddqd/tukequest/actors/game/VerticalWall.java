@@ -11,7 +11,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
  * <p>
  * Created by Steve on 24.03.2017.
  */
-public class BinaryVerticalWall extends RectangleActor {
+public class VerticalWall extends RectangleActor {
 
     public static final int WALL_WIDTH = 40;
 
@@ -22,7 +22,7 @@ public class BinaryVerticalWall extends RectangleActor {
         LEFT, RIGHT
     }
 
-    public BinaryVerticalWall(Side side, float y) {
+    public VerticalWall(Side side, float y) {
         super(
             ANIMATION,
             BodyDef.BodyType.StaticBody,
@@ -34,7 +34,7 @@ public class BinaryVerticalWall extends RectangleActor {
     @Override
     protected void configureFixtureDef(FixtureDef fixtureDef) {
         super.configureFixtureDef(fixtureDef);
-        fixtureDef.restitution = 0.6f;
+        //fixtureDef.restitution = 0.6f;
     }
 
 }

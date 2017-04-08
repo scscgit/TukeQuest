@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.GameOverBackground;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.FullScreenImage;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
@@ -43,13 +43,7 @@ public class GameOverScreen extends AbstractScreen {
         super.show();
 
         // Displaying Game Over image for a moment
-        float emptyHeight = TukeQuestGame.SCREEN_HEIGHT - GAME_OVER_BACKGROUND.getHeight();
-        float emptyWidth = TukeQuestGame.SCREEN_WIDTH - GAME_OVER_BACKGROUND.getWidth();
-        addActor(new GameOverBackground(
-            GAME_OVER_BACKGROUND,
-            emptyWidth > 0 ? emptyWidth / 2 : 0,
-            emptyHeight > 0 ? emptyHeight / 2 : 0) {
-        });
+        addActor(new FullScreenImage(GAME_OVER_BACKGROUND));
 
         // Schedule game restart
         TaskManager.INSTANCE.scheduleTimer(

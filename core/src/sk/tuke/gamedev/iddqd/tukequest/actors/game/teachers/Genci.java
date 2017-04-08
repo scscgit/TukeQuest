@@ -23,4 +23,5 @@ public class Genci extends AbstractTeacher {
     protected int soundDuration() {
         return 3;
     }
+
 }
