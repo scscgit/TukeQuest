@@ -8,18 +8,18 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 /**
  * Created by Steve on 26.03.2017.
  */
-public class Background extends AbstractAnimatedActor implements RenderFirst {
+public class MenuBackground extends FullScreenImage implements RenderFirst {
 
     public static final Animation ANIMATION = new Animation(
-        "background.jpg", Animation.ScaleType.SCALE_WIDTH, TukeQuestGame.SCREEN_WIDTH);
+        "menu.jpg", Animation.ScaleType.SCALE_WIDTH, TukeQuestGame.SCREEN_WIDTH);
 
-    public Background(float y) {
-        super(ANIMATION, 0, y);
+    public MenuBackground() {
+        super(ANIMATION);
     }
-
 
     @Override
     public void act() {
     }
+
 
 }

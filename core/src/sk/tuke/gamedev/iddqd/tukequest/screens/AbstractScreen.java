@@ -109,12 +109,13 @@ public abstract class AbstractScreen implements Screen {
      * @param delta The time in seconds since the last render.
      */
     @Override
-    public final void render(float delta) {
+    public void render(float delta) {
         resetScreenColor();
         if (!isPaused()) {
             addQueuedActors();
             actOnActors();
         }
+        this.batch.enableBlending();
         this.batch.begin();
         this.batch.setProjectionMatrix(this.camera.combined);
         if (isPaused()) {

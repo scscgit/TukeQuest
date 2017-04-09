@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
-import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
+import sk.tuke.gamedev.iddqd.tukequest.screens.MenuScreen;
 
 public class TukeQuestGame extends Game {
 
@@ -17,15 +17,16 @@ public class TukeQuestGame extends Game {
     public static AssetManager manager;
     public static boolean debug;
 
-    private GameScreen gameScreen;
+    private MenuScreen menuScreen;
 
     @Override
     public void create() {
         THIS = this;
         TukeQuestGame.manager = loadAssets();
 
-        this.gameScreen = new GameScreen(this);
-        setScreen(this.gameScreen);
+        this.menuScreen = new MenuScreen(this);
+
+        setScreen(this.menuScreen);
 
         // Delaying turning the debug on
         TaskManager.INSTANCE.scheduleTimer(null, 1, () -> debug = true);
@@ -54,7 +55,7 @@ public class TukeQuestGame extends Game {
     @Override
     public void dispose() {
         super.dispose();
-        gameScreen.dispose();
+        //menuScreen.dispose();
         System.out.println("Game " + this + " disposed");
     }
 
