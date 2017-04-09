@@ -1,6 +1,8 @@
 package sk.tuke.gamedev.iddqd.tukequest.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -107,6 +109,22 @@ public class GameScreen extends AbstractScreen {
             camera
         ).addToWorld(this);
 
+        // Pause handler
+        addActor(new Actor() {
+
+            @Override
+            public void draw(Batch batch) {
+            }
+
+            @Override
+            public void act() {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                    getGame().setScreen(new PauseScreen(getGame(), GameScreen.this));
+                }
+            }
+
+        });
+
         // Flame spawning
         addActor(new Actor() {
 
@@ -150,7 +168,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void hide() {
         super.hide();
-        PlatformManager.INSTANCE = null;
+        //PlatformManager.INSTANCE = null;
     }
 
     public void difficultyIncrease() {

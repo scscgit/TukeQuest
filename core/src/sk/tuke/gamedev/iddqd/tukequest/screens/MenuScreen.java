@@ -2,7 +2,8 @@ package sk.tuke.gamedev.iddqd.tukequest.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,11 +19,15 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.SimpleButton;
 
 public class MenuScreen extends AbstractScreen {
 
+    public static final Music MENU_MUSIC = TukeQuestGame.manager.get("audio/music/backgroundmusic.mp3", Music.class);
     private TukeQuestGame game;
     private Stage stage;
 
+    private ImageButton startBtn;
+    private ImageButton exitBtn;
+
     public MenuScreen(TukeQuestGame game) {
-        super(game, TukeQuestGame.manager.get("audio/music/backgroundmusic.mp3", Music.class));
+        super(game, MENU_MUSIC);
         this.game = game;
     }
 
@@ -47,14 +52,13 @@ public class MenuScreen extends AbstractScreen {
 
         addActor(new MenuBackground());
 
-        ImageButton startBtn = new SimpleButton("StartBtn.png").getButton();
-        ImageButton exitBtn = new SimpleButton("ExitBtn.png").getButton();
+        this.startBtn = new SimpleButton("StartBtn.png").getButton();
+        this.exitBtn = new SimpleButton("ExitBtn.png").getButton();
 
         stage = new Stage(new ScreenViewport());
 
         Table menuTable = new Table();
-        menuTable.add(startBtn).expandX().center().padTop(80).row(); //padding because of main logo
-        menuTable.add(exitBtn).expandX().center().padTop(10).row();
+        tableButtons(menuTable);
         menuTable.setFillParent(true);
         stage.addActor(menuTable);
 
@@ -74,6 +78,19 @@ public class MenuScreen extends AbstractScreen {
                 Gdx.app.exit();
             }
         });
+    }
+
+    protected void tableButtons(Table menuTable) {
+        menuTable.add(startBtn).expandX().center().padTop(startButtonPadTop()).row(); //padding because of main logo
+        menuTable.add(exitBtn).expandX().center().padTop(exitButtonPadTop()).row();
+    }
+
+    protected int startButtonPadTop() {
+        return 80;
+    }
+
+    protected int exitButtonPadTop() {
+        return 10;
     }
 
     @Override
