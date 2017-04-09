@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -47,31 +48,29 @@ public class MenuScreen extends AbstractScreen {
         addActor(new MenuBackground());
 
         ImageButton startBtn = new SimpleButton("StartBtn.png").getButton();
-        startBtn.setPosition((float) (TukeQuestGame.SCREEN_WIDTH/3.4), (float) (TukeQuestGame.SCREEN_HEIGHT/2.5));
-
         ImageButton exitBtn = new SimpleButton("ExitBtn.png").getButton();
-        exitBtn.setPosition((float) (TukeQuestGame.SCREEN_WIDTH/3.4), TukeQuestGame.SCREEN_HEIGHT/6);
 
         stage = new Stage(new ScreenViewport());
 
-        stage.addActor(startBtn);
-        stage.addActor(exitBtn);
+        Table menuTable = new Table();
+        menuTable.add(startBtn).expandX().center().padTop(80).row(); //padding because of main logo
+        menuTable.add(exitBtn).expandX().center().padTop(10).row();
+        menuTable.setFillParent(true);
+        stage.addActor(menuTable);
+
         Gdx.input.setInputProcessor(stage);
 
-        startBtn.addListener(new ClickListener()
-        {
+        startBtn.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
+            public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new GameScreen(game));
+                stage.dispose();
             }
         });
 
-        exitBtn.addListener(new ClickListener()
-        {
+        exitBtn.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
+            public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
         });
@@ -81,5 +80,11 @@ public class MenuScreen extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        stage.getViewport().update(width, height, true);
     }
 }
