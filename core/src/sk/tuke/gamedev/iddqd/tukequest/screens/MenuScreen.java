@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.MenuBackground;
+import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.visual.SimpleButton;
 
 public class MenuScreen extends AbstractScreen {
@@ -80,6 +81,11 @@ public class MenuScreen extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         stage.draw();
+    }
+
+    @Override
+    public void pause() {
+        Log.i(this, "Not pausing menu screen");
     }
 
     @Override
