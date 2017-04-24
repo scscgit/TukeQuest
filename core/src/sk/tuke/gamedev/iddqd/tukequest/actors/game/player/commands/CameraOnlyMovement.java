@@ -10,7 +10,7 @@ import sk.tuke.gamedev.iddqd.tukequest.util.InputHelper;
 /**
  * Created by Steve on 02.04.2017.
  */
-public class CameraFollow extends AbstractCommand {
+public class CameraOnlyMovement extends AbstractCommand {
 
     private static final int DEBUG_TOGGLE_KEY = Input.Keys.X;
     private static final float DEBUG_CAMERA_SPEED = 50;
@@ -18,7 +18,7 @@ public class CameraFollow extends AbstractCommand {
     private final Camera camera;
     private boolean cameraDebugMovement;
 
-    public CameraFollow(Camera camera) {
+    public CameraOnlyMovement(Camera camera) {
         this.camera = camera;
     }
 

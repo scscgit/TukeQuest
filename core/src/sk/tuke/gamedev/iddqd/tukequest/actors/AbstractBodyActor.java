@@ -20,6 +20,7 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
     private Body body;
     private ActorContactHandler actorContactHandler;
     private boolean settingPositionBlocked;
+    private AbstractScreen screen;
 
     protected AbstractBodyActor(Animation animation, BodyType bodyType, float x, float y) {
         super(animation, x, y);
@@ -34,7 +35,12 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
             return (T) screen.addActor(this);
         }
         this.body = createBody(this.bodyType, screen);
+        this.screen = screen;
         return (T) this;
+    }
+
+    protected final AbstractScreen getScreen() {
+        return this.screen;
     }
 
     @Override

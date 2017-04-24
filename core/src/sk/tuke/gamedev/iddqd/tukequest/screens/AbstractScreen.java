@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.*;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.ActLast;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FullScreenImage;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
@@ -24,6 +25,7 @@ import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 import java.security.InvalidParameterException;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -189,16 +191,31 @@ public abstract class AbstractScreen implements Screen {
     }
 
     protected void actOnActors() {
-        for (Actor actor : this.actors) {
-            actor.act();
-        }
-        if (this.world == null) {
-            return;
-        }
-        this.world.getBodies(this.temporaryWorldBodies);
-        for (Body body : this.temporaryWorldBodies) {
-            Actor actor = (Actor) body.getUserData();
-            actor.act();
+        List<Actor> lastActedActors = new LinkedList<>();
+        try {
+            for (Actor actor : this.actors) {
+                if (actor instanceof ActLast) {
+                    lastActedActors.add(actor);
+                    continue;
+                }
+                actor.act();
+            }
+            if (this.world == null) {
+                return;
+            }
+            this.world.getBodies(this.temporaryWorldBodies);
+            for (Body body : this.temporaryWorldBodies) {
+                Actor actor = (Actor) body.getUserData();
+                if (actor instanceof ActLast) {
+                    lastActedActors.add(actor);
+                    continue;
+                }
+                actor.act();
+            }
+        } finally {
+            lastActedActors.stream()
+                .sorted(Comparator.comparingInt(actor -> ((ActLast) actor).getActLastOrder()))
+                .forEach(Actor::act);
         }
     }
 

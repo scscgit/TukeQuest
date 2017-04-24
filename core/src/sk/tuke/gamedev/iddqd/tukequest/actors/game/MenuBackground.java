@@ -1,7 +1,6 @@
 package sk.tuke.gamedev.iddqd.tukequest.actors.game;
 
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
-import sk.tuke.gamedev.iddqd.tukequest.actors.AbstractAnimatedActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RenderFirst;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 

@@ -9,13 +9,16 @@ import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Ground;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RenderLast;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.FullScreenImage;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Surprise;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.CameraFollow;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.CameraOnlyMovement;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.Command;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.HorizontalMovement;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.Jump;
+import sk.tuke.gamedev.iddqd.tukequest.actors.strategy.CameraFollow;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.OneTypeContactHandler;
@@ -62,14 +65,16 @@ public class Player extends RectangleActor implements RenderLast {
     private FlameFootParticle particle;
     private boolean wasHittingWall;
     private float horizontalSpeedInLastAct;
+    private Camera camera;
 
     public Player(float x, float y, Camera camera) {
         super(ANIMATION_STAND, BodyDef.BodyType.DynamicBody, x, y);
         this.commandChain = new HorizontalMovement(INPUT_FORCE_MULTIPLIER, camera)
             .setNext(new Jump(JUMP_FORCE, JUMP_SPRINT_FACTOR))
-            .setNext(new CameraFollow(camera));
-        this.commandChainOnDeath = new CameraFollow(camera);
+            .setNext(new CameraOnlyMovement(camera));
+        this.commandChainOnDeath = new CameraOnlyMovement(camera);
         this.particle = new FlameFootParticle(this::isSprinting);
+        this.camera = camera;
         addParticle(this.particle);
         getParticle().setImage(FlameFootParticle.ParticleImage.ASSEMBLER);
     }
@@ -111,6 +116,11 @@ public class Player extends RectangleActor implements RenderLast {
             this.commandChain = this.commandChainOnDeath;
             TaskManager.INSTANCE.scheduleTimer("gameOverCountdown", 3,
                 () -> TukeQuestGame.THIS.setScreen(new GameOverScreen(TukeQuestGame.THIS)));
+            // Persistent flame always displayed on screen
+            FullScreenImage persistentFlame = new FullScreenImage(FxFlameActor.ANIMATION, this.camera, 0, 0);
+            persistentFlame.addStrategy(new CameraFollow(this.camera, persistentFlame));
+            persistentFlame.setLastActOrder(1);
+            getScreen().addActor(persistentFlame);
         }
     }
 

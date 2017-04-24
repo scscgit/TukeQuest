@@ -3,25 +3,46 @@ package sk.tuke.gamedev.iddqd.tukequest.actors.game;
 import com.badlogic.gdx.graphics.Camera;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.AbstractAnimatedActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.RenderLast;
+import sk.tuke.gamedev.iddqd.tukequest.actors.strategy.Strategist;
+import sk.tuke.gamedev.iddqd.tukequest.actors.strategy.Strategy;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Steve on 27.03.2017.
  */
-public class FullScreenImage extends AbstractAnimatedActor {
+public class FullScreenImage extends AbstractAnimatedActor implements Strategist, RenderLast, ActLast {
 
     private static float nextX;
     private static float nextY;
+    private List<Strategy> strategies = new LinkedList<>();
+    private int actLastOrder;
 
     public FullScreenImage(Animation animation) {
         super(initConstructor(animation), nextX, nextY);
     }
 
     /**
-     * Camera following constructor.
+     * Camera position copying constructor, implicitly centering.
      */
     public FullScreenImage(Animation animation, Camera camera) {
-        super(initConstructor(animation), nextX, nextY + camera.position.y - TukeQuestGame.SCREEN_HEIGHT / 2);
+        super(
+            initConstructor(animation),
+            nextX + camera.position.x - TukeQuestGame.SCREEN_WIDTH / 2,
+            nextY + camera.position.y - TukeQuestGame.SCREEN_HEIGHT / 2);
+    }
+
+    /**
+     * Camera position copying constructor with custom offset.
+     */
+    public FullScreenImage(Animation animation, Camera camera, float x, float y) {
+        super(
+            animation,
+            x + camera.position.x - TukeQuestGame.SCREEN_WIDTH / 2,
+            y + camera.position.y - TukeQuestGame.SCREEN_HEIGHT / 2);
     }
 
     /**
@@ -40,6 +61,21 @@ public class FullScreenImage extends AbstractAnimatedActor {
 
     @Override
     public void act() {
+        this.strategies.forEach(Strategy::act);
+    }
+
+    @Override
+    public void addStrategy(Strategy strategy) {
+        this.strategies.add(strategy);
+    }
+
+    public void setLastActOrder(int actLastOrder) {
+        this.actLastOrder = actLastOrder;
+    }
+
+    @Override
+    public int getActLastOrder() {
+        return this.actLastOrder;
     }
 
 }
