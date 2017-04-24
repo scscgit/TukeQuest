@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Ground;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
+import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 import java.util.ArrayList;
@@ -56,6 +57,9 @@ public class Platform extends RectangleActor implements Ground {
             throw new RuntimeException(PlatformManager.class.getSimpleName() + " instance is not initialized");
         }
         getBody().setActive(PlatformManager.INSTANCE.isPlatformActive(this));
+        if (PlatformManager.INSTANCE.isPlatformActive(this)) {
+            ScoreManager.INSTANCE.addScoreForJumpedPlatform(this);
+        }
     }
 
     public static int getPlatformTexturesCount() {
