@@ -80,7 +80,7 @@ public class GameScreen extends AbstractScreen {
         super.show();
         initActors();
         PlatformManager.INSTANCE = new PlatformManager(this.player);
-        ScoreManager.INSTANCE = new ScoreManager(this.player);
+        ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
     }
 

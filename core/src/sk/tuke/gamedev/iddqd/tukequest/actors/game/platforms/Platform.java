@@ -17,6 +17,8 @@ public class Platform extends RectangleActor implements Ground {
     private final static List<String> PLATFORM_TEXTURE_NAMES = new ArrayList<>();
     private final static Map<PlatformSize, List<Animation>> ANIMATIONS = new HashMap<>();
 
+    private boolean scoreCollected = false;
+
     static {
         // Scales the animation to the full screen width
 //        ANIMATION = new Animation("jerusrockwallsml.jpg", 1f, 128, 24);
@@ -57,9 +59,15 @@ public class Platform extends RectangleActor implements Ground {
             throw new RuntimeException(PlatformManager.class.getSimpleName() + " instance is not initialized");
         }
         getBody().setActive(PlatformManager.INSTANCE.isPlatformActive(this));
-        if (PlatformManager.INSTANCE.isPlatformActive(this)) {
-            ScoreManager.INSTANCE.addScoreForJumpedPlatform(this);
+
+        // if the player went above the platform, and score for this platform was not already counted, add score points
+        // TODO: // FIXME: 25/04/2017 this logic adds score for platform that player is above, so the player does not have to actually jump / reach the platform
+
+        if (!scoreCollected && getBody().isActive()) {
+            ScoreManager.INSTANCE.addScoreForJumpedPlatform();
+            scoreCollected = true;
         }
+
     }
 
     public static int getPlatformTexturesCount() {
