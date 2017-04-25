@@ -17,7 +17,7 @@ public class Platform extends RectangleActor implements Ground {
     private final static List<String> PLATFORM_TEXTURE_NAMES = new ArrayList<>();
     private final static Map<PlatformSize, List<Animation>> ANIMATIONS = new HashMap<>();
 
-    private boolean scoreCollected = false;
+    public boolean scoreCollected = false;
 
     static {
         // Scales the animation to the full screen width
@@ -64,8 +64,10 @@ public class Platform extends RectangleActor implements Ground {
         // TODO: // FIXME: 25/04/2017 this logic adds score for platform that player is above, so the player does not have to actually jump / reach the platform
 
         if (!scoreCollected && getBody().isActive()) {
-            ScoreManager.INSTANCE.addScoreForJumpedPlatform();
+            // add to list the platforms the player went above
+            ScoreManager.platformsInRow.add(this);
             scoreCollected = true;
+            System.out.println("Added platform to Scoremanager.platformsInRow");
         }
 
     }

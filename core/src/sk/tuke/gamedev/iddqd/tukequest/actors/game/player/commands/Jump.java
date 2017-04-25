@@ -3,7 +3,9 @@ package sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
+import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.util.InputHelper;
 
 /**
@@ -27,6 +29,7 @@ public class Jump extends AbstractCommand {
             return;
         }
         if (InputHelper.isJump()) {
+            System.out.println("Jump started");
             JUMP_SOUND.play();
 
             // TODO: jump height should increase if player is moving sideways (sprinting)
@@ -45,6 +48,26 @@ public class Jump extends AbstractCommand {
             player.setJumping(true);
         } else {
             player.setJumping(false);
+
+
+            // claculate score on landing
+            if (ScoreManager.platformsInRow.size() > 0) {
+                // TODO: remove the platforms that player went above, but then fell down without landing
+                int countOfPlatformsReallyJumped = 0;
+                for (Platform platform : ScoreManager.platformsInRow) {
+                    if (platform.getBody().isActive()) {
+                        countOfPlatformsReallyJumped = countOfPlatformsReallyJumped + 1;
+                        platform.scoreCollected = true;
+                    } else {
+                        platform.scoreCollected = false;
+                    }
+                }
+
+                System.out.println("Jump ended, platformsJumped = " + ScoreManager.platformsInRow.size() + " really jumped counter = " + countOfPlatformsReallyJumped);
+                ScoreManager.INSTANCE.addScoreForPlatforms(countOfPlatformsReallyJumped);
+                ScoreManager.platformsInRow.clear();
+
+            }
         }
     }
 

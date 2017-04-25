@@ -3,6 +3,8 @@ package sk.tuke.gamedev.iddqd.tukequest.managers;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 
+import java.util.List;
+
 /**
  * On the game initialization, it is required to set up an instance holding a current Player reference.
  * <p>
