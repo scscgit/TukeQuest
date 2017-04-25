@@ -17,7 +17,7 @@ public class Platform extends RectangleActor implements Ground {
     private final static List<String> PLATFORM_TEXTURE_NAMES = new ArrayList<>();
     private final static Map<PlatformSize, List<Animation>> ANIMATIONS = new HashMap<>();
 
-    public boolean scoreCollected = false;
+    private boolean scoreAwarded = false;
 
     static {
         // Scales the animation to the full screen width
@@ -58,22 +58,24 @@ public class Platform extends RectangleActor implements Ground {
         if (PlatformManager.INSTANCE == null) {
             throw new RuntimeException(PlatformManager.class.getSimpleName() + " instance is not initialized");
         }
+
+        boolean previousPlatformState = getBody().isActive();
+
         getBody().setActive(PlatformManager.INSTANCE.isPlatformActive(this));
 
-        // if the player went above the platform, and score for this platform was not already counted, add score points
-        // TODO: // FIXME: 25/04/2017 this logic adds score for platform that player is above, so the player does not have to actually jump / reach the platform
-
-        if (!scoreCollected && getBody().isActive()) {
-            // add to list the platforms the player went above
-            ScoreManager.platformsInRow.add(this);
-            scoreCollected = true;
-            System.out.println("Added platform to Scoremanager.platformsInRow");
+        // only notify score manager if the state actually changed and score for this platform were not awarded yet
+        if (previousPlatformState != getBody().isActive() && !scoreAwarded) {
+            ScoreManager.INSTANCE.notifyPlatformActiveChanged(this);
         }
 
     }
 
     public static int getPlatformTexturesCount() {
         return PLATFORM_TEXTURE_NAMES.size();
+    }
+
+    public void markAsScoreAwarded() {
+        scoreAwarded = true;
     }
 
 }
