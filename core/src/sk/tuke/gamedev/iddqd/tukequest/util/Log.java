@@ -1,11 +1,13 @@
 package sk.tuke.gamedev.iddqd.tukequest.util;
 
+import com.badlogic.gdx.ApplicationLogger;
+
 import java.util.function.Consumer;
 
 /**
  * Created by Steve on 02.04.2017.
  */
-public class Log {
+public class Log implements ApplicationLogger {
 
     public static boolean trace;
     public static boolean debug = true;
@@ -55,4 +57,33 @@ public class Log {
         logging.accept(metaContextPrefix + contextString + ": " + message);
     }
 
+    @Override
+    public void log(String tag, String message) {
+        i(tag, message);
+    }
+
+    @Override
+    public void log(String tag, String message, Throwable exception) {
+        i(tag, message + " :" + exception.getMessage());
+    }
+
+    @Override
+    public void error(String tag, String message) {
+        e(tag, message);
+    }
+
+    @Override
+    public void error(String tag, String message, Throwable exception) {
+        e(tag, message + " :" + exception.getMessage());
+    }
+
+    @Override
+    public void debug(String tag, String message) {
+        d(tag, message);
+    }
+
+    @Override
+    public void debug(String tag, String message, Throwable exception) {
+        d(tag, message + " :" + exception.getMessage());
+    }
 }

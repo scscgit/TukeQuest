@@ -1,6 +1,7 @@
 package sk.tuke.gamedev.iddqd.tukequest.managers;
 
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
+import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class ScoreManager {
 
     private static final int ONE_PLATFORM_SCORE_VALUE = 10;
+    private static final int COMBO_MULTIPLIER = 5;
     public static ScoreManager INSTANCE;
 
     private int jumpingStreak = 0;
@@ -28,36 +30,31 @@ public class ScoreManager {
     // 1. player has jumped only 1 platform (to continue streak, you have to jump 2+ platforms
     // 2. player has fallen to platform below without jumping
     // TODO: some timeout of streak
-    public void notifyPlatformActiveChanged(Platform platform) {
-
-        // if platform became active, it is not in list of platformsInStreak and player is jumping
-        // -> player reached the platform and it should be added to streak
-        if (platform.getBody().isActive() && !platformsInCurrentJump.contains(platform) && playerIsJumping) {
+    public void notifyPlatformActiveChanged(Platform platform, boolean active) {
+        // Player is jumping and reached the platform, so it should be added to the streak
+        if (active && playerIsJumping) {
             platformsInCurrentJump.add(platform);
             jumpingStreak++;
-            System.out.println("Addint to platformsInCurrentJump + increasing Streak to " + jumpingStreak);
-            return;
-        }
-        // if platform became disabled, and it is in list of platformsInStreak
-        // it means that the player did not reach the platform while jumping (didn't manage to land on it, but was above it before)
-        // and it should be removed from platformsInCurrentJump list and jumpingStreak should be decreased
-        if (!platform.getBody().isActive() && platformsInCurrentJump.contains(platform)) { //&& playerIsJumping
-            platformsInCurrentJump.remove(platform);
-            jumpingStreak = jumpingStreak > 0 ? jumpingStreak - 1 : 0;
-            System.out.println("Remvoing from platformsInCurrentJump + decreasing Streak, now = " + jumpingStreak);
+            Log.d(this, "Increasing jump streak to " + jumpingStreak);
             return;
         }
 
-        // third case: player fell without jumping
-        // FIXME: 25/04/2017 THIS looks like not working properly
-        if (!platform.getBody().isActive() && !playerIsJumping) {
-            System.out.println("Player FELL!");
+        // Player fell down without jumping
+        if (!active && !playerIsJumping) {
+            Log.d(this, "Player FELL!");
             endStreak();
             return;
         }
 
-        System.out.println("Other case happened!");
+        // Player didn't manage to land on the platform while jumping, but was above it before
+        if (!active) {
+            platformsInCurrentJump.remove(platform);
+            jumpingStreak = jumpingStreak > 0 ? jumpingStreak - 1 : 0;
+            Log.d(this, "Decreasing jump streak down to " + jumpingStreak);
+            return;
+        }
 
+        Log.w(this, "Other reason of active platform change happened!");
     }
 
     public void notifyJumpStarted() {
@@ -67,20 +64,17 @@ public class ScoreManager {
     public void notifyJumpEnded() {
         playerIsJumping = false;
 
-        // if player jumps and lands on the same platform, the streak should continue
+        // If player jumps and lands on the same platform, the streak should continue
         if (playerJumpedZeroPlatforms()) {
-            System.out.println("Player landed on the same platform OR jumped platforms were already awarded, continuing streak!!!");
-            endStreak();
-
-
+            Log.d(this, "Player landed on the same or already awarded platform, continuing streak!");
         } else if (playerJumpedOnlyOnePlatform()) {
             // if player jumped only one platform, we should end the streak and add score for one platform without multiplier
-            endStreak();
             addScoreForSinglePlatform();
+            endStreak();
         } else {
             addScoreForThisJumpJumpedPlatforms();
+            endStreak();
         }
-
     }
 
     private boolean playerJumpedOnlyOnePlatform() {
@@ -92,23 +86,28 @@ public class ScoreManager {
     }
 
     private void addScoreForSinglePlatform() {
-        score = score + ONE_PLATFORM_SCORE_VALUE;
-        System.out.println("Adding score for single platform");
+        score += ONE_PLATFORM_SCORE_VALUE;
+        Log.i(this, "Adding score for single platform, score is now " + score);
     }
 
     private void endStreak() {
         platformsInCurrentJump.clear();
         jumpingStreak = 0;
-        System.out.println("Ending streak;");
+        Log.d(this, "Ending streak");
     }
 
     private void addScoreForThisJumpJumpedPlatforms() {
         // TODO: multiplier calculation logic adjustment
-        float comboMultiplier = 2;
         int baseScoreForNumberOfPlatforms = ONE_PLATFORM_SCORE_VALUE * platformsInCurrentJump.size();
-        int muplipliedScore = (int) (baseScoreForNumberOfPlatforms * comboMultiplier);
-        score = score + muplipliedScore;
-        System.out.println("Adding score, jumpingStreak for multiplier calculation is " + jumpingStreak + " score is now " + score);
+        int multipliedScore = baseScoreForNumberOfPlatforms;
+        for (int i = 0; i < jumpingStreak; i++) {
+            multipliedScore += i * COMBO_MULTIPLIER;
+        }
+        score += multipliedScore;
+        Log.i(this,
+            "Jump streak " + jumpingStreak
+                + " added score bonus " + multipliedScore
+                + ", score is now " + score);
 
 
         // mark all platforms that they awarded score

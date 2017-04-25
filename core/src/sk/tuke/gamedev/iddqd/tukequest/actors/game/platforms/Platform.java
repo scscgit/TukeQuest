@@ -1,10 +1,12 @@
 package sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Ground;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
+import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 import java.util.ArrayList;
@@ -53,21 +55,27 @@ public class Platform extends RectangleActor implements Ground {
     }
 
     @Override
+    protected void onAddToWorld(AbstractScreen screen) {
+        super.onAddToWorld(screen);
+        // Does not trigger active state switch on spawn
+        getBody().setActive(false);
+    }
+
+    @Override
     public void act() {
         super.act();
         if (PlatformManager.INSTANCE == null) {
             throw new RuntimeException(PlatformManager.class.getSimpleName() + " instance is not initialized");
         }
 
-        boolean previousPlatformState = getBody().isActive();
+        boolean wasActive = getBody().isActive();
+        boolean isActive = PlatformManager.INSTANCE.isPlatformActive(this);
+        getBody().setActive(isActive);
 
-        getBody().setActive(PlatformManager.INSTANCE.isPlatformActive(this));
-
-        // only notify score manager if the state actually changed and score for this platform were not awarded yet
-        if (previousPlatformState != getBody().isActive() && !scoreAwarded) {
-            ScoreManager.INSTANCE.notifyPlatformActiveChanged(this);
+        // Only notify score manager if the state has changed and score wasn't awarded for this platform yet
+        if (!scoreAwarded && wasActive != isActive) {
+            ScoreManager.INSTANCE.notifyPlatformActiveChanged(this, isActive);
         }
-
     }
 
     public static int getPlatformTexturesCount() {
@@ -76,6 +84,9 @@ public class Platform extends RectangleActor implements Ground {
 
     public void markAsScoreAwarded() {
         scoreAwarded = true;
+        if (TukeQuestGame.debug) {
+            setAnimation(Animation.INVISIBLE);
+        }
     }
 
 }

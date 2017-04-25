@@ -49,6 +49,7 @@ public class Player extends RectangleActor implements RenderLast {
     private static final float LINEAR_DAMPING = 1f;
     private static final float INPUT_FORCE_MULTIPLIER = 30f;
     private static final float JUMP_FORCE = 500f;
+    private static final float RESURRECTION_FORCE = JUMP_FORCE * 2;
     private static final float SPRINT_VELOCITY_THRESHOLD = 9f;
     private static final float SPRINT_BURST = 50f;
     private static final float JUMP_SPRINT_FACTOR = 1.5f;
@@ -58,6 +59,7 @@ public class Player extends RectangleActor implements RenderLast {
     private OneTypeContactHandler wallContactHandler;
     private Command commandChain;
 
+    private int lives = 2;
     private boolean sprinting;
     private boolean alive = true;
     private boolean jumping;
@@ -66,6 +68,7 @@ public class Player extends RectangleActor implements RenderLast {
     private boolean wasHittingWall;
     private float horizontalSpeedInLastAct;
     private Camera camera;
+    private boolean invulnerable;
 
     public Player(float x, float y, Camera camera) {
         super(ANIMATION_STAND, BodyDef.BodyType.DynamicBody, x, y);
@@ -109,19 +112,43 @@ public class Player extends RectangleActor implements RenderLast {
     }
 
     public void killedByFlame() {
-        if (isAlive()) {
-            this.alive = false;
-            Log.i(this, "Game Over");
-            getBody().getFixtureList().get(0).setSensor(true);
-            this.commandChain = this.commandChainOnDeath;
-            TaskManager.INSTANCE.scheduleTimer("gameOverCountdown", 3,
-                () -> TukeQuestGame.THIS.setScreen(new GameOverScreen(TukeQuestGame.THIS)));
-            // Persistent flame always displayed on screen
-            FullScreenImage persistentFlame = new FullScreenImage(FxFlameActor.ANIMATION, this.camera, 0, 0);
-            persistentFlame.addStrategy(new CameraFollow(this.camera, persistentFlame));
-            persistentFlame.setLastActOrder(1);
-            getScreen().addActor(persistentFlame);
+        if (!isAlive() || this.invulnerable) {
+            return;
         }
+        if (this.lives > 1) {
+            lostLife();
+            return;
+        }
+        this.alive = false;
+        Log.i(this, "Game Over");
+        getBody().getFixtureList().get(0).setSensor(true);
+        this.commandChain = this.commandChainOnDeath;
+        TaskManager.INSTANCE.scheduleTimer("gameOverCountdown", 3,
+            () -> TukeQuestGame.THIS.setScreen(new GameOverScreen(TukeQuestGame.THIS)));
+        // Persistent flame always displayed on screen
+        FullScreenImage persistentFlame = new FullScreenImage(FxFlameActor.ANIMATION, this.camera, 0, 0);
+        persistentFlame.addStrategy(new CameraFollow(this.camera, persistentFlame));
+        persistentFlame.setLastActOrder(1);
+        getScreen().addActor(persistentFlame);
+        // Does not jump above the persistent flame
+        removeJumpForce();
+    }
+
+    private void lostLife() {
+        this.lives--;
+        Log.i(this, "Lost one life, " + this.lives + " remaining");
+        removeJumpForce();
+        getBody().applyForceToCenter(0, RESURRECTION_FORCE, true);
+        this.invulnerable = true;
+        TaskManager.INSTANCE.scheduleTimer("playerVulnerable", 1, () -> {
+            Log.d(this, "No longer invulnerable");
+            this.invulnerable = false;
+        });
+    }
+
+    private void removeJumpForce() {
+        float yVelocity = getBody().getLinearVelocity().y;
+        getBody().setLinearVelocity(getBody().getLinearVelocity().x, yVelocity > 0 ? 0 : yVelocity);
     }
 
     @Override
@@ -209,6 +236,9 @@ public class Player extends RectangleActor implements RenderLast {
     }
 
     public void collected(Collectable collectable) {
+        if (!isAlive()) {
+            return;
+        }
         if (collectable instanceof Surprise) {
             float force = getBody().getLinearVelocity().y <= 0 ? JUMP_FORCE * 2 : JUMP_FORCE;
             getBody().applyForceToCenter(new Vector2(0f, force), true);

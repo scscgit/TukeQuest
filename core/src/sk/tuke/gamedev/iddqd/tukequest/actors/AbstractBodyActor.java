@@ -36,7 +36,11 @@ public abstract class AbstractBodyActor extends AbstractAnimatedActor implements
         }
         this.body = createBody(this.bodyType, screen);
         this.screen = screen;
+        onAddToWorld(screen);
         return (T) this;
+    }
+
+    protected void onAddToWorld(AbstractScreen screen) {
     }
 
     protected final AbstractScreen getScreen() {

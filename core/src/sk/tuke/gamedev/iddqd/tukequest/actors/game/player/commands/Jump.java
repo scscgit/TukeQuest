@@ -27,6 +27,7 @@ public class Jump extends AbstractCommand {
         if (!player.isOnGround() || player.getBody().getLinearVelocity().y > 0) {
             return;
         }
+        boolean wasJumping = player.isJumping();
         if (InputHelper.isJump()) {
             System.out.println("Jump started");
             JUMP_SOUND.play();
@@ -44,20 +45,12 @@ public class Jump extends AbstractCommand {
                 jumpForceAppliedInThisJump *= this.jumpSprintFactor;
             }
             player.getBody().applyForceToCenter(new Vector2(0, jumpForceAppliedInThisJump), true);
+
             player.setJumping(true);
-
-
             ScoreManager.INSTANCE.notifyJumpStarted();
-        } else {
-
-            boolean previousPlayerJumpingState = player.isJumping();
+        } else if (wasJumping) {
             player.setJumping(false);
-
-            // only notify if the jump really ended
-            if (previousPlayerJumpingState != player.isJumping()) {
-                ScoreManager.INSTANCE.notifyJumpEnded();
-            }
-
+            ScoreManager.INSTANCE.notifyJumpEnded();
         }
     }
 
