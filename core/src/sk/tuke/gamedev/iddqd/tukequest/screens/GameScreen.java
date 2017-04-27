@@ -24,6 +24,7 @@ import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
+import sk.tuke.gamedev.iddqd.tukequest.visual.HUD;
 
 /**
  * Created by Steve on 24.03.2017.
@@ -37,6 +38,8 @@ public class GameScreen extends AbstractScreen {
     private static final float GRAVITY = 70;
     // Vertical jump goes up 1 platform
     private static final float GRAVITY_LIMIT = 170;
+
+    private HUD hud;
 
     /**
      * Number of platforms displayed at once.
@@ -82,6 +85,22 @@ public class GameScreen extends AbstractScreen {
         PlatformManager.INSTANCE = new PlatformManager(this.player);
         ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
+        hud = new HUD();
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        this.getBatch().setProjectionMatrix(hud.stage.getCamera().combined);
+
+        if(hud != null) {
+            hud.stage.draw();
+
+            int actual = ScoreManager.INSTANCE.getCurrentScore();
+            if(actual > hud.getScore()) {
+                hud.setScore(actual);
+            }
+        }
     }
 
     private void initActors() {
@@ -177,4 +196,9 @@ public class GameScreen extends AbstractScreen {
         Log.i(this, "Difficulty increased, gravity is " + this.world.getGravity().y);
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        hud.dispose();
+    }
 }

@@ -105,6 +105,10 @@ public abstract class AbstractScreen implements Screen {
         Log.i(this, "Screen shown");
     }
 
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+
     /**
      * Called when the screen should render itself.
      *
