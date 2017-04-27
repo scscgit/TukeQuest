@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
+import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 
 import java.security.InvalidParameterException;
 
@@ -20,10 +21,11 @@ public class Animation {
         SCALE_WIDTH, SCALE_HEIGHT
     }
 
-    // Invisible animation does not provide width or height, attempt at accessing it is illegal
+    // Invisible animation does not provide width or height, attempt at accessing any of them is illegal
     public static final Animation INVISIBLE = new Animation((Texture) null);
 
     private float scale;
+    private boolean renderGraphicsCycle = !AbstractScreen.getRenderGraphicsCycle();
 
     /**
      * Static image representation, must be written to using @{link setSprite} in order to update the scale.
@@ -171,12 +173,12 @@ public class Animation {
         return walkFrames;
     }
 
-    public Animation(String spriteSheet, int columns, int rows, int firstImage, int lastImage, float speed) {
-        this(getTexture(spriteSheet), columns, rows, firstImage, lastImage, speed);
+    public Animation(String spriteSheet, int columns, int rows, int firstImage, int lastImage, float frameDuration) {
+        this(getTexture(spriteSheet), columns, rows, firstImage, lastImage, frameDuration);
     }
 
-    public Animation(String spriteSheet, int columns, int rows, int images, float speed) {
-        this(getTexture(spriteSheet), columns, rows, images, speed);
+    public Animation(String spriteSheet, int columns, int rows, int images, float frameDuration) {
+        this(getTexture(spriteSheet), columns, rows, images, frameDuration);
     }
 
     private void setAnimationGdx(com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> animationGdx) {
@@ -222,11 +224,14 @@ public class Animation {
         } else if (this.sprite != null) {
             drawSprite(batch, actor);
         }
+        this.renderGraphicsCycle = AbstractScreen.getRenderGraphicsCycle();
     }
 
     private void drawAnimationGdx(Batch batch, AnimatedActor actor) {
-        // Accumulate elapsed animation time
-        this.animationTime += Gdx.graphics.getDeltaTime();
+        // Accumulate elapsed animation time only once per the graphics render cycle
+        if (!hasRenderedGraphicsCycle()) {
+            this.animationTime += Gdx.graphics.getDeltaTime();
+        }
         TextureRegion frame = this.animationGdx.getKeyFrame(this.animationTime, true);
         setSprite(new Sprite(frame));
         drawSprite(batch, actor);
@@ -236,6 +241,10 @@ public class Animation {
         this.sprite.setPosition(actor.getX(), actor.getY());
         this.sprite.setRotation(actor.getRotation());
         this.sprite.draw(batch);
+    }
+
+    private boolean hasRenderedGraphicsCycle() {
+        return this.renderGraphicsCycle == AbstractScreen.getRenderGraphicsCycle();
     }
 
 }

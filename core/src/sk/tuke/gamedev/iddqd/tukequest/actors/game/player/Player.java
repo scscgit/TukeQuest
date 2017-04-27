@@ -69,6 +69,7 @@ public class Player extends RectangleActor implements RenderLast {
     private float horizontalSpeedInLastAct;
     private Camera camera;
     private boolean invulnerable;
+    private float hitFlamesOnY;
 
     public Player(float x, float y, Camera camera) {
         super(ANIMATION_STAND, BodyDef.BodyType.DynamicBody, x, y);
@@ -140,9 +141,14 @@ public class Player extends RectangleActor implements RenderLast {
         removeJumpForce();
         getBody().applyForceToCenter(0, RESURRECTION_FORCE, true);
         this.invulnerable = true;
+        this.hitFlamesOnY = getBody().getPosition().y;
         TaskManager.INSTANCE.scheduleTimer("playerVulnerable", 1, () -> {
             Log.d(this, "No longer invulnerable");
             this.invulnerable = false;
+            // Double-check in case physics go wrong and let player slip below flames during invulnerability
+            if (this.hitFlamesOnY > getBody().getPosition().y) {
+                lostLife();
+            }
         });
     }
 

@@ -39,6 +39,7 @@ public abstract class AbstractScreen implements Screen {
 
     public static final Animation PAUSED_ANIMATION = new Animation(
         "paused.jpg", Animation.ScaleType.SCALE_WIDTH, TukeQuestGame.SCREEN_HEIGHT);
+    private static boolean renderGraphicsCycle;
     protected Camera camera;
     protected World world;
     protected Viewport viewport;
@@ -147,7 +148,7 @@ public abstract class AbstractScreen implements Screen {
     /**
      * Adding any {@link Actor} other than {@link BodyActor}, that should have its callbacks run during the game.
      */
-    public Actor addActor(Actor actor) {
+    public <T extends Actor> T addActor(T actor) {
         this.addingActor = true;
         if (actor instanceof BodyActor) {
             ((BodyActor) actor).addToWorld(this);
@@ -220,6 +221,7 @@ public abstract class AbstractScreen implements Screen {
     }
 
     protected void renderGraphics(Batch batch) {
+        AbstractScreen.renderGraphicsCycle = !AbstractScreen.renderGraphicsCycle;
         // Draw the images of all Actors
         List<Actor> lastRenderedActors = new LinkedList<>();
         for (Actor actor : this.actors) {
@@ -243,6 +245,14 @@ public abstract class AbstractScreen implements Screen {
         for (Actor lastRenderedActor : lastRenderedActors) {
             lastRenderedActor.draw(batch);
         }
+    }
+
+    /**
+     * The boolean gets switched after every render cycle, this can be used by {@link Animation} to prevent
+     * duplicate calculations on draw.
+     */
+    public static boolean getRenderGraphicsCycle() {
+        return AbstractScreen.renderGraphicsCycle;
     }
 
     protected void renderDebug() {

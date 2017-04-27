@@ -1,6 +1,7 @@
 package sk.tuke.gamedev.iddqd.tukequest.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -8,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -45,6 +49,7 @@ public class GameScreen extends AbstractScreen {
     private static final int PLATFORMS_COUNT = 10;
 
     private Player player;
+    private Stage guiStage;
 
     public GameScreen(TukeQuestGame game) {
         super(game, TukeQuestGame.manager.get("audio/music/backgroundmusic.mp3", Music.class));
@@ -82,6 +87,28 @@ public class GameScreen extends AbstractScreen {
         PlatformManager.INSTANCE = new PlatformManager(this.player);
         ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
+
+        this.guiStage = new Stage();
+        Skin uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
+        addStageActors(this.guiStage, uiSkin);
+    }
+
+    private void addStageActors(Stage guiStage, Skin uiSkin) {
+        Label scoreLabel = new Label("", uiSkin);
+        scoreLabel.setPosition(60, 470);
+        ScoreManager.INSTANCE.setScoreLabel(scoreLabel);
+        guiStage.addActor(scoreLabel);
+
+        Label comboLabel = new Label("", uiSkin);
+        comboLabel.setPosition(60, 450);
+        ScoreManager.INSTANCE.setComboLabel(comboLabel);
+        guiStage.addActor(comboLabel);
+    }
+
+    @Override
+    protected void renderGraphics(Batch batch) {
+        super.renderGraphics(batch);
+        this.guiStage.draw();
     }
 
     private void initActors() {
@@ -121,15 +148,10 @@ public class GameScreen extends AbstractScreen {
             @Override
             public void act() {
                 if (waiting && GameScreen.this.player.getY() > 800) {
-                    new FxFlameActor(GameScreen.this.player, 0, -100).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -80, -150).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -50, -200).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -30, -250).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -10, -350).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -50, -450).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -40, -550).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -20, -650).addToWorld(GameScreen.this);
-                    new FxFlameActor(GameScreen.this.player, -90, -750).addToWorld(GameScreen.this);
+                    for (int i = 2; i < 20; i++) {
+                        new FxFlameActor(GameScreen.this.player, (35 * i) % 100 - 100, i * -50)
+                            .addToWorld(GameScreen.this);
+                    }
                     TaskManager.INSTANCE.scheduleTimer(
                         "difficultyIncrease", 15, 15, GameScreen.this::difficultyIncrease);
                     waiting = false;
