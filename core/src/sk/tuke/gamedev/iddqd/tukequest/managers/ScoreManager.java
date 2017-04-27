@@ -1,8 +1,8 @@
 package sk.tuke.gamedev.iddqd.tukequest.managers;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
+import sk.tuke.gamedev.iddqd.tukequest.visual.HUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +22,7 @@ public class ScoreManager {
 
     private int score;
     private boolean playerIsJumping = false;
-    private Label scoreLabel;
-    private Label comboLabel;
+    private HUD hud;
 
     public void addScore(int score) {
         this.score += score;
@@ -87,6 +86,7 @@ public class ScoreManager {
         platformsInCurrentJump.clear();
         jumpingStreak = 0;
         Log.d(this, "Ending streak");
+        updateComboLabel();
     }
 
     private void addScoreForJump() {
@@ -109,26 +109,22 @@ public class ScoreManager {
         return multipliedScore;
     }
 
-    public void setScoreLabel(Label scoreLabel) {
-        this.scoreLabel = scoreLabel;
+    public void setHud(HUD hud) {
+        this.hud = hud;
         updateScoreLabel();
+        updateComboLabel();
     }
 
     private void updateScoreLabel() {
-        this.scoreLabel.setText("Score: " + ScoreManager.INSTANCE.getCurrentScore());
-    }
-
-    public void setComboLabel(Label comboLabel) {
-        this.comboLabel = comboLabel;
-        updateComboLabel();
+        this.hud.setScoreText(String.format("Score: %d", getCurrentScore()));
     }
 
     private void updateComboLabel() {
         if (this.jumpingStreak == 0) {
-            this.comboLabel.setText("");
+            this.hud.setComboText("");
             return;
         }
-        this.comboLabel.setText("Jump streak (" + this.jumpingStreak + ") combo: " + calculateMultipliedScore());
+        this.hud.setComboText("Jump streak (" + this.jumpingStreak + ") combo: " + calculateMultipliedScore());
     }
 
 }

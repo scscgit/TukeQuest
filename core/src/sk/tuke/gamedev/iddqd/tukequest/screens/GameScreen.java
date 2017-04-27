@@ -1,7 +1,6 @@
 package sk.tuke.gamedev.iddqd.tukequest.screens;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,8 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -28,6 +25,7 @@ import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
+import sk.tuke.gamedev.iddqd.tukequest.visual.HUD;
 
 /**
  * Created by Steve on 24.03.2017.
@@ -41,6 +39,8 @@ public class GameScreen extends AbstractScreen {
     private static final float GRAVITY = 70;
     // Vertical jump goes up 1 platform
     private static final float GRAVITY_LIMIT = 170;
+
+    private HUD hud;
 
     /**
      * Number of platforms displayed at once.
@@ -88,27 +88,19 @@ public class GameScreen extends AbstractScreen {
         ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
 
-        this.guiStage = new Stage();
-        Skin uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
-        addStageActors(this.guiStage, uiSkin);
-    }
-
-    private void addStageActors(Stage guiStage, Skin uiSkin) {
-        Label scoreLabel = new Label("", uiSkin);
-        scoreLabel.setPosition(60, 470);
-        ScoreManager.INSTANCE.setScoreLabel(scoreLabel);
-        guiStage.addActor(scoreLabel);
-
-        Label comboLabel = new Label("", uiSkin);
-        comboLabel.setPosition(60, 450);
-        ScoreManager.INSTANCE.setComboLabel(comboLabel);
-        guiStage.addActor(comboLabel);
+        this.hud = new HUD();
+        ScoreManager.INSTANCE.setHud(this.hud);
     }
 
     @Override
     protected void renderGraphics(Batch batch) {
         super.renderGraphics(batch);
-        this.guiStage.draw();
+        if (this.hud == null) {
+            return;
+        }
+        // This fixes a problem with flames randomly turning invisible
+        getBatch().setProjectionMatrix(hud.stage.getCamera().combined);
+        this.hud.stage.draw();
     }
 
     private void initActors() {
@@ -148,7 +140,7 @@ public class GameScreen extends AbstractScreen {
             @Override
             public void act() {
                 if (waiting && GameScreen.this.player.getY() > 800) {
-                    for (int i = 2; i < 20; i++) {
+                    for (int i = 2; i < 40; i++) {
                         new FxFlameActor(GameScreen.this.player, (35 * i) % 100 - 100, i * -50)
                             .addToWorld(GameScreen.this);
                     }
@@ -199,4 +191,9 @@ public class GameScreen extends AbstractScreen {
         Log.i(this, "Difficulty increased, gravity is " + this.world.getGravity().y);
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        hud.dispose();
+    }
 }
