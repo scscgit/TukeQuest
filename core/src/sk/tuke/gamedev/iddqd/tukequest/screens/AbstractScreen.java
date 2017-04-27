@@ -19,10 +19,12 @@ import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.*;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.ActLast;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FullScreenImage;
+import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
+import sk.tuke.gamedev.iddqd.tukequest.visual.HUD;
 
 import java.security.InvalidParameterException;
 import java.util.Comparator;
@@ -53,6 +55,7 @@ public abstract class AbstractScreen implements Screen {
     private boolean addingActor;
     private Music music;
     private boolean paused;
+    private HUD hud;
 
     protected AbstractScreen(TukeQuestGame game, Music music) {
         this.game = game;
@@ -152,7 +155,7 @@ public abstract class AbstractScreen implements Screen {
     /**
      * Adding any {@link Actor} other than {@link BodyActor}, that should have its callbacks run during the game.
      */
-    public <T extends Actor> T addActor(T actor) {
+    public final <T extends Actor> T addActor(T actor) {
         this.addingActor = true;
         if (actor instanceof BodyActor) {
             ((BodyActor) actor).addToWorld(this);
@@ -249,6 +252,9 @@ public abstract class AbstractScreen implements Screen {
         for (Actor lastRenderedActor : lastRenderedActors) {
             lastRenderedActor.draw(batch);
         }
+        if (this.hud != null) {
+            this.hud.draw(batch);
+        }
     }
 
     /**
@@ -343,6 +349,15 @@ public abstract class AbstractScreen implements Screen {
             throw new InvalidParameterException();
         }
         music.setVolume(musicVolume);
+    }
+
+    public void setHud(HUD hud) {
+        ScoreManager.INSTANCE.setHud(hud);
+        this.hud = hud;
+    }
+
+    public HUD getHud() {
+        return this.hud;
     }
 
 }

@@ -10,7 +10,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.Ground;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RenderLast;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FullScreenImage;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Surprise;
@@ -127,7 +127,7 @@ public class Player extends RectangleActor implements RenderLast {
         TaskManager.INSTANCE.scheduleTimer("gameOverCountdown", 3,
             () -> TukeQuestGame.THIS.setScreen(new GameOverScreen(TukeQuestGame.THIS)));
         // Persistent flame always displayed on screen
-        FullScreenImage persistentFlame = new FullScreenImage(FxFlameActor.ANIMATION, this.camera, 0, 0);
+        FullScreenImage persistentFlame = new FullScreenImage(FxFlame.ANIMATION, this.camera, 0, 0);
         persistentFlame.addStrategy(new CameraFollow(this.camera, persistentFlame));
         persistentFlame.setLastActOrder(1);
         getScreen().addActor(persistentFlame);

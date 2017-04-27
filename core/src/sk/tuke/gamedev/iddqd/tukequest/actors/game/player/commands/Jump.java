@@ -16,6 +16,7 @@ public class Jump extends AbstractCommand {
 
     private final float jumpForce;
     private final float jumpSprintFactor;
+    private boolean wasOnGround;
 
     public Jump(float jumpForce, float jumpSprintFactor) {
         this.jumpForce = jumpForce;
@@ -25,9 +26,13 @@ public class Jump extends AbstractCommand {
     @Override
     public void onExecute(Player player) {
         if (!player.isOnGround() || player.getBody().getLinearVelocity().y > 0) {
+            this.wasOnGround = false;
             return;
         }
-        boolean wasJumping = player.isJumping();
+        if (!this.wasOnGround) {
+            ScoreManager.INSTANCE.notifyOnGround();
+            this.wasOnGround = true;
+        }
         if (InputHelper.isJump()) {
             System.out.println("Jump started");
             JUMP_SOUND.play();
@@ -48,9 +53,8 @@ public class Jump extends AbstractCommand {
 
             player.setJumping(true);
             ScoreManager.INSTANCE.notifyJumpStarted();
-        } else if (wasJumping) {
+        } else {
             player.setJumping(false);
-            ScoreManager.INSTANCE.notifyJumpEnded();
         }
     }
 

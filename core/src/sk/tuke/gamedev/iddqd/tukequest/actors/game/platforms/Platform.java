@@ -82,6 +82,7 @@ public class Platform extends RectangleActor implements Ground {
         return PLATFORM_TEXTURE_NAMES.size();
     }
 
+    @Deprecated
     public void markAsScoreAwarded() {
         scoreAwarded = true;
         if (TukeQuestGame.debug) {

@@ -14,10 +14,11 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 /**
  * Created by macbook on 26/03/2017.
  */
-public class FxFlameActor extends RectangleActor implements RenderLast, ActOnAdd {
+public class FxFlame extends RectangleActor implements RenderLast, ActOnAdd {
 
     public static final Animation ANIMATION = new Animation("flame_fx.png", 1, 5, 0, 4, 0.25f);
-    public static final float INITIAL_SPEED = 2;
+
+    protected Player player;
 
     static {
         // Scales the animation to the full screen width
@@ -25,9 +26,7 @@ public class FxFlameActor extends RectangleActor implements RenderLast, ActOnAdd
         ANIMATION.setScale((TukeQuestGame.SCREEN_WIDTH + 100) / ANIMATION.getWidth());
     }
 
-    private Player player;
-
-    public FxFlameActor(Player player, float x, float y) {
+    public FxFlame(Player player, float x, float y) {
         super(
             ANIMATION,
             BodyDef.BodyType.KinematicBody,
@@ -46,15 +45,15 @@ public class FxFlameActor extends RectangleActor implements RenderLast, ActOnAdd
 
     @Override
     public void onAddedToScreen(AbstractScreen screen) {
-        setFlameVelocity(INITIAL_SPEED);
+        setFlameVelocity(FxFlameMaster.MIN_SPEED_START);
     }
 
-    public void setFlameVelocity(float velocity) {
+    public boolean setFlameVelocity(float velocity) {
+        if (getBody().getLinearVelocity().y == velocity) {
+            return false;
+        }
         getBody().setLinearVelocity(new Vector2(0, velocity));
-    }
-
-    public void increaseFlameVelocity(float velocity) {
-        setFlameVelocity(getBody().getLinearVelocity().y + velocity);
+        return true;
     }
 
     @Override

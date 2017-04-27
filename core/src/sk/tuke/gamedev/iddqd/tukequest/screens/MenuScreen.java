@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.MenuBackground;
+import sk.tuke.gamedev.iddqd.tukequest.util.InputHelper;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.visual.SimpleButton;
 
@@ -65,23 +66,36 @@ public class MenuScreen extends AbstractScreen {
         startBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
-                stage.dispose();
+                runGame();
             }
         });
 
         exitBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
+                exitGame();
             }
         });
+    }
+
+    private void runGame() {
+        game.setScreen(new GameScreen(game));
+        stage.dispose();
+    }
+
+    private void exitGame() {
+        Gdx.app.exit();
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         stage.draw();
+        if (InputHelper.isEnter()) {
+            runGame();
+        } else if (InputHelper.isExit()) {
+            exitGame();
+        }
     }
 
     @Override

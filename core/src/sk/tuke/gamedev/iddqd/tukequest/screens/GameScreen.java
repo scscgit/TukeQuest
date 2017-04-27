@@ -6,15 +6,14 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameMaster;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
@@ -40,8 +39,6 @@ public class GameScreen extends AbstractScreen {
     // Vertical jump goes up 1 platform
     private static final float GRAVITY_LIMIT = 170;
 
-    private HUD hud;
-
     /**
      * Number of platforms displayed at once.
      */
@@ -49,7 +46,7 @@ public class GameScreen extends AbstractScreen {
     private static final int PLATFORMS_COUNT = 10;
 
     private Player player;
-    private Stage guiStage;
+    private FxFlameMaster firstFlame;
 
     public GameScreen(TukeQuestGame game) {
         super(game, TukeQuestGame.manager.get("audio/music/backgroundmusic.mp3", Music.class));
@@ -87,20 +84,7 @@ public class GameScreen extends AbstractScreen {
         PlatformManager.INSTANCE = new PlatformManager(this.player);
         ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
-
-        this.hud = new HUD();
-        ScoreManager.INSTANCE.setHud(this.hud);
-    }
-
-    @Override
-    protected void renderGraphics(Batch batch) {
-        super.renderGraphics(batch);
-        if (this.hud == null) {
-            return;
-        }
-        // This fixes a problem with flames randomly turning invisible
-        getBatch().setProjectionMatrix(hud.stage.getCamera().combined);
-        this.hud.stage.draw();
+        setHud(new HUD());
     }
 
     private void initActors() {
@@ -140,9 +124,17 @@ public class GameScreen extends AbstractScreen {
             @Override
             public void act() {
                 if (waiting && GameScreen.this.player.getY() > 800) {
-                    for (int i = 2; i < 40; i++) {
-                        new FxFlameActor(GameScreen.this.player, (35 * i) % 100 - 100, i * -50)
-                            .addToWorld(GameScreen.this);
+                    FxFlameMaster firstFlame = new FxFlameMaster(GameScreen.this.player, -30, -FxFlameMaster.MAX_DISTANCE);
+                    GameScreen.this.firstFlame = firstFlame;
+                    firstFlame.registerHud(getHud());
+                    firstFlame.addToWorld(GameScreen.this);
+                    for (int i = 1; i < 40; i++) {
+                        FxFlame otherFlame = new FxFlame(
+                            GameScreen.this.player,
+                            (35 * i) % 100 - 100,
+                            -FxFlameMaster.MAX_DISTANCE - i * 50);
+                        otherFlame.addToWorld(GameScreen.this);
+                        firstFlame.addOtherFlame(otherFlame);
                     }
                     TaskManager.INSTANCE.scheduleTimer(
                         "difficultyIncrease", 15, 15, GameScreen.this::difficultyIncrease);
@@ -179,21 +171,18 @@ public class GameScreen extends AbstractScreen {
         if (this.world.getGravity().y < -GRAVITY_LIMIT) {
             this.world.setGravity(new Vector2(0, -GRAVITY_LIMIT));
         }
-        Array<Body> temporaryBodies = new Array<>();
-        getWorld().getBodies(temporaryBodies);
-        // TODO: probably use getActors() instead, which means addActor will add them to actors field of Screen
-        for (Body body : temporaryBodies) {
-            if (body.getUserData() instanceof FxFlameActor) {
-                FxFlameActor flame = (FxFlameActor) body.getUserData();
-                flame.increaseFlameVelocity(flameIncrease);
-            }
-        }
+        this.firstFlame.increaseMinFlameVelocity(flameIncrease);
         Log.i(this, "Difficulty increased, gravity is " + this.world.getGravity().y);
     }
 
     @Override
     public void dispose() {
+        getActors().forEach(actor -> {
+            if (actor instanceof Disposable) {
+                ((Disposable) actor).dispose();
+            }
+        });
         super.dispose();
-        hud.dispose();
     }
+
 }

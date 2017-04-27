@@ -12,10 +12,12 @@ import java.util.List;
  */
 public class ScoreManager {
 
-    private static final int ONE_PLATFORM_SCORE_VALUE = 10;
-    private static final int COMBO_MULTIPLIER = 5;
+    private static final int ONE_PLATFORM_SCORE_VALUE = 50;
+    private static final int JUMP_COMBO_MULTIPLIER = 5;
     public static ScoreManager INSTANCE;
 
+    private int platformStreak;
+    private int lastPlatformStreak;
     private int jumpingStreak;
 
     private List<Platform> platformsInCurrentJump = new ArrayList<>();
@@ -41,22 +43,22 @@ public class ScoreManager {
         // Player is jumping and reached the platform, so it should be added to the streak
         if (active && playerIsJumping) {
             platformsInCurrentJump.add(platform);
-            jumpingStreak++;
-            Log.d(this, "Increasing jump streak to " + jumpingStreak);
+            platformStreak++;
+            Log.d(this, "Increasing jump streak to " + platformStreak);
             updateComboLabel();
             return;
         }
         // Player fell down without jumping
-        if (!active && !playerIsJumping) {
-            Log.d(this, "Player FELL!");
-            endStreak();
-            return;
-        }
+//        if (!active && !playerIsJumping) {
+//            Log.d(this, "Player FELL!");
+//            endStreak();
+//            return;
+//        }
         // Player didn't manage to land on the platform while jumping, but was above it before
         if (!active) {
             platformsInCurrentJump.remove(platform);
-            jumpingStreak = jumpingStreak > 0 ? jumpingStreak - 1 : 0;
-            Log.d(this, "Decreasing jump streak down to " + jumpingStreak);
+            platformStreak = platformStreak > 0 ? platformStreak - 1 : 0;
+            Log.d(this, "Decreasing jump streak down to " + platformStreak);
             updateComboLabel();
             return;
         }
@@ -68,23 +70,28 @@ public class ScoreManager {
         playerIsJumping = true;
     }
 
-    public void notifyJumpEnded() {
+    public void notifyOnGround() {
         playerIsJumping = false;
-        if (playerJumpedZeroPlatforms()) {
+        if (this.platformStreak < this.lastPlatformStreak) {
+            // The streak has ended
+            addScoreForJump();
+            this.lastPlatformStreak = 0;
+            return;
+        }
+        if (this.platformStreak == this.lastPlatformStreak) {
             // If player jumps and lands on the same platform, the streak should continue
             Log.d(this, "Player landed on the same or already awarded platform, continuing streak!");
-        } else {
-            addScoreForJump();
+            return;
         }
-    }
-
-    private boolean playerJumpedZeroPlatforms() {
-        return platformsInCurrentJump.size() == 0;
+        this.lastPlatformStreak = this.platformStreak;
+        this.jumpingStreak++;
+        updateComboLabel();
     }
 
     private void endStreak() {
         platformsInCurrentJump.clear();
-        jumpingStreak = 0;
+        this.platformStreak = 0;
+        this.jumpingStreak = 0;
         Log.d(this, "Ending streak");
         updateComboLabel();
     }
@@ -93,18 +100,22 @@ public class ScoreManager {
         int multipliedScore = calculateMultipliedScore();
         addScore(multipliedScore);
         Log.i(this,
-            "Jump streak " + jumpingStreak
+            "Jump streak " + this.jumpingStreak
                 + " added score bonus " + multipliedScore
-                + ", score is now " + getCurrentScore());
-        // mark all platforms that they awarded score
-        platformsInCurrentJump.forEach(Platform::markAsScoreAwarded);
+                + " with " + this.platformStreak
+                + " platforms, score is now " + getCurrentScore());
+        // Mark all platforms that awarded score
+        // Probably obsolete from now on, it makes more sense to let player get awarded again
+        //platformsInCurrentJump.forEach(Platform::markAsScoreAwarded);
         endStreak();
     }
 
     private int calculateMultipliedScore() {
-        int multipliedScore = ONE_PLATFORM_SCORE_VALUE * platformsInCurrentJump.size();
-        for (int i = 0; i < jumpingStreak; i++) {
-            multipliedScore += i * COMBO_MULTIPLIER;
+//        int multipliedScore = ONE_PLATFORM_SCORE_VALUE * platformsInCurrentJump.size();
+        int multipliedScore = ONE_PLATFORM_SCORE_VALUE * this.platformStreak;
+        for (int i = 0; i < this.jumpingStreak; i++) {
+            // First jump is not rewarded
+            multipliedScore += i * JUMP_COMBO_MULTIPLIER;
         }
         return multipliedScore;
     }
@@ -116,15 +127,15 @@ public class ScoreManager {
     }
 
     private void updateScoreLabel() {
-        this.hud.setScoreText(String.format("Score: %d", getCurrentScore()));
+        this.hud.setScore(this.score);
     }
 
     private void updateComboLabel() {
-        if (this.jumpingStreak == 0) {
-            this.hud.setComboText("");
+        if (this.platformStreak == 0) {
+            this.hud.setCombo(0, 0, 0);
             return;
         }
-        this.hud.setComboText("Jump streak (" + this.jumpingStreak + ") combo: " + calculateMultipliedScore());
+        this.hud.setCombo(this.platformStreak, this.jumpingStreak, calculateMultipliedScore());
     }
 
 }
