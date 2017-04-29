@@ -35,9 +35,9 @@ public class GameScreen extends AbstractScreen {
     public static final float SILENT_MUSIC_VOLUME = 0.04f;
 
     // Vertical jump goes up 3 platforms
-    private static final float GRAVITY = 70;
+    public static final float GRAVITY = 70;
     // Vertical jump goes up 1 platform
-    private static final float GRAVITY_LIMIT = 170;
+    public static final float GRAVITY_LIMIT = 170;
 
     /**
      * Number of platforms displayed at once.
@@ -123,7 +123,7 @@ public class GameScreen extends AbstractScreen {
 
             @Override
             public void act() {
-                if (waiting && GameScreen.this.player.getY() > 800) {
+                if (waiting && (ScoreManager.INSTANCE.getCurrentScore() > 0 || GameScreen.this.player.getY() > 800)) {
                     FxFlameMaster firstFlame = new FxFlameMaster(GameScreen.this.player, -30, -FxFlameMaster.MAX_DISTANCE);
                     GameScreen.this.firstFlame = firstFlame;
                     firstFlame.registerHud(getHud());
@@ -167,12 +167,22 @@ public class GameScreen extends AbstractScreen {
 
         // Example implementation of difficulty increase: increasing gravity and speed of flames
         // NOTE: to be fair, maximum gravity should always allow player to jump vertically on a next platform
-        this.world.setGravity(this.world.getGravity().cpy().scl(gravityMultiplier));
-        if (this.world.getGravity().y < -GRAVITY_LIMIT) {
-            this.world.setGravity(new Vector2(0, -GRAVITY_LIMIT));
+        Vector2 newGravity = getGravity().scl(gravityMultiplier);
+        if (newGravity.y < -GRAVITY_LIMIT) {
+            newGravity.y = -GRAVITY_LIMIT;
         }
+        setGravity(newGravity);
         this.firstFlame.increaseMinFlameVelocity(flameIncrease);
         Log.i(this, "Difficulty increased, gravity is " + this.world.getGravity().y);
+    }
+
+    public Vector2 getGravity() {
+        return this.world.getGravity().cpy();
+    }
+
+    public void setGravity(Vector2 gravity) {
+        this.world.setGravity(gravity);
+        getHud().setGravity(gravity.y);
     }
 
     @Override

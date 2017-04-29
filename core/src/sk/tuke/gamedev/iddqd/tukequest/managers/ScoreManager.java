@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class ScoreManager {
 
-    private static final int ONE_PLATFORM_SCORE_VALUE = 50;
+    private static final int ONE_PLATFORM_SCORE_VALUE = 20;
     private static final int JUMP_COMBO_MULTIPLIER = 5;
     public static ScoreManager INSTANCE;
 
@@ -67,24 +67,22 @@ public class ScoreManager {
     }
 
     public void notifyJumpStarted() {
-        playerIsJumping = true;
+        this.playerIsJumping = true;
     }
 
     public void notifyOnGround() {
-        playerIsJumping = false;
+        this.playerIsJumping = false;
         if (this.platformStreak < this.lastPlatformStreak) {
             // The streak has ended
             addScoreForJump();
             this.lastPlatformStreak = 0;
-            return;
-        }
-        if (this.platformStreak == this.lastPlatformStreak) {
+        } else if (this.platformStreak == this.lastPlatformStreak) {
             // If player jumps and lands on the same platform, the streak should continue
             Log.d(this, "Player landed on the same or already awarded platform, continuing streak!");
-            return;
+        } else {
+            this.lastPlatformStreak = this.platformStreak;
+            this.jumpingStreak++;
         }
-        this.lastPlatformStreak = this.platformStreak;
-        this.jumpingStreak++;
         updateComboLabel();
     }
 
@@ -111,8 +109,12 @@ public class ScoreManager {
     }
 
     private int calculateMultipliedScore() {
+        return calculateMultipliedScore(this.platformStreak);
+    }
+
+    private int calculateMultipliedScore(int scoreForPlatformStreak) {
 //        int multipliedScore = ONE_PLATFORM_SCORE_VALUE * platformsInCurrentJump.size();
-        int multipliedScore = ONE_PLATFORM_SCORE_VALUE * this.platformStreak;
+        int multipliedScore = ONE_PLATFORM_SCORE_VALUE * scoreForPlatformStreak;
         for (int i = 0; i < this.jumpingStreak; i++) {
             // First jump is not rewarded
             multipliedScore += i * JUMP_COMBO_MULTIPLIER;
@@ -135,7 +137,10 @@ public class ScoreManager {
             this.hud.setCombo(0, 0, 0);
             return;
         }
-        this.hud.setCombo(this.platformStreak, this.jumpingStreak, calculateMultipliedScore());
+        this.hud.setCombo(
+            this.platformStreak - 1,
+            this.jumpingStreak,
+            calculateMultipliedScore(this.platformStreak - 1));
     }
 
 }

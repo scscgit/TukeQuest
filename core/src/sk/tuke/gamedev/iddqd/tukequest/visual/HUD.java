@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
 
 /**
  * Created by 123 on 27.4.2017.
@@ -19,7 +20,8 @@ public class HUD implements Disposable {
     private Stage stage;
     private Label scoreLabel;
     private Label comboLabel;
-    private FlameProgressBar progressBar;
+    private FlameProgressBar flameProgressBar;
+    private GravityProgressBar gravityProgressBar;
 
     public HUD() {
         this.stage = new Stage(new ScreenViewport());
@@ -37,7 +39,12 @@ public class HUD implements Disposable {
         scoreTable.add(comboLabel).expandX();
         this.stage.addActor(scoreTable);
 
-        this.progressBar = new FlameProgressBar(FLAME_PROGRESS_BAR_MAX_DISTANCE).addToStage(this.stage);
+        this.flameProgressBar = new FlameProgressBar(FLAME_PROGRESS_BAR_MAX_DISTANCE)
+            .addToStage(this.stage);
+        this.gravityProgressBar = new GravityProgressBar((int) (GameScreen.GRAVITY_LIMIT - GameScreen.GRAVITY))
+            .addToStage(this.stage);
+        // The starting gravity will be set
+        setGravity(GameScreen.GRAVITY);
     }
 
     public void setScore(int score) {
@@ -50,15 +57,15 @@ public class HUD implements Disposable {
             return;
         }
         this.comboLabel.setText(
-            "Jump streak (" + jumpingStreak
-                + " over " + platformStreak
+            "Jump streak " + jumpingStreak
+                + " (over " + platformStreak
                 + " platforms) combo score: " + multipliedScore);
     }
 
     public void setFlameDistance(float distance) {
         // The distance is practically zero when a Player can see the flame
         distance -= 500;
-        this.progressBar.setValue(distance);
+        this.flameProgressBar.setValue(distance);
     }
 
     public void draw(Batch batch) {
@@ -70,6 +77,13 @@ public class HUD implements Disposable {
     @Override
     public void dispose() {
         this.stage.dispose();
+    }
+
+    public void setGravity(float gravity) {
+        if (gravity < 0) {
+            gravity = -gravity;
+        }
+        this.gravityProgressBar.setValue(gravity - GameScreen.GRAVITY);
     }
 
 }
