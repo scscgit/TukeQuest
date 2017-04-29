@@ -21,7 +21,7 @@ public class Genci extends AbstractTeacher {
     }
 
     @Override
-    protected int soundDuration() {
+    protected int soundDuration(boolean wasVisited) {
         return 3;
     }
 

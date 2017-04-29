@@ -17,6 +17,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameMaster;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Genci;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
@@ -151,7 +152,7 @@ public class GameScreen extends AbstractScreen {
 
         });
 
-        new Genci(this, TukeQuestGame.SCREEN_WIDTH * 3.7f / 5f, groundHeight)
+        new Binas(this, TukeQuestGame.SCREEN_WIDTH * 3.7f / 5f, groundHeight)
             .addToWorld(this);
 
         new Poruban(this, TukeQuestGame.SCREEN_WIDTH * 1.3f / 5f, groundHeight)

@@ -109,25 +109,26 @@ public abstract class AbstractTeacher extends RectangleActor implements ActOnAdd
     }
 
     protected void playSound() {
-        if (isVisited) {
+        if (this.isVisited) {
             otherSound.play();
         } else {
             welcomeSound.play();
-            isVisited = true;
+            this.isVisited = true;
         }
     }
 
     protected void meetPlayer() {
-        playSound();
-        playingSound = true;
         this.screen.setMusicVolume(GameScreen.SILENT_MUSIC_VOLUME);
         // Allow the sound again in a few seconds
-        TaskManager.INSTANCE.scheduleTimer("teacherSound", soundDuration(), () -> playingSound = false);
+        TaskManager.INSTANCE.scheduleTimer("teacherSound", soundDuration(this.isVisited),
+            () -> playingSound = false);
         TaskManager.INSTANCE.removeTimers("teacherBackgroundMute");
-        TaskManager.INSTANCE.scheduleTimer("teacherBackgroundMute", soundDuration(),
+        TaskManager.INSTANCE.scheduleTimer("teacherBackgroundMute", soundDuration(this.isVisited),
             () -> this.screen.setMusicVolume(GameScreen.DEFAULT_MUSIC_VOLUME));
+        playSound();
+        playingSound = true;
     }
 
-    protected abstract int soundDuration();
+    protected abstract int soundDuration(boolean wasVisited);
 
 }
