@@ -44,6 +44,7 @@ public class Player extends RectangleActor implements RenderLast {
     public static final Animation ANIMATION_LEFT_STAND = new Animation(ANIMATION_FILE_NAME, 8, 4, 27, 28, 0.2f);
     public static final Animation ANIMATION_STAND = ANIMATION_RIGHT_STAND;
 
+    public static final float NO_LONGER_WALKING_SPEED_THRESHOLD = 1;
     private static final float DENSITY = .1f;
     private static final float FRICTION = 0f;
     private static final float LINEAR_DAMPING = 1f;

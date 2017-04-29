@@ -14,6 +14,7 @@ public class HorizontalMovement extends AbstractCommand {
 
     private float forceMultiplier;
     private Camera camera;
+    private boolean lastDirectionLeft;
 
     public HorizontalMovement(float forceMultiplier, Camera camera) {
         this.forceMultiplier = forceMultiplier;
@@ -31,6 +32,14 @@ public class HorizontalMovement extends AbstractCommand {
                 player.setAnimation(player.isJumping() ? Player.ANIMATION_LEFT_JUMP : Player.ANIMATION_LEFT_WALK);
             } else {
                 player.setAnimation(player.isJumping() ? Player.ANIMATION_RIGHT_JUMP : Player.ANIMATION_RIGHT_WALK);
+            }
+            lastDirectionLeft = direction < 0;
+        } else {
+            // Ad-hoc turning off running animation if the player is already slow
+            float velocityX = player.getBody().getLinearVelocity().x;
+            if (velocityX != 0 && Math.abs(velocityX) < Player.NO_LONGER_WALKING_SPEED_THRESHOLD) {
+                //player.setAnimation(velocityX < 0 ? Player.ANIMATION_LEFT_STAND : Player.ANIMATION_RIGHT_STAND);
+                player.setAnimation(lastDirectionLeft ? Player.ANIMATION_LEFT_STAND : Player.ANIMATION_RIGHT_STAND);
             }
         }
     }
