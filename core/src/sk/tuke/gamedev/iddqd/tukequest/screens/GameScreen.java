@@ -23,6 +23,7 @@ import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
+import sk.tuke.gamedev.iddqd.tukequest.util.InputHelper;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.visual.HUD;
 
@@ -112,7 +113,7 @@ public class GameScreen extends AbstractScreen {
             camera
         ).addToWorld(this);
 
-        // Flame spawning
+        // Flame spawning and Exit handler
         addActor(new Actor() {
 
             private boolean waiting = true;
@@ -124,8 +125,10 @@ public class GameScreen extends AbstractScreen {
             @Override
             public void act() {
                 if (waiting && (ScoreManager.INSTANCE.getCurrentScore() > 0 || GameScreen.this.player.getY() > 800)) {
-                    FxFlameMaster firstFlame = new FxFlameMaster(GameScreen.this.player, -30, -FxFlameMaster.MAX_DISTANCE);
+                    FxFlameMaster firstFlame = new FxFlameMaster(
+                        GameScreen.this.player, -30, -FxFlameMaster.MAX_DISTANCE);
                     GameScreen.this.firstFlame = firstFlame;
+                    ScoreManager.INSTANCE.registerFxFlame(firstFlame);
                     firstFlame.registerHud(getHud());
                     firstFlame.addToWorld(GameScreen.this);
                     for (int i = 1; i < 40; i++) {
@@ -140,6 +143,9 @@ public class GameScreen extends AbstractScreen {
                         "difficultyIncrease", 15, 15, GameScreen.this::difficultyIncrease);
                     waiting = false;
                     Log.i(GameScreen.this, "Flames started");
+                }
+                if (InputHelper.isExit()) {
+                    getGame().setScreen(new MenuScreen(getGame()));
                 }
             }
 

@@ -51,7 +51,7 @@ public class HUD implements Disposable {
         this.scoreLabel.setText(String.format("Score: %d", score));
     }
 
-    public void setCombo(int platformStreak, int jumpingStreak, int multipliedScore) {
+    public void setCombo(int platformStreak, int jumpingStreak, int score, int multiplier) {
         if (jumpingStreak == 0) {
             this.comboLabel.setText("");
             return;
@@ -59,7 +59,8 @@ public class HUD implements Disposable {
         this.comboLabel.setText(
             "Jump streak " + jumpingStreak
                 + " (over " + platformStreak
-                + " platforms) combo score: " + multipliedScore);
+                + " platforms) Combo Score: " + score
+                + "x" + multiplier);
     }
 
     public void setFlameDistance(float distance) {
