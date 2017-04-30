@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.ActOnAdd;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.RenderLast;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
@@ -17,7 +18,7 @@ import java.util.Random;
 /**
  * Created by Ruza on 5.4.2017.
  */
-public abstract class AbstractTeacher extends RectangleActor implements ActOnAdd {
+public abstract class AbstractTeacher extends RectangleActor implements ActOnAdd, RenderLast {
 
     private static final int SCREEN_MOVEMENT_LIMIT_LEFT = 150;
     private static final int SCREEN_MOVEMENT_LIMIT_RIGHT = TukeQuestGame.SCREEN_WIDTH - 150;

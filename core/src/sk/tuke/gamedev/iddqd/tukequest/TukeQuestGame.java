@@ -19,17 +19,13 @@ public class TukeQuestGame extends Game {
     public static AssetManager manager;
     public static boolean debug;
 
-    private MenuScreen menuScreen;
-
     @Override
     public void create() {
         THIS = this;
         Gdx.app.setApplicationLogger(new Log());
         TukeQuestGame.manager = loadAssets();
 
-        this.menuScreen = new MenuScreen(this);
-
-        setScreen(this.menuScreen);
+        setScreen(new MenuScreen(this));
 
         // Delaying turning the debug on
         TaskManager.INSTANCE.scheduleTimer(null, 1, () -> debug = true);

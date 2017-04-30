@@ -17,9 +17,6 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameMaster;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Genci;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.generator.TeacherGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
@@ -88,6 +85,7 @@ public class GameScreen extends AbstractScreen {
         ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
         setHud(new HUD());
+        PlatformGenerator.reset();
     }
 
     private void initActors() {
@@ -146,8 +144,9 @@ public class GameScreen extends AbstractScreen {
                     waiting = false;
                     Log.i(GameScreen.this, "Flames started");
                 }
-                if (InputHelper.isExit()) {
+                if (InputHelper.isJustExit()) {
                     getGame().setScreen(new MenuScreen(getGame()));
+                    throw new ScreenFinishedException();
                 }
             }
 
@@ -155,11 +154,7 @@ public class GameScreen extends AbstractScreen {
 
         TeacherGenerator.screen = this;
 
-//        new Binas(this, TukeQuestGame.SCREEN_WIDTH * 3.7f / 5f, groundHeight)
-//            .addToWorld(this);
-//
-//        new Poruban(this, TukeQuestGame.SCREEN_WIDTH * 1.3f / 5f, groundHeight)
-//            .addToWorld(this);
+        TeacherGenerator.generateRandomTeacher(groundHeight);
     }
 
     /**

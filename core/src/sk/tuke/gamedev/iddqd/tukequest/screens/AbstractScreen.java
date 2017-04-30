@@ -120,23 +120,27 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        resetScreenColor();
-        if (!isPaused()) {
-            addQueuedActors();
-            actOnActors();
-        }
-        this.batch.enableBlending();
-        this.batch.begin();
-        this.batch.setProjectionMatrix(this.camera.combined);
-        if (isPaused()) {
-            new FullScreenImage(PAUSED_ANIMATION, this.camera).draw(this.batch);
-        } else {
-            renderGraphics(this.batch);
-        }
-        this.batch.end();
-        if (!isPaused()) {
-            renderDebug();
-            calculatePhysics();
+        try {
+            resetScreenColor();
+            if (!isPaused()) {
+                addQueuedActors();
+                actOnActors();
+            }
+            this.batch.enableBlending();
+            this.batch.begin();
+            this.batch.setProjectionMatrix(this.camera.combined);
+            if (isPaused()) {
+                new FullScreenImage(PAUSED_ANIMATION, this.camera).draw(this.batch);
+            } else {
+                renderGraphics(this.batch);
+            }
+            this.batch.end();
+            if (!isPaused()) {
+                renderDebug();
+                calculatePhysics();
+            }
+        } catch (ScreenFinishedException e) {
+            Log.i(this, "Render interrupted as the screen has finished");
         }
     }
 

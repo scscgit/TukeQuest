@@ -93,7 +93,7 @@ public class MenuScreen extends AbstractScreen {
         stage.draw();
         if (InputHelper.isEnter()) {
             runGame();
-        } else if (InputHelper.isExit()) {
+        } else if (InputHelper.isJustExit()) {
             exitGame();
         }
     }

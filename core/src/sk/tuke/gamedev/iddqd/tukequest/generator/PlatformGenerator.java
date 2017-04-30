@@ -22,6 +22,11 @@ public class PlatformGenerator {
 
     private static Random random = new Random();
 
+    public static void reset() {
+        PlatformGenerator.platformCount = 0;
+        PlatformGenerator.currentTextureIndex = 0;
+    }
+
     // TODO: maybe implement some LEVEL algorithm that will increase the difficulty given the value of Y
     public static List<Platform> generateNext(int count, float startingY) {
         int PLATFORM_WIDTH = 128;

@@ -17,52 +17,37 @@ import java.util.Random;
 public class TeacherGenerator {
 
     public static GameScreen screen;
-
     public static List<Platform> levelPlatforms = new ArrayList<>();
-
     private static Random random = new Random();
 
     public static void generateTeacherIfNeeded() {
-
         if (!levelPlatforms.isEmpty()) {
             Platform platform = levelPlatforms.get(0);
-
             generateRandomTeacher(platform.getPosition().y + platform.getHeight());
-
-
             levelPlatforms.remove(0);
         }
-
-//
-//        new Poruban(this, TukeQuestGame.SCREEN_WIDTH * 1.3f / 5f, groundHeight)
-//            .addToWorld(this);
     }
 
-    private static void generateRandomTeacher(float position) {
-
+    public static void generateRandomTeacher(float position) {
         int randomNumber = random.nextInt(3);
+        float location = random.nextBoolean() ? 1.3f / 5f : 3.7f / 5f;
         switch (randomNumber) {
             case 0:
-                new Binas(screen, TukeQuestGame.SCREEN_WIDTH * 3.7f / 5f, position)
+                new Binas(screen, TukeQuestGame.SCREEN_WIDTH * location, position)
                     .addToWorld(screen);
                 System.out.println("Adding BINAS!");
                 break;
             case 1:
-                new Poruban(screen, TukeQuestGame.SCREEN_WIDTH * 3.7f / 5f, position)
+                new Poruban(screen, TukeQuestGame.SCREEN_WIDTH * location, position)
                     .addToWorld(screen);
                 System.out.println("Adding PORUBAN!");
                 break;
             case 2:
-                new Genci(screen, TukeQuestGame.SCREEN_WIDTH * 3.7f / 5f, position)
+                new Genci(screen, TukeQuestGame.SCREEN_WIDTH * location, position)
                     .addToWorld(screen);
                 System.out.println("Adding GENCI!");
                 break;
-
         }
-
-
-
     }
-
 
 }

@@ -40,8 +40,8 @@ public final class InputHelper {
         return Gdx.input.isKeyPressed(Input.Keys.ENTER);
     }
 
-    public static boolean isExit() {
-        return Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
+    public static boolean isJustExit() {
+        return Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE);
     }
 
 }

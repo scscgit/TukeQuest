@@ -81,8 +81,9 @@ public class FxFlameMaster extends FxFlame {
     public int getScoreMultiplier() {
         // Multiplier starts at half the distance
         float multiplier = (getFlameDistance() - (MAX_DISTANCE - MIN_DISTANCE) / 2) / SCORE_MULTIPLIER_DISTANCE_RATIO;
+        int intMultiplier = (int) multiplier;
         // Multiplier cannot go below 1 when the flame is nearby
-        return multiplier > 0 ? (int) multiplier : 1;
+        return intMultiplier > 0 ? intMultiplier : 1;
     }
 
 }

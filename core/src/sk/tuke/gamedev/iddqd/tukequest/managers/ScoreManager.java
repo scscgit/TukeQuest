@@ -30,6 +30,9 @@ public class ScoreManager {
     private FxFlameMaster fxFlame;
 
     public int addScore(int score) {
+        if (score < 0) {
+            throw new RuntimeException("Attempted to add negative score, this should never happen");
+        }
         if (this.fxFlame != null) {
             score *= this.fxFlame.getScoreMultiplier();
         }
@@ -132,7 +135,7 @@ public class ScoreManager {
             // First jump is not rewarded
             multipliedScore += i * JUMP_COMBO_MULTIPLIER;
         }
-        return multipliedScore;
+        return multipliedScore < 0 ? 0 : multipliedScore;
     }
 
     public void setHud(HUD hud) {
