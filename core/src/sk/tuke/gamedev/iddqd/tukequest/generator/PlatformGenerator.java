@@ -35,11 +35,16 @@ public class PlatformGenerator {
 
             if (platformCount % PLATFORM_TEXTURE_CHANGE_RATE == 0) {
                 changePlatformType();
-                platforms.add(new Platform(VerticalWall.WALL_WIDTH + 1, startingY, PlatformSize.LEVEL, currentTextureIndex));
+                Platform levelPlatform = new Platform(VerticalWall.WALL_WIDTH + 1, startingY, PlatformSize.LEVEL, currentTextureIndex);
+                platforms.add(levelPlatform);
+
+
+                // FIXME: 30/04/2017 decouple logic
+                TeacherGenerator.levelPlatforms.add(levelPlatform);
+                TeacherGenerator.generateTeacherIfNeeded();
             } else {
                 int randomStartingX = random.nextInt((X_COORDINATE_RANGE - VerticalWall.WALL_WIDTH) + 1) + VerticalWall.WALL_WIDTH;
                 platforms.add(createSmallOrMediumPlatform(randomStartingX, startingY));
-
             }
         }
 
