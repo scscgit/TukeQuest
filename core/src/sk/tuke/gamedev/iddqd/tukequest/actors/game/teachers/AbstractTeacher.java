@@ -118,7 +118,7 @@ public abstract class AbstractTeacher extends RectangleActor implements ActOnAdd
         }
     }
 
-    protected void meetPlayer() {
+    private void meetPlayer() {
         this.screen.setMusicVolume(GameScreen.SILENT_MUSIC_VOLUME);
         // Allow the sound again in a few seconds
         TaskManager.INSTANCE.scheduleTimer("teacherSound", soundDuration(this.isVisited),
@@ -128,7 +128,10 @@ public abstract class AbstractTeacher extends RectangleActor implements ActOnAdd
             () -> this.screen.setMusicVolume(GameScreen.DEFAULT_MUSIC_VOLUME));
         playSound();
         playingSound = true;
+        onMeetPlayer();
     }
+
+    protected abstract void onMeetPlayer();
 
     protected abstract int soundDuration(boolean wasVisited);
 
