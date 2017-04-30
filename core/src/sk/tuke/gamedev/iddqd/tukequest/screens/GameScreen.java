@@ -21,6 +21,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Genci;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
+import sk.tuke.gamedev.iddqd.tukequest.generator.TeacherGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
@@ -152,11 +153,13 @@ public class GameScreen extends AbstractScreen {
 
         });
 
-        new Binas(this, TukeQuestGame.SCREEN_WIDTH * 3.7f / 5f, groundHeight)
-            .addToWorld(this);
+        TeacherGenerator.screen = this;
 
-        new Poruban(this, TukeQuestGame.SCREEN_WIDTH * 1.3f / 5f, groundHeight)
-            .addToWorld(this);
+//        new Binas(this, TukeQuestGame.SCREEN_WIDTH * 3.7f / 5f, groundHeight)
+//            .addToWorld(this);
+//
+//        new Poruban(this, TukeQuestGame.SCREEN_WIDTH * 1.3f / 5f, groundHeight)
+//            .addToWorld(this);
     }
 
     /**
