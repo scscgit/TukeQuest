@@ -17,7 +17,7 @@ import java.util.Map;
 public class Platform extends RectangleActor implements Ground {
 
     private final static List<String> PLATFORM_TEXTURE_NAMES = new ArrayList<>();
-    private final static Map<PlatformSize, List<Animation>> ANIMATIONS = new HashMap<>();
+    public final static Map<PlatformSize, List<Animation>> ANIMATIONS = new HashMap<>();
 
     private boolean scoreAwarded = false;
 

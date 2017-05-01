@@ -6,7 +6,6 @@ import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,14 +13,11 @@ import java.util.List;
  */
 public class GameLevelManager implements Actor {
 
-    List<GameLevelGenerator> gameLevelGeneratorList = new ArrayList<>();
+    //List<GameLevelGenerator> gameLevelGeneratorList = new ArrayList<>();
 
     private GameScreen screen;
-
     private Camera camera;
-
     private float latestLevelEndingY;
-
 
     public GameLevelManager(GameScreen screen, Camera camera, float startingY) {
         this.screen = screen;
@@ -29,10 +25,8 @@ public class GameLevelManager implements Actor {
         this.latestLevelEndingY = startingY;
     }
 
-
     @Override
     public void draw(Batch batch) {
-
     }
 
     @Override
@@ -48,6 +42,6 @@ public class GameLevelManager implements Actor {
             latestLevelEndingY = gameLevelGenerator.getLevelEndY();
         }
         // TODO: implement some cleanUp logic here -> remove old levels maybe?
-
     }
+
 }

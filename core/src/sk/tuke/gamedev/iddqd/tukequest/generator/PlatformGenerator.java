@@ -27,18 +27,22 @@ public class PlatformGenerator {
         PlatformGenerator.currentTextureIndex = 0;
     }
 
+    private static List<Platform> generateNext(float startingY) {
+        return generateNext(PLATFORM_TEXTURE_CHANGE_RATE, startingY);
+    }
+
     // TODO: maybe implement some LEVEL algorithm that will increase the difficulty given the value of Y
-    public static List<Platform> generateNext(int count, float startingY) {
+    private static List<Platform> generateNext(int count, float startingY) {
         int PLATFORM_WIDTH = 128;
         int X_COORDINATE_RANGE = TukeQuestGame.SCREEN_WIDTH - PLATFORM_WIDTH - 2 * VerticalWall.WALL_WIDTH;
 
         List<Platform> platforms = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
-            platformCount++;
+            //platformCount++;
             startingY = startingY + Y_DISTANCE_BETWEEN_PLATFORMS;
 
-            if (platformCount % PLATFORM_TEXTURE_CHANGE_RATE == 0) {
+            if (i == 0) {
                 changePlatformType();
                 Platform levelPlatform = new Platform(VerticalWall.WALL_WIDTH + 1, startingY, PlatformSize.LEVEL, currentTextureIndex);
                 platforms.add(levelPlatform);
@@ -78,13 +82,8 @@ public class PlatformGenerator {
         currentTextureIndex = textureOrder % texturesCount;
     }
 
-    @Deprecated
-    public static List<Platform> generateNext(int count) {
-        return generateNext(count, highestPlatformY);
-    }
-
-    public static Platform generateNext() {
-        return generateNext(1, highestPlatformY).get(0);
+    public static List<Platform> generateNext() {
+        return generateNext(highestPlatformY);
     }
 
 }

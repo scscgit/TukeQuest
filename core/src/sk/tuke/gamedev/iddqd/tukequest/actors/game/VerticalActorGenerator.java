@@ -5,13 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Surprise;
-import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
-
-import java.util.Random;
 
 /**
  * Created by Steve on 26.03.2017.
@@ -22,25 +17,27 @@ public class VerticalActorGenerator implements Actor {
         AnimatedActor createActor(AbstractScreen screen, float y);
     }
 
-    public static final ActorFactory BACKGROUND_FACTORY = (screen, y) ->
-        screen.addActor(new Background(y));
-
-    public static final ActorFactory LEFT_WALL_FACTORY = (screen, y) ->
-        new VerticalWall(VerticalWall.Side.LEFT, y).addToWorld(screen);
-    public static final ActorFactory RIGHT_WALL_FACTORY = (screen, y) ->
-        new VerticalWall(VerticalWall.Side.RIGHT, y).addToWorld(screen);
-
-    public static final ActorFactory PLATFORM_FACTORY = (screen, y) -> {
-        BodyActor platform = PlatformGenerator.generateNext().addToWorld(screen);
-        if (new Random().nextInt(22) == 0) {
-            new Surprise(screen,
-                platform.getX() + platform.getAnimation().getWidth() / 2,
-                platform.getY() + platform.getAnimation().getHeight()
-            ).addToWorld(screen);
-            Log.d(screen, "Surprise spawned");
-        }
-        return platform;
+    public static final ActorFactory BACKGROUND_FACTORY = (screen, y) -> {
+        Log.d(ActorFactory.class, "Background factory generated new Background");
+        return screen.addActor(new Background(y));
     };
+
+//    public static final ActorFactory LEFT_WALL_FACTORY = (screen, y) ->
+//        new VerticalWall(VerticalWall.Side.LEFT, y).addToWorld(screen);
+//    public static final ActorFactory RIGHT_WALL_FACTORY = (screen, y) ->
+//        new VerticalWall(VerticalWall.Side.RIGHT, y).addToWorld(screen);
+
+//    public static final ActorFactory PLATFORM_FACTORY = (screen, y) -> {
+//        BodyActor platform = PlatformGenerator.generateNext().addToWorld(screen);
+//        if (new Random().nextInt(22) == 0) {
+//            new Surprise(screen,
+//                platform.getX() + platform.getAnimation().getWidth() / 2,
+//                platform.getY() + platform.getAnimation().getHeight()
+//            ).addToWorld(screen);
+//            Log.d(screen, "Surprise spawned");
+//        }
+//        return platform;
+//    };
 
     private Camera camera;
     private AbstractScreen screen;

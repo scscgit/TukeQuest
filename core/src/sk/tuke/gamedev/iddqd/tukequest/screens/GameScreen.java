@@ -15,9 +15,10 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameMaster;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
-import sk.tuke.gamedev.iddqd.tukequest.generator.TeacherGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
@@ -152,12 +153,12 @@ public class GameScreen extends AbstractScreen {
 
         });
 
-        TeacherGenerator.screen = this;
-
-        TeacherGenerator.generateRandomTeacherAndAddToWorld(groundHeight);
-
-
-        GameLevelManager gameLevelManager = new GameLevelManager(this, camera, groundHeight);
+        GameLevelManager gameLevelManager = new GameLevelManager(
+            this,
+            camera,
+            groundHeight
+                - Platform.ANIMATIONS.get(PlatformSize.LEVEL).get(0).getHeight()
+                - PlatformGenerator.Y_DISTANCE_BETWEEN_PLATFORMS);
         addActor(gameLevelManager);
 //        gameLevelGenerator.generateLevel();
 

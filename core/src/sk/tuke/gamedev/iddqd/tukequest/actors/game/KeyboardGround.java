@@ -4,12 +4,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Ground;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.RenderLast;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 /**
  * Created by Steve on 24.03.2017.
  */
-public class KeyboardGround extends RectangleActor implements Ground {
+public class KeyboardGround extends RectangleActor implements Ground, RenderLast {
 
     public static final Animation ANIMATION;
 
