@@ -4,7 +4,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Ground;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.PlatformTexture;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
@@ -89,4 +88,23 @@ public class Platform extends RectangleActor implements Ground {
         }
     }
 
+    /**
+     *
+     */
+    public static enum PlatformTexture {
+
+        MATHS("maths_texture.jpg"),
+        ROCK("jerusrockwallsml.jpg"),
+        CHIMNEY("cabin_chimney_side.jpg");
+
+        private String textureFileName;
+
+        PlatformTexture(String s) {
+            this.textureFileName = s;
+        }
+
+        public String getTextureFileName() {
+            return textureFileName;
+        }
+    }
 }

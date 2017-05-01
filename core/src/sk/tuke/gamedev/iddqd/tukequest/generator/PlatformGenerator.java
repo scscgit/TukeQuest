@@ -2,7 +2,6 @@ package sk.tuke.gamedev.iddqd.tukequest.generator;
 
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.PlatformTexture;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
 import sk.tuke.gamedev.iddqd.tukequest.util.RandomHelper;
@@ -26,12 +25,12 @@ public class PlatformGenerator {
         PlatformGenerator.currentTextureIndex = 0;
     }
 
-    private static List<Platform> generateNext(float startingY, PlatformTexture texture) {
+    private static List<Platform> generateNext(float startingY, Platform.PlatformTexture texture) {
         return generateNext(PLATFORM_TEXTURE_CHANGE_RATE, startingY, texture);
     }
 
     // TODO: maybe implement some LEVEL algorithm that will increase the difficulty given the value of Y
-    private static List<Platform> generateNext(int count, float startingY, PlatformTexture texture) {
+    private static List<Platform> generateNext(int count, float startingY, Platform.PlatformTexture texture) {
         int PLATFORM_WIDTH = 128;
         int X_COORDINATE_RANGE = TukeQuestGame.SCREEN_WIDTH - PLATFORM_WIDTH - 2 * VerticalWall.WALL_WIDTH;
 
@@ -62,7 +61,7 @@ public class PlatformGenerator {
         return platforms;
     }
 
-    private static Platform createSmallOrMediumPlatform(int randomStartingX, float startingY, PlatformTexture texture) {
+    private static Platform createSmallOrMediumPlatform(int randomStartingX, float startingY, Platform.PlatformTexture texture) {
         PlatformSize size;
         if (RandomHelper.random.nextBoolean()) {
             size = PlatformSize.SMALL;
@@ -83,7 +82,7 @@ public class PlatformGenerator {
         currentTextureIndex = textureOrder % texturesCount;
     }
 
-    public static List<Platform> generateNext(PlatformTexture texture) {
+    public static List<Platform> generateNext(Platform.PlatformTexture texture) {
         return generateNext(highestPlatformY, texture);
     }
 

@@ -3,7 +3,6 @@ package sk.tuke.gamedev.iddqd.tukequest.screens;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.Background;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.BackgroundTexture;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.generator.CollectableGenerator;
@@ -75,8 +74,8 @@ public class GameLevelGenerator {
         float wallsMaxY = startingY;
 
         while (wallsMaxY < levelEndY) {
-            VerticalWall leftWall = new VerticalWall(VerticalWall.Side.LEFT, wallsMaxY);
-            VerticalWall rightWall = new VerticalWall(VerticalWall.Side.RIGHT, wallsMaxY);
+            VerticalWall leftWall = new VerticalWall(VerticalWall.Side.LEFT, wallsMaxY, level.WALL_TEXTURE);
+            VerticalWall rightWall = new VerticalWall(VerticalWall.Side.RIGHT, wallsMaxY, level.WALL_TEXTURE);
 
             generatedWalls.add(leftWall);
             generatedWalls.add(rightWall);

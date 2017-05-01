@@ -12,11 +12,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.Background;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameMaster;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.BackgroundTexture;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.PlatformTexture;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
@@ -172,7 +172,7 @@ public class GameScreen extends AbstractScreen {
             this,
             camera,
             groundHeight
-                - Platform.ANIMATIONS.get(PlatformSize.LEVEL).get(PlatformTexture.MATHS).getHeight()
+                - Platform.ANIMATIONS.get(PlatformSize.LEVEL).get(Platform.PlatformTexture.MATHS).getHeight()
                 - PlatformGenerator.Y_DISTANCE_BETWEEN_PLATFORMS,
             levels);
         addActor(gameLevelManager);
@@ -184,9 +184,9 @@ public class GameScreen extends AbstractScreen {
     private List<Level> createLevels() {
         List<Level> levels = new ArrayList<>();
         // TODO: implement more levels with reasonable backgrounds
-        levels.add(new Level("Binasov level", PlatformTexture.MATHS, Binas.class, BackgroundTexture.ICY_TOWER, null));
-        levels.add(new Level("Genciho level", PlatformTexture.ROCK, Genci.class, BackgroundTexture.ICY_TOWER, null));
-        levels.add(new Level("Porubanov level", PlatformTexture.CHIMNEY, Poruban.class, BackgroundTexture.ICY_TOWER, null));
+        levels.add(new Level("Binasov level", Platform.PlatformTexture.MATHS, Binas.class, Background.BackgroundTexture.ICY_TOWER, VerticalWall.WallTexture.BINARY));
+        levels.add(new Level("Genciho level", Platform.PlatformTexture.ROCK, Genci.class, Background.BackgroundTexture.ICY_TOWER, VerticalWall.WallTexture.BINARY));
+        levels.add(new Level("Porubanov level", Platform.PlatformTexture.CHIMNEY, Poruban.class, Background.BackgroundTexture.ICY_TOWER, VerticalWall.WallTexture.BINARY));
         return levels;
     }
 

@@ -6,6 +6,9 @@ import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Vertical side wall with the theme of binary numbers.
  * <p>
@@ -15,18 +18,19 @@ public class VerticalWall extends RectangleActor {
 
     public static final int WALL_WIDTH = 40;
 
-    // TODO: do not increase the size of walls this way, but move them around when camera moves
-    public static final Animation ANIMATION = new Animation("binary_vertical_wall.jpg", 1, WALL_WIDTH, 452);
+    private static final Map<WallTexture, Animation> animations = new HashMap<>();
 
-    public enum Side {
-        LEFT, RIGHT
+    static {
+        for (WallTexture texture : WallTexture.values()) {
+            animations.put(texture, new Animation(texture.getTextureFileName(), 1, WALL_WIDTH, 452));
+        }
     }
 
-    public VerticalWall(Side side, float y) {
+    public VerticalWall(Side side, float y, WallTexture texture) {
         super(
-            ANIMATION,
+            animations.get(texture),
             BodyDef.BodyType.StaticBody,
-            side == Side.LEFT ? 0 : TukeQuestGame.SCREEN_WIDTH - ANIMATION.getWidth(),
+            side == Side.LEFT ? 0 : TukeQuestGame.SCREEN_WIDTH - animations.get(texture).getWidth(),
             y
         );
     }
@@ -36,5 +40,24 @@ public class VerticalWall extends RectangleActor {
         super.configureFixtureDef(fixtureDef);
         //fixtureDef.restitution = 0.6f;
     }
+
+    public enum WallTexture {
+        BINARY("binary_vertical_wall.jpg");
+
+        private String textureFileName;
+
+        WallTexture(String s) {
+            this.textureFileName = s;
+        }
+
+        public String getTextureFileName() {
+            return textureFileName;
+        }
+    }
+
+    public enum Side {
+        LEFT, RIGHT
+    }
+
 
 }

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.AnimatedActor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.BackgroundTexture;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 
@@ -20,7 +19,7 @@ public class VerticalActorGenerator implements Actor {
 
     public static final ActorFactory BACKGROUND_FACTORY = (screen, y) -> {
         Log.d(ActorFactory.class, "Background factory generated new Background");
-        return screen.addActor(new Background(y, BackgroundTexture.ICY_TOWER));
+        return screen.addActor(new Background(y, Background.BackgroundTexture.ICY_TOWER));
     };
 
 //    public static final ActorFactory LEFT_WALL_FACTORY = (screen, y) ->
