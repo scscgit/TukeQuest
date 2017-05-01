@@ -10,6 +10,7 @@ import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +41,9 @@ public class Platform extends RectangleActor implements Ground {
     private boolean scoreAwarded = false;
 
     static {
-        // Scales the animation to the full screen width
-        PLATFORM_TEXTURES.add(PlatformTexture.MATHS);
-        PLATFORM_TEXTURES.add(PlatformTexture.CHIMNEY);
-        PLATFORM_TEXTURES.add(PlatformTexture.ROCK);
 
+        // add all enum values
+        PLATFORM_TEXTURES.addAll(Arrays.asList(PlatformTexture.values()));
 
         // generate animations in all sizes
         PlatformSize.getAll().forEach((platformSize -> {
