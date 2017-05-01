@@ -15,6 +15,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameMaster;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.BackgroundTexture;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.PlatformTexture;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
@@ -182,9 +183,10 @@ public class GameScreen extends AbstractScreen {
 
     private List<Level> createLevels() {
         List<Level> levels = new ArrayList<>();
-        levels.add(new Level("Binasov level", PlatformTexture.MATHS, Binas.class, null, null));
-        levels.add(new Level("Genciho level", PlatformTexture.ROCK, Genci.class, null, null));
-        levels.add(new Level("Porubanov level", PlatformTexture.CHIMNEY, Poruban.class, null, null));
+        // TODO: implement more levels with reasonable backgrounds
+        levels.add(new Level("Binasov level", PlatformTexture.MATHS, Binas.class, BackgroundTexture.ICY_TOWER, null));
+        levels.add(new Level("Genciho level", PlatformTexture.ROCK, Genci.class, BackgroundTexture.ICY_TOWER, null));
+        levels.add(new Level("Porubanov level", PlatformTexture.CHIMNEY, Poruban.class, BackgroundTexture.ICY_TOWER, null));
         return levels;
     }
 

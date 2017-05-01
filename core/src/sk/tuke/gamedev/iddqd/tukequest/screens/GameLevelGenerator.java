@@ -3,6 +3,7 @@ package sk.tuke.gamedev.iddqd.tukequest.screens;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.Background;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.BackgroundTexture;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.generator.CollectableGenerator;
@@ -92,7 +93,7 @@ public class GameLevelGenerator {
         float backgroundMaxY = startingY;
 
         while (backgroundMaxY < levelEndY) {
-            Background background = new Background(backgroundMaxY);
+            Background background = new Background(backgroundMaxY, level.BACKGROUND);
 
             generatedBackgrounds.add(background);
 
