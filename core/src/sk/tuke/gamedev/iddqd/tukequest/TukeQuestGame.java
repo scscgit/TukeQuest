@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.screens.MenuScreen;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 
@@ -24,12 +23,7 @@ public class TukeQuestGame extends Game {
         THIS = this;
         Gdx.app.setApplicationLogger(new Log());
         TukeQuestGame.manager = loadAssets();
-
         setScreen(new MenuScreen(this));
-
-        // Delaying turning the debug on
-        TaskManager.INSTANCE.scheduleTimer(null, 1, () -> debug = true);
-
         System.out.println("Game " + this + " created");
     }
 

@@ -124,6 +124,7 @@ public class Player extends RectangleActor implements RenderLast {
             lostLife();
             return;
         }
+        this.gameScreen.getHud().setLives(0);
         this.alive = false;
         Log.i(this, "Game Over");
         getBody().getFixtureList().get(0).setSensor(true);
@@ -151,7 +152,7 @@ public class Player extends RectangleActor implements RenderLast {
             this.invulnerable = false;
             // Double-check in case physics go wrong and let player slip below flames during invulnerability
             if (this.hitFlamesOnY > getBody().getPosition().y) {
-                lostLife();
+                killedByFlame();
             }
         });
         this.gameScreen.getHud().setLives(this.lives);

@@ -76,7 +76,11 @@ public abstract class AbstractTeacher extends RectangleActor implements ActOnAdd
 
     @Override
     public void act() {
-        if (getPlayer().isAlive() && collides(getPlayer()) && !this.playingSound) {
+        if (getPlayer().isAlive()
+            // Meeting on sight, not on collision
+            && getPlayer().getY() >= getY()
+            && getPlayer().getY() <= getY() + getHeight()
+            && !this.playingSound) {
             meetPlayer();
         }
         if (this.isWalking && shouldRotate()) {

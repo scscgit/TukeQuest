@@ -27,6 +27,8 @@ public class CameraOnlyMovement extends AbstractCommand {
         // Toggle between camera debug mode and normal navigation
         if (Gdx.input.isKeyJustPressed(DEBUG_TOGGLE_KEY)) {
             this.cameraDebugMovement ^= true;
+            // This will switch the Debug mode too
+            TukeQuestGame.debug = this.cameraDebugMovement;
         }
 
         if (this.cameraDebugMovement) {
