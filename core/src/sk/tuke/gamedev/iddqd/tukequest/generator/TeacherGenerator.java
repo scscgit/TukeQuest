@@ -2,6 +2,7 @@ package sk.tuke.gamedev.iddqd.tukequest.generator;
 
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.AbstractTeacher;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Genci;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
@@ -23,12 +24,12 @@ public class TeacherGenerator {
     public static void generateTeacherIfNeeded() {
         if (!levelPlatforms.isEmpty()) {
             Platform platform = levelPlatforms.get(0);
-            generateRandomTeacher(platform.getPosition().y + platform.getHeight());
+            generateRandomTeacherAndAddToWorld(platform.getPosition().y + platform.getHeight());
             levelPlatforms.remove(0);
         }
     }
 
-    public static void generateRandomTeacher(float position) {
+    public static void generateRandomTeacherAndAddToWorld(float position) {
         int randomNumber = random.nextInt(3);
         float location = random.nextBoolean() ? 1.3f / 5f : 3.7f / 5f;
         switch (randomNumber) {
@@ -48,6 +49,22 @@ public class TeacherGenerator {
                 System.out.println("Adding GENCI!");
                 break;
         }
+    }
+
+    public static AbstractTeacher generateRandomTeacherOnPlatform(Platform platform) {
+        float yPosition = platform.getPosition().y + platform.getHeight();
+        int randomNumber = random.nextInt(3);
+        float location = random.nextBoolean() ? 1.3f / 5f : 3.7f / 5f;
+        switch (randomNumber) {
+            case 0:
+                return new Binas(screen, TukeQuestGame.SCREEN_WIDTH * location, yPosition);
+            case 1:
+                return new Poruban(screen, TukeQuestGame.SCREEN_WIDTH * location, yPosition);
+
+            case 2:
+                return new Genci(screen, TukeQuestGame.SCREEN_WIDTH * location, yPosition);
+        }
+        return null;
     }
 
 }

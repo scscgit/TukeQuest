@@ -15,7 +15,6 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameMaster;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.generator.TeacherGenerator;
@@ -155,13 +154,14 @@ public class GameScreen extends AbstractScreen {
 
         TeacherGenerator.screen = this;
 
-        TeacherGenerator.generateRandomTeacher(groundHeight);
+        TeacherGenerator.generateRandomTeacherAndAddToWorld(groundHeight);
 
 
-        GameLevelGenerator gameLevelGenerator = new GameLevelGenerator(this, camera, groundHeight);
-        gameLevelGenerator.generateLevel();
+        GameLevelManager gameLevelManager = new GameLevelManager(this, camera, groundHeight);
+        addActor(gameLevelManager);
+//        gameLevelGenerator.generateLevel();
 
-        addActor(gameLevelGenerator);
+//        addActor(gameLevelGenerator);
     }
 
     /**
