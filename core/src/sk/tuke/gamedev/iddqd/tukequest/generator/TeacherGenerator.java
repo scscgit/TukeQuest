@@ -1,6 +1,7 @@
 package sk.tuke.gamedev.iddqd.tukequest.generator;
 
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.AbstractTeacher;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
@@ -50,4 +51,15 @@ public class TeacherGenerator {
         throw new RuntimeException("Teacher generation random number out of bounds");
     }
 
+    public static AbstractTeacher generateTeacherOnPlatform(Class TEACHER_CLASS, Platform platform, GameScreen screen) {
+        float position = platform.getPosition().y + platform.getHeight();
+        float location = random.nextBoolean() ? 1.3f / 5f : 3.7f / 5f;
+        if (TEACHER_CLASS == Genci.class) {
+            return new Genci(screen, TukeQuestGame.SCREEN_WIDTH * location, position);
+        } else if (TEACHER_CLASS == Binas.class) {
+            return new Binas(screen, TukeQuestGame.SCREEN_WIDTH * location, position);
+        } else {
+            return new Poruban(screen, TukeQuestGame.SCREEN_WIDTH * location, position);
+        }
+    }
 }

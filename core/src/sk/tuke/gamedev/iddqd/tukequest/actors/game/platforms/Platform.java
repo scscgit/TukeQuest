@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Ground;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.PlatformTexture;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
@@ -16,26 +17,24 @@ import java.util.Map;
 
 public class Platform extends RectangleActor implements Ground {
 
-    private final static List<String> PLATFORM_TEXTURE_NAMES = new ArrayList<>();
-    public final static Map<PlatformSize, List<Animation>> ANIMATIONS = new HashMap<>();
+    private final static List<PlatformTexture> PLATFORM_TEXTURES = new ArrayList<>();
+    public final static Map<PlatformSize, Map<PlatformTexture, Animation>> ANIMATIONS = new HashMap<>();
 
     private boolean scoreAwarded = false;
 
     static {
         // Scales the animation to the full screen width
-//        ANIMATION = new Animation("jerusrockwallsml.jpg", 1f, 128, 24);
-        PLATFORM_TEXTURE_NAMES.add("maths_texture.jpg");
-        PLATFORM_TEXTURE_NAMES.add("binary_vertical_wall.jpg");
-        PLATFORM_TEXTURE_NAMES.add("jerusrockwallsml.jpg");
-        PLATFORM_TEXTURE_NAMES.add("cabin_chimney_side.jpg");
+        PLATFORM_TEXTURES.add(PlatformTexture.MATHS);
+        PLATFORM_TEXTURES.add(PlatformTexture.CHIMNEY);
+        PLATFORM_TEXTURES.add(PlatformTexture.ROCK);
 
 
         // generate animations in all sizes
         PlatformSize.getAll().forEach((platformSize -> {
-            List<Animation> animations = new ArrayList<>();
+            Map<PlatformTexture, Animation> animations = new HashMap<>();
             // for all textures
-            PLATFORM_TEXTURE_NAMES.forEach((platformTextureName) -> {
-                animations.add(new Animation(platformTextureName, 1f, platformSize.getPlatformWidth(), 24));
+            PLATFORM_TEXTURES.forEach((platformTexture) -> {
+                animations.put(platformTexture, new Animation(platformTexture.getTextureFileName(), 1f, platformSize.getPlatformWidth(), 24));
             });
 
             ANIMATIONS.put(platformSize, animations);
@@ -43,14 +42,14 @@ public class Platform extends RectangleActor implements Ground {
 
     }
 
-    public Platform(float x, float y, PlatformSize platformSize, int textureIndex) {
+    public Platform(float x, float y, PlatformSize platformSize, PlatformTexture texture) {
         super(
-            ANIMATIONS.get(platformSize).get(textureIndex),
+            ANIMATIONS.get(platformSize).get(texture),
             BodyDef.BodyType.StaticBody,
             x,
             y,
-            ANIMATIONS.get(platformSize).get(textureIndex).getWidth(),
-            ANIMATIONS.get(platformSize).get(textureIndex).getHeight()
+            ANIMATIONS.get(platformSize).get(texture).getWidth(),
+            ANIMATIONS.get(platformSize).get(texture).getHeight()
         );
     }
 
@@ -79,7 +78,7 @@ public class Platform extends RectangleActor implements Ground {
     }
 
     public static int getPlatformTexturesCount() {
-        return PLATFORM_TEXTURE_NAMES.size();
+        return PLATFORM_TEXTURES.size();
     }
 
     @Deprecated
