@@ -4,10 +4,10 @@ import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
+import sk.tuke.gamedev.iddqd.tukequest.util.RandomHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 // TODO: integrate to the PlatformManager; don't use static fields, as this breaks when scene changes
 public class PlatformGenerator {
@@ -19,8 +19,6 @@ public class PlatformGenerator {
 
     private static int platformCount;
     private static int currentTextureIndex;
-
-    private static Random random = new Random();
 
     public static void reset() {
         PlatformGenerator.platformCount = 0;
@@ -44,14 +42,19 @@ public class PlatformGenerator {
 
             if (i == 0) {
                 changePlatformType();
-                Platform levelPlatform = new Platform(VerticalWall.WALL_WIDTH + 1, startingY, PlatformSize.LEVEL, currentTextureIndex);
+                Platform levelPlatform = new Platform(
+                    VerticalWall.WALL_WIDTH + 1,
+                    startingY,
+                    PlatformSize.LEVEL, currentTextureIndex);
                 platforms.add(levelPlatform);
 
 
                 // FIXME: 30/04/2017 decouple logic
                 TeacherGenerator.levelPlatforms.add(levelPlatform);
             } else {
-                int randomStartingX = random.nextInt((X_COORDINATE_RANGE - VerticalWall.WALL_WIDTH) + 1) + VerticalWall.WALL_WIDTH;
+                int randomStartingX =
+                    RandomHelper.random.nextInt((X_COORDINATE_RANGE - VerticalWall.WALL_WIDTH) + 1)
+                        + VerticalWall.WALL_WIDTH;
                 platforms.add(createSmallOrMediumPlatform(randomStartingX, startingY));
             }
         }
@@ -63,7 +66,7 @@ public class PlatformGenerator {
 
     private static Platform createSmallOrMediumPlatform(int randomStartingX, float startingY) {
         PlatformSize size;
-        if (random.nextBoolean()) {
+        if (RandomHelper.random.nextBoolean()) {
             size = PlatformSize.SMALL;
         } else {
             size = PlatformSize.MEDIUM;

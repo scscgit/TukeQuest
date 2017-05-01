@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.Camera;
 import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
+import sk.tuke.gamedev.iddqd.tukequest.generator.CollectableGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.generator.TeacherGenerator;
 
@@ -42,6 +44,14 @@ public class GameLevelGenerator {
         List<Platform> levelPlatforms = PlatformGenerator.generateNext();
         generatedActors.addAll(levelPlatforms);
         Platform firstPlatform = levelPlatforms.get(0);
+
+        for (int i = 1; i < levelPlatforms.size(); i++) {
+            Platform platform = levelPlatforms.get(i);
+            Collectable collectable = CollectableGenerator.createForPlatform(platform);
+            if (collectable != null) {
+                generatedActors.add(collectable);
+            }
+        }
 
         // generate teacher on first platform (this should be the BIG one)
         generatedActors.add(TeacherGenerator.generateRandomTeacherOnPlatform(firstPlatform, screen));
