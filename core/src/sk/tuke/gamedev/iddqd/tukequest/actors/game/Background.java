@@ -13,6 +13,22 @@ import java.util.Map;
  */
 public class Background extends AbstractAnimatedActor implements RenderFirst {
 
+    public enum BackgroundTexture {
+
+        ICY_TOWER("background.jpg");
+
+        private String textureFileName;
+
+        BackgroundTexture(String s) {
+            this.textureFileName = s;
+        }
+
+        public String getTextureFileName() {
+            return textureFileName;
+        }
+
+    }
+
     private static final Map<BackgroundTexture, Animation> animations = new HashMap<>();
 
     static {
@@ -29,17 +45,4 @@ public class Background extends AbstractAnimatedActor implements RenderFirst {
     public void act() {
     }
 
-    public enum BackgroundTexture {
-        ICY_TOWER("background.jpg");
-
-        private String textureFileName;
-
-        BackgroundTexture(String s) {
-            this.textureFileName = s;
-        }
-
-        public String getTextureFileName() {
-            return textureFileName;
-        }
-    }
 }

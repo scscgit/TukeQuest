@@ -16,6 +16,24 @@ import java.util.Map;
 
 public class Platform extends RectangleActor implements Ground {
 
+    public enum PlatformTexture {
+
+        MATHS("maths_texture.jpg"),
+        ROCK("jerusrockwallsml.jpg"),
+        CHIMNEY("cabin_chimney_side.jpg");
+
+        private String textureFileName;
+
+        PlatformTexture(String s) {
+            this.textureFileName = s;
+        }
+
+        public String getTextureFileName() {
+            return textureFileName;
+        }
+
+    }
+
     private final static List<PlatformTexture> PLATFORM_TEXTURES = new ArrayList<>();
     public final static Map<PlatformSize, Map<PlatformTexture, Animation>> ANIMATIONS = new HashMap<>();
 
@@ -88,23 +106,4 @@ public class Platform extends RectangleActor implements Ground {
         }
     }
 
-    /**
-     *
-     */
-    public static enum PlatformTexture {
-
-        MATHS("maths_texture.jpg"),
-        ROCK("jerusrockwallsml.jpg"),
-        CHIMNEY("cabin_chimney_side.jpg");
-
-        private String textureFileName;
-
-        PlatformTexture(String s) {
-            this.textureFileName = s;
-        }
-
-        public String getTextureFileName() {
-            return textureFileName;
-        }
-    }
 }

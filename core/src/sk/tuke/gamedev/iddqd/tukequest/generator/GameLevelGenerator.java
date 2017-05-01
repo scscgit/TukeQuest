@@ -1,13 +1,12 @@
-package sk.tuke.gamedev.iddqd.tukequest.screens;
+package sk.tuke.gamedev.iddqd.tukequest.generator;
 
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.Background;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
-import sk.tuke.gamedev.iddqd.tukequest.generator.CollectableGenerator;
-import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
-import sk.tuke.gamedev.iddqd.tukequest.generator.TeacherGenerator;
+import sk.tuke.gamedev.iddqd.tukequest.levels.Level;
+import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,34 +16,32 @@ import java.util.List;
  */
 public class GameLevelGenerator {
 
+    private final GameScreen screen;
     private final Level level;
-    private GameScreen screen;
     private float startingY;
     private float levelEndY;
 
     public GameLevelGenerator(GameScreen screen, Level level, float startingY) {
         this.screen = screen;
-        this.startingY = startingY;
         this.level = level;
+        this.startingY = startingY;
     }
 
     public List<Actor> generateLevel() {
-
-        System.out.println("Generating LEVEL = " + level.LEVEL_NAME);
-
+        System.out.println("Generating LEVEL = " + level.levelName);
         List<Actor> generatedActors = new ArrayList<>();
-
-        levelEndY = startingY + 50 * PlatformGenerator.Y_DISTANCE_BETWEEN_PLATFORMS;
+        levelEndY = startingY + level.getPlatformCount() * PlatformGenerator.Y_DISTANCE_BETWEEN_PLATFORMS;
 
         // TODO: This factory should not be added with each level
 //        screen.addActor(new VerticalActorGenerator(
 //            this.camera, screen, startingY, VerticalActorGenerator.BACKGROUND_FACTORY));
         generatedActors.addAll(generateBackgrounds());
 
-        // Generate platforms starting from height of the ground
-        PlatformGenerator.highestPlatformY = startingY;
-
-        List<Platform> levelPlatforms = PlatformGenerator.generateNext(level.PLATFORM_TEXTURE);
+        List<Platform> levelPlatforms = PlatformGenerator.generateNext(
+            level.getPlatformCount(),
+            // Generate platforms starting from height of the ground
+            this.startingY,
+            level.platformTexture);
         generatedActors.addAll(levelPlatforms);
         Platform firstPlatform = levelPlatforms.get(0);
 
@@ -58,12 +55,15 @@ public class GameLevelGenerator {
 
         // generate teacher on first platform (this should be the BIG one)
 //        generatedActors.add(TeacherGenerator.generateRandomTeacherOnPlatform(firstPlatform, screen));
-        generatedActors.add(TeacherGenerator.generateTeacherOnPlatform(level.TEACHER_CLASS, firstPlatform, screen));
+        generatedActors.add(TeacherGenerator.generateTeacherOnPlatform(
+            this.level.teacherClass,
+            firstPlatform,
+            screen));
 
         // generate walls at the sides
         generatedActors.addAll(generateWalls());
 
-
+        this.level.generated();
         return generatedActors;
     }
 
@@ -72,10 +72,9 @@ public class GameLevelGenerator {
     private List<VerticalWall> generateWalls() {
         List<VerticalWall> generatedWalls = new ArrayList<>();
         float wallsMaxY = startingY;
-
-        while (wallsMaxY < levelEndY) {
-            VerticalWall leftWall = new VerticalWall(VerticalWall.Side.LEFT, wallsMaxY, level.WALL_TEXTURE);
-            VerticalWall rightWall = new VerticalWall(VerticalWall.Side.RIGHT, wallsMaxY, level.WALL_TEXTURE);
+        while (wallsMaxY < this.levelEndY) {
+            VerticalWall leftWall = new VerticalWall(VerticalWall.Side.LEFT, wallsMaxY, level.wallTexture);
+            VerticalWall rightWall = new VerticalWall(VerticalWall.Side.RIGHT, wallsMaxY, level.wallTexture);
 
             generatedWalls.add(leftWall);
             generatedWalls.add(rightWall);
@@ -83,19 +82,15 @@ public class GameLevelGenerator {
             wallsMaxY = wallsMaxY + leftWall.getHeight();
             System.out.println("New wallsMaxY " + wallsMaxY);
         }
-
         return generatedWalls;
     }
 
     private List<Background> generateBackgrounds() {
         List<Background> generatedBackgrounds = new ArrayList<>();
         float backgroundMaxY = startingY;
-
         while (backgroundMaxY < levelEndY) {
-            Background background = new Background(backgroundMaxY, level.BACKGROUND);
-
+            Background background = new Background(backgroundMaxY, level.background);
             generatedBackgrounds.add(background);
-
             backgroundMaxY = backgroundMaxY + background.getAnimation().getHeight();
         }
         return generatedBackgrounds;

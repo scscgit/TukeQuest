@@ -16,6 +16,26 @@ import java.util.Map;
  */
 public class VerticalWall extends RectangleActor {
 
+    public enum WallTexture {
+
+        BINARY("binary_vertical_wall.jpg");
+
+        private String textureFileName;
+
+        WallTexture(String s) {
+            this.textureFileName = s;
+        }
+
+        public String getTextureFileName() {
+            return textureFileName;
+        }
+
+    }
+
+    public enum Side {
+        LEFT, RIGHT
+    }
+
     public static final int WALL_WIDTH = 40;
 
     private static final Map<WallTexture, Animation> animations = new HashMap<>();
@@ -40,24 +60,5 @@ public class VerticalWall extends RectangleActor {
         super.configureFixtureDef(fixtureDef);
         //fixtureDef.restitution = 0.6f;
     }
-
-    public enum WallTexture {
-        BINARY("binary_vertical_wall.jpg");
-
-        private String textureFileName;
-
-        WallTexture(String s) {
-            this.textureFileName = s;
-        }
-
-        public String getTextureFileName() {
-            return textureFileName;
-        }
-    }
-
-    public enum Side {
-        LEFT, RIGHT
-    }
-
 
 }

@@ -1,9 +1,12 @@
-package sk.tuke.gamedev.iddqd.tukequest.screens;
+package sk.tuke.gamedev.iddqd.tukequest.managers;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
+import sk.tuke.gamedev.iddqd.tukequest.generator.GameLevelGenerator;
+import sk.tuke.gamedev.iddqd.tukequest.levels.Level;
+import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
 
 import java.util.List;
 
@@ -11,15 +14,12 @@ import java.util.List;
  *
  */
 public class GameLevelManager implements Actor {
-    private final List<Level> levels;
 
-    //List<GameLevelGenerator> gameLevelGeneratorList = new ArrayList<>();
-
-    private GameScreen screen;
-    private Camera camera;
+    private final GameScreen screen;
+    private final Camera camera;
     private float latestLevelEndingY;
-
-    private int levelIndex = 0;
+    private final List<Level> levels;
+    private int levelIndex;
 
     public GameLevelManager(GameScreen screen, Camera camera, float startingY, List<Level> levels) {
         this.screen = screen;
@@ -34,18 +34,15 @@ public class GameLevelManager implements Actor {
 
     @Override
     public void act() {
+        // Change level when the player is at the end of a previous one
         if (this.latestLevelEndingY < this.camera.position.y + TukeQuestGame.SCREEN_HEIGHT) {
-
-            // change level
-            Level level = levels.get(levelIndex % levels.size());
-            GameLevelGenerator gameLevelGenerator = new GameLevelGenerator(screen, level, latestLevelEndingY);
-            List<Actor> levelActors = gameLevelGenerator.generateLevel();
-
-            levelActors.forEach(bodyActor -> {
-                screen.addActor(bodyActor);
-            });
-            latestLevelEndingY = gameLevelGenerator.getLevelEndY();
-            levelIndex++;
+            GameLevelGenerator gameLevelGenerator = new GameLevelGenerator(
+                this.screen,
+                levels.get(this.levelIndex % levels.size()),
+                this.latestLevelEndingY);
+            gameLevelGenerator.generateLevel().forEach(this.screen::addActor);
+            this.latestLevelEndingY = gameLevelGenerator.getLevelEndY();
+            this.levelIndex++;
         }
         // TODO: implement some cleanUp logic here -> remove old levels maybe?
     }

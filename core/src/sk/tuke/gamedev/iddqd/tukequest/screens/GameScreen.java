@@ -12,19 +12,17 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.Background;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameMaster;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Genci;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
 import sk.tuke.gamedev.iddqd.tukequest.generator.CollectableGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
+import sk.tuke.gamedev.iddqd.tukequest.levels.Level;
+import sk.tuke.gamedev.iddqd.tukequest.levels.Levels;
+import sk.tuke.gamedev.iddqd.tukequest.managers.GameLevelManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
@@ -91,7 +89,6 @@ public class GameScreen extends AbstractScreen {
         ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
         CollectableGenerator.reset();
-        PlatformGenerator.reset();
         // Initialize actors
         initActors();
         PlatformManager.INSTANCE = new PlatformManager(this.player);
@@ -184,9 +181,9 @@ public class GameScreen extends AbstractScreen {
     private List<Level> createLevels() {
         List<Level> levels = new ArrayList<>();
         // TODO: implement more levels with reasonable backgrounds
-        levels.add(new Level("Binasov level", Platform.PlatformTexture.MATHS, Binas.class, Background.BackgroundTexture.ICY_TOWER, VerticalWall.WallTexture.BINARY));
-        levels.add(new Level("Genciho level", Platform.PlatformTexture.ROCK, Genci.class, Background.BackgroundTexture.ICY_TOWER, VerticalWall.WallTexture.BINARY));
-        levels.add(new Level("Porubanov level", Platform.PlatformTexture.CHIMNEY, Poruban.class, Background.BackgroundTexture.ICY_TOWER, VerticalWall.WallTexture.BINARY));
+        for (Levels levelsValue : Levels.values()) {
+            levels.add(levelsValue.level);
+        }
         return levels;
     }
 
