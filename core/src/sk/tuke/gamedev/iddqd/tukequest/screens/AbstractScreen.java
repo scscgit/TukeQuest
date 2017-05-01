@@ -163,10 +163,9 @@ public abstract class AbstractScreen implements Screen {
         this.addingActor = true;
         if (actor instanceof BodyActor) {
             ((BodyActor) actor).addToWorld(this);
-        } else {
-            // Adds them to an intermediate queue
-            this.newActors.add(actor);
         }
+        // Adds them to an intermediate queue
+        this.newActors.add(actor);
         if (actor instanceof ActOnAdd) {
             ((ActOnAdd) actor).onAddedToScreen(this);
         }
@@ -204,30 +203,21 @@ public abstract class AbstractScreen implements Screen {
 
     protected void actOnActors() {
         List<Actor> lastActedActors = new LinkedList<>();
-        try {
-            for (Actor actor : this.actors) {
-                if (actor instanceof ActLast) {
-                    lastActedActors.add(actor);
-                    continue;
-                }
-                actor.act();
+        for (Actor actor : this.actors) {
+            if (actor instanceof ActLast) {
+                lastActedActors.add(actor);
+                continue;
             }
-            if (this.world == null) {
-                return;
-            }
-            this.world.getBodies(this.temporaryWorldBodies);
-            for (Body body : this.temporaryWorldBodies) {
-                Actor actor = (Actor) body.getUserData();
-                if (actor instanceof ActLast) {
-                    lastActedActors.add(actor);
-                    continue;
-                }
-                actor.act();
-            }
-        } finally {
-            lastActedActors.stream()
-                .sorted(Comparator.comparingInt(actor -> ((ActLast) actor).getActLastOrder()))
-                .forEach(Actor::act);
+            actor.act();
+        }
+        if (this.world == null) {
+            return;
+        }
+        lastActedActors.stream()
+            .sorted(Comparator.comparingInt(actor -> ((ActLast) actor).getActLastOrder()))
+            .forEach(Actor::act);
+        if (this.hud != null) {
+            this.hud.act();
         }
     }
 
@@ -242,20 +232,9 @@ public abstract class AbstractScreen implements Screen {
             }
             actor.draw(batch);
         }
-        if (this.world != null) {
-            this.world.getBodies(this.temporaryWorldBodies);
-            for (Body body : this.temporaryWorldBodies) {
-                Actor actor = (Actor) body.getUserData();
-                if (actor instanceof RenderLast) {
-                    lastRenderedActors.add(actor);
-                    continue;
-                }
-                actor.draw(batch);
-            }
-        }
-        for (Actor lastRenderedActor : lastRenderedActors) {
-            lastRenderedActor.draw(batch);
-        }
+        lastRenderedActors.stream()
+            .sorted(Comparator.comparingInt(actor -> ((RenderLast) actor).getRenderLastOrder()))
+            .forEach(actor -> actor.draw(batch));
         if (this.hud != null) {
             this.hud.draw(batch);
         }

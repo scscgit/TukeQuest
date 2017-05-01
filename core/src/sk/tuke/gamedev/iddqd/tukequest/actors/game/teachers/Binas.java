@@ -11,14 +11,12 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.particles.FlameFootParticle;
  */
 public class Binas extends AbstractTeacher {
 
-    private static Animation ANIMATION_LEFT = new Animation("binas.png", 8, 4, 16, 25, 0.2f);
-    private static Animation ANIMATION_RIGHT = new Animation("binas.png", 8, 4, 0, 9, 0.2f);
+    private static Animation ANIMATION = new Animation("binas.png", 0.3f);
 
     public Binas(GameScreen screen, float x, float y) {
         super(
             screen,
-            ANIMATION_LEFT,
-            ANIMATION_RIGHT,
+            ANIMATION,
             x,
             y,
             TukeQuestGame.manager.get("audio/sounds/binas1.mp3", Music.class),

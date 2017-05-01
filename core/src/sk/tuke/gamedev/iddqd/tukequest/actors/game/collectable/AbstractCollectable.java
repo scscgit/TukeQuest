@@ -52,4 +52,10 @@ public abstract class AbstractCollectable extends RectangleActor implements Coll
         }
     }
 
+    @Override
+    public int getRenderLastOrder() {
+        // Does not have priority over other Actors
+        return 1;
+    }
+
 }

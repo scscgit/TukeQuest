@@ -10,7 +10,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 /**
  * Created by Steve on 24.03.2017.
  */
-public class KeyboardGround extends RectangleActor implements Ground, RenderLast {
+public class KeyboardGround extends RectangleActor implements RenderLast, Ground {
 
     public static final Animation ANIMATION;
 
@@ -27,6 +27,12 @@ public class KeyboardGround extends RectangleActor implements Ground, RenderLast
             x,
             y
         );
+    }
+
+    @Override
+    public int getRenderLastOrder() {
+        // Is only in front of the initial spawned platform
+        return 0;
     }
 
 }

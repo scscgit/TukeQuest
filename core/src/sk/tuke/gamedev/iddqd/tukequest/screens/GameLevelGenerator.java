@@ -1,10 +1,7 @@
 package sk.tuke.gamedev.iddqd.tukequest.screens;
 
-import com.badlogic.gdx.graphics.Camera;
 import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
-import sk.tuke.gamedev.iddqd.tukequest.actors.BodyActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.Background;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalActorGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;

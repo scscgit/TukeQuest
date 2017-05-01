@@ -32,7 +32,7 @@ public class CameraOnlyMovement extends AbstractCommand {
         if (this.cameraDebugMovement) {
             debugCameraMovement();
         } else {
-            levelCameraOnPlayerPosition(player);
+            levelCameraOnPlayerPosition(player, this.camera);
         }
     }
 
@@ -56,14 +56,14 @@ public class CameraOnlyMovement extends AbstractCommand {
     /**
      * Make sure camera does not go below ground.
      */
-    private void levelCameraOnPlayerPosition(Player player) {
+    public static void levelCameraOnPlayerPosition(Player player, Camera camera) {
         int calculatedY = (int) player.getY();
         if (calculatedY - (TukeQuestGame.SCREEN_HEIGHT / 2) <= 0) {
             calculatedY = TukeQuestGame.SCREEN_HEIGHT / 2;
         }
-        this.camera.position.y = calculatedY;
-        this.camera.position.x = TukeQuestGame.SCREEN_WIDTH / 2;
-        this.camera.update();
+        camera.position.y = calculatedY;
+        camera.position.x = TukeQuestGame.SCREEN_WIDTH / 2;
+        camera.update();
     }
 
 }

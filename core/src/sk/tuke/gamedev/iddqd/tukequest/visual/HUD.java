@@ -1,5 +1,6 @@
 package sk.tuke.gamedev.iddqd.tukequest.visual;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -8,7 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.LifeImage;
 import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by 123 on 27.4.2017.
@@ -16,14 +22,19 @@ import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
 public class HUD implements Disposable {
 
     public static final int FLAME_PROGRESS_BAR_MAX_DISTANCE = 2000;
+    private static final float LIVES_X_POSITION = TukeQuestGame.SCREEN_WIDTH - 120;
+    private static final float LIVES_Y_POSITION = 55;
 
+    private Camera camera;
     private Stage stage;
     private Label scoreLabel;
     private Label comboLabel;
     private FlameProgressBar flameProgressBar;
     private GravityProgressBar gravityProgressBar;
+    private final List<LifeImage> lifeActors = new LinkedList<>();
 
-    public HUD() {
+    public HUD(Camera camera) {
+        this.camera = camera;
         this.stage = new Stage(new ScreenViewport());
         // TODO: increase the font size; BitmapFont does not scale well, this could be better with a custom font:
         // https://github.com/libgdx/libgdx/wiki/Gdx-freetype
@@ -69,7 +80,12 @@ public class HUD implements Disposable {
         this.flameProgressBar.setValue(distance);
     }
 
+    public void act() {
+        this.lifeActors.forEach(LifeImage::act);
+    }
+
     public void draw(Batch batch) {
+        this.lifeActors.forEach(lifeImage -> lifeImage.draw(batch));
         // Projection matrix fixes a problem with flames randomly turning invisible
         batch.setProjectionMatrix(this.stage.getCamera().combined);
         this.stage.draw();
@@ -85,6 +101,17 @@ public class HUD implements Disposable {
             gravity = -gravity;
         }
         this.gravityProgressBar.setValue(gravity - GameScreen.GRAVITY);
+    }
+
+    public void setLives(int lives) {
+        this.lifeActors.clear();
+        for (int i = 0; i < lives; i++) {
+            this.lifeActors.add(new LifeImage(
+                LIVES_X_POSITION - LifeImage.LIFE_ANIMATION.getWidth() * i
+                    + this.camera.position.x - TukeQuestGame.SCREEN_WIDTH / 2,
+                LIVES_Y_POSITION + this.camera.position.y - TukeQuestGame.SCREEN_HEIGHT / 2,
+                this.camera));
+        }
     }
 
 }

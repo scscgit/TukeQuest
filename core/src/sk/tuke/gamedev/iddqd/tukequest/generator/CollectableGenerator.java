@@ -2,6 +2,7 @@ package sk.tuke.gamedev.iddqd.tukequest.generator;
 
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Headphones;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Paper;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Surprise;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
@@ -18,7 +19,8 @@ public class CollectableGenerator {
     public enum CollectableType {
 
         SURPRISE(22, 5, 50),
-        HEADPHONES(30, 100, 145);
+        HEADPHONES(30, 100, 145),
+        PAPER(90, 60, 250);
 
         private int chance;
         private int minCount;
@@ -66,6 +68,8 @@ public class CollectableGenerator {
                 return new Surprise(x, y);
             case HEADPHONES:
                 return new Headphones(x, y);
+            case PAPER:
+                return new Paper(x, y);
 
             default:
                 throw new RuntimeException("Attempted to spawn unknown collectable");

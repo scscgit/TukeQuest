@@ -18,6 +18,8 @@ public class FxFlameMaster extends FxFlame {
     private static final float MAX_SPEED = 12;
     private static final float MAX_INCREASE_OF_MIN_SPEED = 7;
     private static final float SCORE_MULTIPLIER_DISTANCE_RATIO = 500;
+    public static final float SPEED_DECREASE_ON_PLAYER_LOST_LIFE = 1.5f;
+    public static final float SPEED_DECREASE_ON_MET_TEACHER = 1.5f;
 
     private float minSpeed = MIN_SPEED_START;
     private HUD hud;
@@ -44,6 +46,10 @@ public class FxFlameMaster extends FxFlame {
     public void increaseMinFlameVelocity(float velocity) {
         if (this.minSpeed + velocity > MAX_INCREASE_OF_MIN_SPEED) {
             this.minSpeed = MAX_INCREASE_OF_MIN_SPEED;
+            return;
+        }
+        if (this.minSpeed + velocity < MIN_SPEED_START) {
+            this.minSpeed = MIN_SPEED_START;
             return;
         }
         this.minSpeed += velocity;
@@ -84,6 +90,14 @@ public class FxFlameMaster extends FxFlame {
         int intMultiplier = (int) multiplier;
         // Multiplier cannot go below 1 when the flame is nearby
         return intMultiplier > 0 ? intMultiplier : 1;
+    }
+
+    public void playerLostLife() {
+        increaseMinFlameVelocity(-SPEED_DECREASE_ON_PLAYER_LOST_LIFE);
+    }
+
+    public void playerMetTeacher() {
+        increaseMinFlameVelocity(-SPEED_DECREASE_ON_MET_TEACHER);
     }
 
 }

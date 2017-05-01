@@ -78,4 +78,9 @@ public class FullScreenImage extends AbstractAnimatedActor implements Strategist
         return this.actLastOrder;
     }
 
+    @Override
+    public int getRenderLastOrder() {
+        // Is an override
+        return 99;
+    }
 }

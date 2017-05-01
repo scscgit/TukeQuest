@@ -19,17 +19,16 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.PlatformTexture;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
-import sk.tuke.gamedev.iddqd.tukequest.generator.CollectableGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Genci;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
+import sk.tuke.gamedev.iddqd.tukequest.generator.CollectableGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.util.InputHelper;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
-import sk.tuke.gamedev.iddqd.tukequest.visual.HUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,13 +87,15 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void show() {
         super.show();
-        initActors();
-        PlatformManager.INSTANCE = new PlatformManager(this.player);
         ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
         CollectableGenerator.reset();
-        setHud(new HUD());
         PlatformGenerator.reset();
+        // Initialize actors
+        initActors();
+        PlatformManager.INSTANCE = new PlatformManager(this.player);
+        // Create the HUD after player's camera position is initialized, so that his movement can be detected
+        setHud(this.player.createHud());
     }
 
     private void initActors() {
@@ -120,7 +121,9 @@ public class GameScreen extends AbstractScreen {
         this.player = new Player(
             TukeQuestGame.SCREEN_WIDTH / 2 - Player.ANIMATION_STAND.getWidth() / 2,
             groundHeight,
-            camera
+            camera,
+            this
+
         ).addToWorld(this);
 
         // Flame spawning and Exit handler
@@ -226,6 +229,10 @@ public class GameScreen extends AbstractScreen {
             }
         });
         super.dispose();
+    }
+
+    public FxFlameMaster getFirstFlame() {
+        return firstFlame;
     }
 
 }

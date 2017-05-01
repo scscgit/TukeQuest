@@ -22,8 +22,10 @@ import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.MyContactListener;
 import sk.tuke.gamedev.iddqd.tukequest.physics.contacts.OneTypeContactHandler;
 import sk.tuke.gamedev.iddqd.tukequest.screens.GameOverScreen;
+import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
+import sk.tuke.gamedev.iddqd.tukequest.visual.HUD;
 import sk.tuke.gamedev.iddqd.tukequest.visual.particles.FlameFootParticle;
 
 /**
@@ -70,8 +72,9 @@ public class Player extends RectangleActor implements RenderLast {
     private Camera camera;
     private boolean invulnerable;
     private float hitFlamesOnY;
+    private GameScreen gameScreen;
 
-    public Player(float x, float y, Camera camera) {
+    public Player(float x, float y, Camera camera, GameScreen gameScreen) {
         super(ANIMATION_STAND, BodyDef.BodyType.DynamicBody, x, y);
         this.commandChain = new HorizontalMovement(INPUT_FORCE_MULTIPLIER, camera)
             .setNext(new Jump(JUMP_FORCE, JUMP_SPRINT_FACTOR))
@@ -79,6 +82,7 @@ public class Player extends RectangleActor implements RenderLast {
         this.commandChainOnDeath = new CameraOnlyMovement(camera);
         this.particle = new FlameFootParticle(this::isSprinting);
         this.camera = camera;
+        this.gameScreen = gameScreen;
         addParticle(this.particle);
         getParticle().setImage(FlameFootParticle.ParticleImage.ASSEMBLER);
     }
@@ -150,6 +154,8 @@ public class Player extends RectangleActor implements RenderLast {
                 lostLife();
             }
         });
+        this.gameScreen.getHud().setLives(this.lives);
+        this.gameScreen.getFirstFlame().playerLostLife();
     }
 
     private void removeJumpForce() {
@@ -251,6 +257,24 @@ public class Player extends RectangleActor implements RenderLast {
             float force = getBody().getLinearVelocity().y <= 0 ? jumpForce * 2 : jumpForce;
             getBody().applyForceToCenter(new Vector2(0f, force), true);
         }
+    }
+
+    public void addLife() {
+        this.lives++;
+        this.gameScreen.getHud().setLives(this.lives);
+    }
+
+    @Override
+    public int getRenderLastOrder() {
+        // Does not draw over the flame
+        return 2;
+    }
+
+    public HUD createHud() {
+        CameraOnlyMovement.levelCameraOnPlayerPosition(this, this.camera);
+        HUD hud = new HUD(this.camera);
+        hud.setLives(this.lives);
+        return hud;
     }
 
 }

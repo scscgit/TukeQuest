@@ -1,7 +1,6 @@
 package sk.tuke.gamedev.iddqd.tukequest.generator;
 
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
-import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.AbstractTeacher;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;

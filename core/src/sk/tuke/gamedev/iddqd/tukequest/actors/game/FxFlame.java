@@ -63,4 +63,10 @@ public class FxFlame extends RectangleActor implements RenderLast, ActOnAdd {
         }
     }
 
+    @Override
+    public int getRenderLastOrder() {
+        // Draws over standard game actors and ground
+        return 3;
+    }
+
 }
