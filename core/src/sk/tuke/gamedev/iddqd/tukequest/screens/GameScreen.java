@@ -19,6 +19,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.PlatformTexture;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
+import sk.tuke.gamedev.iddqd.tukequest.generator.CollectableGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Genci;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
@@ -91,6 +92,7 @@ public class GameScreen extends AbstractScreen {
         PlatformManager.INSTANCE = new PlatformManager(this.player);
         ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
+        CollectableGenerator.reset();
         setHud(new HUD());
         PlatformGenerator.reset();
     }
