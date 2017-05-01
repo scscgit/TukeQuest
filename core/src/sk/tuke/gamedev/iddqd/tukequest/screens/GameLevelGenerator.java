@@ -46,26 +46,17 @@ public class GameLevelGenerator {
 
         // Generate platforms starting from height of the ground
         PlatformGenerator.highestPlatformY = startingY;
-//        screen.addActor(new VerticalActorGenerator(
-//            this.camera, screen, startingY, VerticalActorGenerator.PLATFORM_FACTORY));
 
         List<Platform> levelPlatforms = PlatformGenerator.generateNext(50);
         generatedActors.addAll(levelPlatforms);
         Platform firstPlatform = levelPlatforms.get(0);
 
 
+        // generate teacher on first platform (this should be the BIG one)
         generatedActors.add(TeacherGenerator.generateRandomTeacherOnPlatform(firstPlatform));
-
-//        TeacherGenerator.generateTeacherIfNeeded(startingY + Platform.);
 
         // generate walls at the sides
         generateWalls();
-
-        // Generate walls at the sides as the camera moves
-//        screen.addActor(new VerticalActorGenerator(
-//            camera, screen, startingY, VerticalActorGenerator.LEFT_WALL_FACTORY));
-//        screen.addActor(new VerticalActorGenerator(
-//            camera, screen, startingY, VerticalActorGenerator.RIGHT_WALL_FACTORY));
 
         return generatedActors;
     }
