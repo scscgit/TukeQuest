@@ -5,6 +5,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
 import sk.tuke.gamedev.iddqd.tukequest.util.RandomHelper;
+import sk.tuke.gamedev.iddqd.tukequest.visual.AbstractProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,10 @@ public class PlatformGenerator {
     // TODO: maybe implement some LEVEL algorithm that will increase the difficulty given the value of Y
     public static List<Platform> generateNext(int count, float startingY, Platform.PlatformTexture texture) {
         int PLATFORM_WIDTH = 128;
-        int X_COORDINATE_RANGE = TukeQuestGame.SCREEN_WIDTH - PLATFORM_WIDTH - 2 * VerticalWall.WALL_WIDTH;
+        int X_COORDINATE_RANGE = TukeQuestGame.SCREEN_WIDTH
+            - PLATFORM_WIDTH
+            - 2 * VerticalWall.WALL_WIDTH
+            - AbstractProgressBar.BAR_WIDTH;
 
         List<Platform> platforms = new ArrayList<>();
 

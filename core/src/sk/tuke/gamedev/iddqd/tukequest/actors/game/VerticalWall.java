@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
+import sk.tuke.gamedev.iddqd.tukequest.visual.AbstractProgressBar;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
 import java.util.HashMap;
@@ -50,7 +51,9 @@ public class VerticalWall extends RectangleActor {
         super(
             animations.get(texture),
             BodyDef.BodyType.StaticBody,
-            side == Side.LEFT ? 0 : TukeQuestGame.SCREEN_WIDTH - animations.get(texture).getWidth(),
+            side == Side.LEFT
+                ? 0
+                : TukeQuestGame.SCREEN_WIDTH - animations.get(texture).getWidth() - AbstractProgressBar.BAR_WIDTH,
             y
         );
     }

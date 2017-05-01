@@ -17,13 +17,16 @@ public abstract class AbstractProgressBar {
         Vertical, Horizontal
     }
 
+    public static final int BAR_WIDTH = 15;
+    public static final int VALUE_WIDTH = 45;
+
     protected int maxValue;
     protected com.badlogic.gdx.scenes.scene2d.ui.ProgressBar bar;
 
     public AbstractProgressBar(int maxValue, Type type, Color fullColor, Color fullBack, Color emptyColor, Color emptyBack) {
         this.maxValue = maxValue;
-        int valueWidth = type == Type.Horizontal ? 45 : 15;
-        int valueHeight = type == Type.Horizontal ? 15 : 45;
+        int valueWidth = type == Type.Horizontal ? VALUE_WIDTH : BAR_WIDTH;
+        int valueHeight = type == Type.Horizontal ? BAR_WIDTH : VALUE_WIDTH;
         Pixmap fullMap = new Pixmap(valueWidth, valueHeight, Pixmap.Format.RGBA8888);
         fullMap.setColor(fullColor);
         fullMap.fill();

@@ -43,13 +43,10 @@ public class GameScreen extends AbstractScreen {
     // Vertical jump goes up 3 platforms
     public static final float GRAVITY = 70;
     // Vertical jump goes up 1 platform
-    public static final float GRAVITY_LIMIT = 170;
+    public static final float GRAVITY_LIMIT = 140;
 
-    /**
-     * Number of platforms displayed at once.
-     */
-    @Deprecated
-    private static final int PLATFORMS_COUNT = 10;
+    private static final float DIFFICULTY_INCREASE_GRAVITY_MULTIPLIER = 1.1f;
+    private static final float DIFFICULTY_INCREASE_FLAME_INCREASE = 0.4f;
 
     private Player player;
     private FxFlameMaster firstFlame;
@@ -151,7 +148,7 @@ public class GameScreen extends AbstractScreen {
                         firstFlame.addOtherFlame(otherFlame);
                     }
                     TaskManager.INSTANCE.scheduleTimer(
-                        "difficultyIncrease", 15, 15, GameScreen.this::difficultyIncrease);
+                        "difficultyIncrease", 4, 4, GameScreen.this::difficultyIncrease);
                     waiting = false;
                     Log.i(GameScreen.this, "Flames started");
                 }
@@ -197,18 +194,18 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void difficultyIncrease() {
-        float gravityMultiplier = 1.3f;
-        float flameIncrease = 0.5f;
-
         // Example implementation of difficulty increase: increasing gravity and speed of flames
         // NOTE: to be fair, maximum gravity should always allow player to jump vertically on a next platform
-        Vector2 newGravity = getGravity().scl(gravityMultiplier);
+        Vector2 newGravity = getGravity().scl(DIFFICULTY_INCREASE_GRAVITY_MULTIPLIER);
         if (newGravity.y < -GRAVITY_LIMIT) {
             newGravity.y = -GRAVITY_LIMIT;
         }
         setGravity(newGravity);
-        this.firstFlame.increaseMinFlameVelocity(flameIncrease);
-        Log.i(this, "Difficulty increased, gravity is " + this.world.getGravity().y);
+        this.firstFlame.increaseMinFlameVelocity(DIFFICULTY_INCREASE_FLAME_INCREASE);
+        Log.i(
+            this,
+            "Difficulty increased, gravity is " + this.world.getGravity().y
+                + ", flame speed is " + this.firstFlame.getMinSpeed());
     }
 
     public Vector2 getGravity() {

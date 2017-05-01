@@ -126,6 +126,9 @@ public abstract class AbstractTeacher extends RectangleActor implements ActOnAdd
         } else {
             welcomeSound.play();
             this.isVisited = true;
+            if (this.screen.getFirstFlame() != null) {
+                this.screen.getFirstFlame().playerMetTeacher();
+            }
             onMeetPlayer();
         }
         playingSound = true;

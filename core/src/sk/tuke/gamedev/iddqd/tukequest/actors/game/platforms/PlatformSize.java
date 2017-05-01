@@ -17,7 +17,7 @@ public enum PlatformSize {
 
     private int platformWidth;
 
-    private PlatformSize(int platformWidth) {
+    PlatformSize(int platformWidth) {
         this.platformWidth = platformWidth;
     }
 

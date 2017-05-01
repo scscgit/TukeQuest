@@ -19,7 +19,7 @@ public class FxFlameMaster extends FxFlame {
     private static final float MAX_INCREASE_OF_MIN_SPEED = 7;
     private static final float SCORE_MULTIPLIER_DISTANCE_RATIO = 500;
     public static final float SPEED_DECREASE_ON_PLAYER_LOST_LIFE = 1.5f;
-    public static final float SPEED_DECREASE_ON_MET_TEACHER = 1.5f;
+    public static final float SPEED_DECREASE_ON_MET_TEACHER = 1.0f;
 
     private float minSpeed = MIN_SPEED_START;
     private HUD hud;
@@ -53,6 +53,10 @@ public class FxFlameMaster extends FxFlame {
             return;
         }
         this.minSpeed += velocity;
+    }
+
+    public float getMinSpeed() {
+        return this.minSpeed;
     }
 
     @Override
