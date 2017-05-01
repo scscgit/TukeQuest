@@ -41,7 +41,7 @@ public class GameScreen extends AbstractScreen {
     public static final float SILENT_MUSIC_VOLUME = 0.04f;
 
     // Vertical jump goes up 3 platforms
-    public static final float GRAVITY = 70;
+    public static final float GRAVITY_START = 70;
     // Vertical jump goes up 1 platform
     public static final float GRAVITY_LIMIT = 140;
 
@@ -74,7 +74,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     protected World initWorld() {
         // Initialize the World with a gravitation
-        return new World(new Vector2(0, -GRAVITY), true);
+        return new World(new Vector2(0, -GRAVITY_START), true);
     }
 
     /**

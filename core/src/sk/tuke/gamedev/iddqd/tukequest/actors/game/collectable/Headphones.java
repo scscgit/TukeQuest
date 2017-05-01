@@ -30,7 +30,10 @@ public class Headphones extends AbstractCollectable {
     @Override
     protected void onCollected(Player player) {
         // Resets the gravity, causes the player to go into the "flow"
-        getGameScreen().setGravity(new Vector2(0, -GameScreen.GRAVITY));
+        // Headphones cannot cause harm
+        if (getGameScreen().getGravity().y < -GameScreen.GRAVITY_START) {
+            getGameScreen().setGravity(new Vector2(0, -GameScreen.GRAVITY_START));
+        }
     }
 
 }

@@ -2,6 +2,8 @@ package sk.tuke.gamedev.iddqd.tukequest.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Created by Steve on 02.04.2017.
@@ -42,6 +44,17 @@ public final class InputHelper {
 
     public static boolean isJustExit() {
         return Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE);
+    }
+
+    public static boolean clickWithinBounds(Camera camera, float xMin, float xMax, float yMin, float yMax) {
+        if (Gdx.input.isTouched()) {
+            Vector3 touchPos = new Vector3();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            // Transform touch/mouse position coordinates to our camera's coordinate system
+            camera.unproject(touchPos);
+            return touchPos.x > xMin && touchPos.x < xMax && touchPos.y > yMin && touchPos.y < yMax;
+        }
+        return false;
     }
 
 }

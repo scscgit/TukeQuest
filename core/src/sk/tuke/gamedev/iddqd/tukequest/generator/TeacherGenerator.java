@@ -6,6 +6,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.AbstractTeacher;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Genci;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
+import sk.tuke.gamedev.iddqd.tukequest.levels.Level;
 import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
 
 import java.util.ArrayList;
@@ -20,45 +21,18 @@ public class TeacherGenerator {
     public static List<Platform> levelPlatforms = new ArrayList<>();
     private static Random random = new Random();
 
-//    public static void generateTeacherIfNeeded() {
-//        if (!levelPlatforms.isEmpty()) {
-//            Platform platform = levelPlatforms.get(0);
-//            generateRandomTeacherAndAddToWorld(platform.getPosition().y + platform.getHeight());
-//            levelPlatforms.remove(0);
-//        }
-//    }
-
-    public static void generateRandomTeacherAndAddToWorld(float position, GameScreen screen) {
-        generateRandomTeacher(position, screen).addToWorld(screen);
-    }
-
-    public static AbstractTeacher generateRandomTeacherOnPlatform(Platform platform, GameScreen screen) {
-        return generateRandomTeacher(platform.getPosition().y + platform.getHeight(), screen);
-    }
-
-    public static AbstractTeacher generateRandomTeacher(float position, GameScreen screen) {
-        int randomNumber = random.nextInt(3);
-        float location = random.nextBoolean() ? 1.3f / 5f : 3.7f / 5f;
-        switch (randomNumber) {
-            case 0:
-                return new Binas(screen, TukeQuestGame.SCREEN_WIDTH * location, position);
-            case 1:
-                return new Poruban(screen, TukeQuestGame.SCREEN_WIDTH * location, position);
-            case 2:
-                return new Genci(screen, TukeQuestGame.SCREEN_WIDTH * location, position);
-        }
-        throw new RuntimeException("Teacher generation random number out of bounds");
-    }
-
-    public static AbstractTeacher generateTeacherOnPlatform(Class TEACHER_CLASS, Platform platform, GameScreen screen) {
+    public static AbstractTeacher generateTeacherOnPlatform(Level teacherLevel, Platform platform, GameScreen screen) {
         float position = platform.getPosition().y + platform.getHeight();
         float location = random.nextBoolean() ? 1.3f / 5f : 3.7f / 5f;
-        if (TEACHER_CLASS == Genci.class) {
-            return new Genci(screen, TukeQuestGame.SCREEN_WIDTH * location, position);
-        } else if (TEACHER_CLASS == Binas.class) {
-            return new Binas(screen, TukeQuestGame.SCREEN_WIDTH * location, position);
+        if (teacherLevel.teacherClass == Genci.class) {
+            return new Genci(screen, teacherLevel, TukeQuestGame.SCREEN_WIDTH * location, position);
+        } else if (teacherLevel.teacherClass == Binas.class) {
+            return new Binas(screen, teacherLevel, TukeQuestGame.SCREEN_WIDTH * location, position);
+        } else if (teacherLevel.teacherClass == Poruban.class) {
+            return new Poruban(screen, teacherLevel, TukeQuestGame.SCREEN_WIDTH * location, position);
         } else {
-            return new Poruban(screen, TukeQuestGame.SCREEN_WIDTH * location, position);
+            throw new RuntimeException("Unexpected teacher generation request");
         }
     }
+
 }

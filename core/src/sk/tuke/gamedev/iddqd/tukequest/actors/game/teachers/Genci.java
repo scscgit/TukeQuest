@@ -2,6 +2,7 @@ package sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers;
 
 import com.badlogic.gdx.audio.Music;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
+import sk.tuke.gamedev.iddqd.tukequest.levels.Level;
 import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 import sk.tuke.gamedev.iddqd.tukequest.visual.particles.FlameFootParticle;
@@ -13,9 +14,10 @@ public class Genci extends AbstractTeacher {
 
     private static Animation ANIMATION = new Animation("genci.png", 0.3f);
 
-    public Genci(GameScreen screen, float x, float y) {
+    public Genci(GameScreen screen, Level level, float x, float y) {
         super(
             screen,
+            level,
             ANIMATION,
             x,
             y,

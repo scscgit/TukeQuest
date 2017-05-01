@@ -3,6 +3,7 @@ package sk.tuke.gamedev.iddqd.tukequest.levels;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.Background;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 
 /**
  *
@@ -47,6 +48,9 @@ public class Level {
 
     public Background.BackgroundTexture getBackground() {
         return background;
+    }
+
+    public void levelAchieved(Player player) {
     }
 
 }

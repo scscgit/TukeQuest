@@ -13,7 +13,7 @@ import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 public class Surprise extends AbstractCollectable {
 
     public static final Animation ANIMATION = new Animation("gift.png");
-    private static final Music SOUND_BONUS = TukeQuestGame.manager.get("audio/sounds/bonus.mp3", Music.class);
+    public static final Music SOUND_BONUS = TukeQuestGame.manager.get("audio/sounds/bonus.mp3", Music.class);
     private boolean jump;
 
     public Surprise(float x, float y) {

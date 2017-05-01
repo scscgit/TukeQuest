@@ -69,6 +69,10 @@ public enum TaskManager {
         }
     }
 
+    public boolean hasTimers(String type) {
+        return taskMap.containsKey(type);
+    }
+
     public void removeTimers(String type) {
         List<Timer.Task> tasks = taskMap.get(type);
         if (tasks == null) {

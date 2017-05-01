@@ -1,15 +1,14 @@
 package sk.tuke.gamedev.iddqd.tukequest.generator;
 
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Headphones;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Paper;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Surprise;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.*;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.util.RandomHelper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * Created by Steve on 01.05.2017.
@@ -20,11 +19,18 @@ public class CollectableGenerator {
 
         SURPRISE(22, 5, 50),
         HEADPHONES(30, 100, 145),
-        PAPER(90, 60, 250);
+        PAPER(90, 60, 250),
+        PUBLIC_CLASS(15, 10, 50, () -> Poruban.isPorubanLevel);
 
         private int chance;
         private int minCount;
         private int maxCount;
+        public Supplier<Boolean> condition;
+
+        CollectableType(int chance, int minCount, int maxCount, Supplier<Boolean> condition) {
+            this(chance, minCount, maxCount);
+            this.condition = condition;
+        }
 
         CollectableType(int chance, int minCount, int maxCount) {
             this.chance = chance;
@@ -52,6 +58,7 @@ public class CollectableGenerator {
             typeCount.put(type, count + 1);
 
             if (collectable == null
+                && (type.condition == null || type.condition.get())
                 && count > type.minCount
                 && (RandomHelper.random.nextInt(type.chance) == 0 || count > type.maxCount)) {
                 collectable = create(type, x, y);
@@ -70,6 +77,8 @@ public class CollectableGenerator {
                 return new Headphones(x, y);
             case PAPER:
                 return new Paper(x, y);
+            case PUBLIC_CLASS:
+                return new PublicClass(x, y);
 
             default:
                 throw new RuntimeException("Attempted to spawn unknown collectable");

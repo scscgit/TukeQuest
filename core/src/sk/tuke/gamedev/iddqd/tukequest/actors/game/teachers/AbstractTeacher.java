@@ -8,6 +8,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.ActOnAdd;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RectangleActor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.RenderLast;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
+import sk.tuke.gamedev.iddqd.tukequest.levels.Level;
 import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
@@ -26,6 +27,7 @@ public abstract class AbstractTeacher extends RectangleActor implements ActOnAdd
     private Animation animationLeft;
     private Animation animationRight;
     private GameScreen screen;
+    private Level level;
     private Music welcomeSound;
     private Music otherSound;
     private boolean isVisited;
@@ -35,28 +37,32 @@ public abstract class AbstractTeacher extends RectangleActor implements ActOnAdd
 
     // Walking teacher constructors
 
-    protected AbstractTeacher(GameScreen screen, Animation animationLeft, Animation animationRight,
+    protected AbstractTeacher(GameScreen screen, Level level, Animation animationLeft, Animation animationRight,
                               float x, float y, Music welcomeSound) {
-        this(screen, animationLeft, x, y, welcomeSound);
+        this(screen, level, animationLeft, x, y, welcomeSound);
         initializeWalkingAnimations(animationLeft, animationRight);
     }
 
-    protected AbstractTeacher(GameScreen screen, Animation animationLeft, Animation animationRight,
+    protected AbstractTeacher(GameScreen screen, Level level, Animation animationLeft, Animation animationRight,
                               float x, float y, Music welcomeSound, Music otherSound) {
-        this(screen, animationLeft, x, y, welcomeSound, otherSound);
+        this(screen, level, animationLeft, x, y, welcomeSound, otherSound);
         initializeWalkingAnimations(animationLeft, animationRight);
     }
 
     // Standing teacher constructors
 
-    protected AbstractTeacher(GameScreen screen, Animation animation, float x, float y, Music welcomeSound) {
-        this(screen, animation, x, y, welcomeSound, welcomeSound);
+    protected AbstractTeacher(
+        GameScreen screen, Level level, Animation animation, float x, float y, Music welcomeSound
+    ) {
+        this(screen, level, animation, x, y, welcomeSound, welcomeSound);
     }
 
     protected AbstractTeacher(
-        GameScreen screen, Animation animation, float x, float y, Music welcomeSound, Music otherSound) {
+        GameScreen screen, Level level, Animation animation, float x, float y, Music welcomeSound, Music otherSound
+    ) {
         super(animation, BodyDef.BodyType.KinematicBody, x, y);
         this.screen = screen;
+        this.level = level;
         this.welcomeSound = welcomeSound;
         this.otherSound = otherSound;
     }
@@ -129,9 +135,14 @@ public abstract class AbstractTeacher extends RectangleActor implements ActOnAdd
             if (this.screen.getFirstFlame() != null) {
                 this.screen.getFirstFlame().playerMetTeacher();
             }
+            this.level.levelAchieved(getPlayer());
             onMeetPlayer();
         }
         playingSound = true;
+    }
+
+    protected Level getLevel() {
+        return this.level;
     }
 
     protected abstract void onMeetPlayer();

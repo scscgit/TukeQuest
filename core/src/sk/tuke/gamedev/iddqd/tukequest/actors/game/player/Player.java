@@ -124,7 +124,7 @@ public class Player extends RectangleActor implements RenderLast {
             lostLife();
             return;
         }
-        this.gameScreen.getHud().setLives(0);
+        this.gameScreen.getHud().setLives(0, this);
         this.alive = false;
         Log.i(this, "Game Over");
         getBody().getFixtureList().get(0).setSensor(true);
@@ -155,8 +155,10 @@ public class Player extends RectangleActor implements RenderLast {
                 killedByFlame();
             }
         });
-        this.gameScreen.getHud().setLives(this.lives);
-        this.gameScreen.getFirstFlame().playerLostLife();
+        this.gameScreen.getHud().setLives(this.lives, this);
+        if (this.gameScreen.getFirstFlame() != null) {
+            this.gameScreen.getFirstFlame().playerLostLife();
+        }
     }
 
     private void removeJumpForce() {
@@ -262,7 +264,7 @@ public class Player extends RectangleActor implements RenderLast {
 
     public void addLife() {
         this.lives++;
-        this.gameScreen.getHud().setLives(this.lives);
+        this.gameScreen.getHud().setLives(this.lives, this);
     }
 
     @Override
@@ -274,8 +276,16 @@ public class Player extends RectangleActor implements RenderLast {
     public HUD createHud() {
         CameraOnlyMovement.levelCameraOnPlayerPosition(this, this.camera);
         HUD hud = new HUD(this.camera);
-        hud.setLives(this.lives);
+        hud.setLives(this.lives, this);
         return hud;
+    }
+
+    public int getLives() {
+        return this.lives;
+    }
+
+    public GameScreen getGameScreen() {
+        return gameScreen;
     }
 
 }

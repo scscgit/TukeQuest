@@ -51,7 +51,7 @@ public class GameLevelGenerator {
 
         // Generate teacher on first platform (this should be the BIG one)
         generatedActors.add(TeacherGenerator.generateTeacherOnPlatform(
-            this.level.teacherClass,
+            this.level,
             firstPlatform,
             screen));
 

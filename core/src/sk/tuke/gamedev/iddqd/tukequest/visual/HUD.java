@@ -11,8 +11,11 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.LifeImage;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
 import sk.tuke.gamedev.iddqd.tukequest.screens.GameScreen;
+import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 
+import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,10 +55,10 @@ public class HUD implements Disposable {
 
         this.flameProgressBar = new FlameProgressBar(FLAME_PROGRESS_BAR_MAX_DISTANCE)
             .addToStage(this.stage);
-        this.gravityProgressBar = new GravityProgressBar((int) (GameScreen.GRAVITY_LIMIT - GameScreen.GRAVITY))
+        this.gravityProgressBar = new GravityProgressBar((int) (GameScreen.GRAVITY_LIMIT - GameScreen.GRAVITY_START))
             .addToStage(this.stage);
         // The starting gravity will be set
-        setGravity(GameScreen.GRAVITY);
+        setGravity(GameScreen.GRAVITY_START);
     }
 
     public void setScore(int score) {
@@ -81,7 +84,12 @@ public class HUD implements Disposable {
     }
 
     public void act() {
-        this.lifeActors.forEach(LifeImage::act);
+        try {
+            this.lifeActors.forEach(LifeImage::act);
+        } catch (ConcurrentModificationException e) {
+            // This is expected and for now it is temporarily okay
+            Log.e(this, e.getMessage());
+        }
     }
 
     public void draw(Batch batch) {
@@ -100,17 +108,18 @@ public class HUD implements Disposable {
         if (gravity < 0) {
             gravity = -gravity;
         }
-        this.gravityProgressBar.setValue(gravity - GameScreen.GRAVITY);
+        this.gravityProgressBar.setValue(gravity - GameScreen.GRAVITY_START);
     }
 
-    public void setLives(int lives) {
+    public void setLives(int lives, Player player) {
         this.lifeActors.clear();
         for (int i = 0; i < lives; i++) {
             this.lifeActors.add(new LifeImage(
                 LIVES_X_POSITION - LifeImage.LIFE_ANIMATION.getWidth() * i
                     + this.camera.position.x - TukeQuestGame.SCREEN_WIDTH / 2,
                 LIVES_Y_POSITION + this.camera.position.y - TukeQuestGame.SCREEN_HEIGHT / 2,
-                this.camera));
+                this.camera,
+                player));
         }
     }
 
