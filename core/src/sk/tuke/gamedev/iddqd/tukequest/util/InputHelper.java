@@ -57,4 +57,8 @@ public final class InputHelper {
         return false;
     }
 
+    public static boolean isHelp() {
+        return Gdx.input.isKeyJustPressed(Input.Keys.F1);
+    }
+
 }

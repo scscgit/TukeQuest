@@ -87,6 +87,10 @@ public class MenuScreen extends AbstractScreen {
         Gdx.app.exit();
     }
 
+    private void showHelp() {
+        getGame().setScreen(new TutorialScreen(getGame()));
+    }
+
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -95,6 +99,8 @@ public class MenuScreen extends AbstractScreen {
             runGame();
         } else if (InputHelper.isJustExit()) {
             exitGame();
+        } else if (InputHelper.isHelp()) {
+            showHelp();
         }
     }
 

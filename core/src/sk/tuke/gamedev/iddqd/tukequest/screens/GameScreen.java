@@ -18,6 +18,7 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
 import sk.tuke.gamedev.iddqd.tukequest.generator.CollectableGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.levels.Level;
@@ -83,6 +84,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void show() {
         super.show();
+        Poruban.isPorubanLevel = false;
         ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
         CollectableGenerator.reset();
@@ -155,6 +157,9 @@ public class GameScreen extends AbstractScreen {
                 if (InputHelper.isJustExit()) {
                     getGame().setScreen(new MenuScreen(getGame()));
                     throw new ScreenFinishedException();
+                }
+                if (InputHelper.isHelp()) {
+                    getGame().setScreen(new TutorialScreen(getGame()));
                 }
             }
 
