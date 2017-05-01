@@ -15,9 +15,14 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.Actor;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlameMaster;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.KeyboardGround;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.PlatformTexture;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.Player;
+import sk.tuke.gamedev.iddqd.tukequest.generator.CollectableGenerator;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Genci;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
 import sk.tuke.gamedev.iddqd.tukequest.generator.PlatformGenerator;
 import sk.tuke.gamedev.iddqd.tukequest.managers.PlatformManager;
 import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
@@ -25,6 +30,9 @@ import sk.tuke.gamedev.iddqd.tukequest.managers.TaskManager;
 import sk.tuke.gamedev.iddqd.tukequest.util.InputHelper;
 import sk.tuke.gamedev.iddqd.tukequest.util.Log;
 import sk.tuke.gamedev.iddqd.tukequest.visual.HUD;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Steve on 24.03.2017.
@@ -84,6 +92,7 @@ public class GameScreen extends AbstractScreen {
         PlatformManager.INSTANCE = new PlatformManager(this.player);
         ScoreManager.INSTANCE = new ScoreManager();
         TaskManager.INSTANCE.removeTimers("difficultyIncrease");
+        CollectableGenerator.reset();
         setHud(new HUD());
         PlatformGenerator.reset();
     }
@@ -153,16 +162,27 @@ public class GameScreen extends AbstractScreen {
 
         });
 
+        List<Level> levels = createLevels();
+
         GameLevelManager gameLevelManager = new GameLevelManager(
             this,
             camera,
             groundHeight
-                - Platform.ANIMATIONS.get(PlatformSize.LEVEL).get(0).getHeight()
-                - PlatformGenerator.Y_DISTANCE_BETWEEN_PLATFORMS);
+                - Platform.ANIMATIONS.get(PlatformSize.LEVEL).get(PlatformTexture.MATHS).getHeight()
+                - PlatformGenerator.Y_DISTANCE_BETWEEN_PLATFORMS,
+            levels);
         addActor(gameLevelManager);
 //        gameLevelGenerator.generateLevel();
 
 //        addActor(gameLevelGenerator);
+    }
+
+    private List<Level> createLevels() {
+        List<Level> levels = new ArrayList<>();
+        levels.add(new Level("Binasov level", PlatformTexture.MATHS, Binas.class, null, null));
+        levels.add(new Level("Genciho level", PlatformTexture.ROCK, Genci.class, null, null));
+        levels.add(new Level("Porubanov level", PlatformTexture.CHIMNEY, Poruban.class, null, null));
+        return levels;
     }
 
     /**

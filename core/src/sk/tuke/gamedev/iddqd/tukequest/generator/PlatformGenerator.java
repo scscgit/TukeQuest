@@ -2,12 +2,13 @@ package sk.tuke.gamedev.iddqd.tukequest.generator;
 
 import sk.tuke.gamedev.iddqd.tukequest.TukeQuestGame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.assets.PlatformTexture;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.PlatformSize;
+import sk.tuke.gamedev.iddqd.tukequest.util.RandomHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 // TODO: integrate to the PlatformManager; don't use static fields, as this breaks when scene changes
 public class PlatformGenerator {
@@ -20,19 +21,17 @@ public class PlatformGenerator {
     private static int platformCount;
     private static int currentTextureIndex;
 
-    private static Random random = new Random();
-
     public static void reset() {
         PlatformGenerator.platformCount = 0;
         PlatformGenerator.currentTextureIndex = 0;
     }
 
-    private static List<Platform> generateNext(float startingY) {
-        return generateNext(PLATFORM_TEXTURE_CHANGE_RATE, startingY);
+    private static List<Platform> generateNext(float startingY, PlatformTexture texture) {
+        return generateNext(PLATFORM_TEXTURE_CHANGE_RATE, startingY, texture);
     }
 
     // TODO: maybe implement some LEVEL algorithm that will increase the difficulty given the value of Y
-    private static List<Platform> generateNext(int count, float startingY) {
+    private static List<Platform> generateNext(int count, float startingY, PlatformTexture texture) {
         int PLATFORM_WIDTH = 128;
         int X_COORDINATE_RANGE = TukeQuestGame.SCREEN_WIDTH - PLATFORM_WIDTH - 2 * VerticalWall.WALL_WIDTH;
 
@@ -44,15 +43,17 @@ public class PlatformGenerator {
 
             if (i == 0) {
                 changePlatformType();
-                Platform levelPlatform = new Platform(VerticalWall.WALL_WIDTH + 1, startingY, PlatformSize.LEVEL, currentTextureIndex);
+                Platform levelPlatform = new Platform(VerticalWall.WALL_WIDTH + 1, startingY, PlatformSize.LEVEL, texture);
                 platforms.add(levelPlatform);
 
 
                 // FIXME: 30/04/2017 decouple logic
                 TeacherGenerator.levelPlatforms.add(levelPlatform);
             } else {
-                int randomStartingX = random.nextInt((X_COORDINATE_RANGE - VerticalWall.WALL_WIDTH) + 1) + VerticalWall.WALL_WIDTH;
-                platforms.add(createSmallOrMediumPlatform(randomStartingX, startingY));
+                int randomStartingX =
+                    RandomHelper.random.nextInt((X_COORDINATE_RANGE - VerticalWall.WALL_WIDTH) + 1)
+                        + VerticalWall.WALL_WIDTH;
+                platforms.add(createSmallOrMediumPlatform(randomStartingX, startingY, texture));
             }
         }
 
@@ -61,15 +62,15 @@ public class PlatformGenerator {
         return platforms;
     }
 
-    private static Platform createSmallOrMediumPlatform(int randomStartingX, float startingY) {
+    private static Platform createSmallOrMediumPlatform(int randomStartingX, float startingY, PlatformTexture texture) {
         PlatformSize size;
-        if (random.nextBoolean()) {
+        if (RandomHelper.random.nextBoolean()) {
             size = PlatformSize.SMALL;
         } else {
             size = PlatformSize.MEDIUM;
         }
 
-        return new Platform(randomStartingX, startingY, size, currentTextureIndex);
+        return new Platform(randomStartingX, startingY, size, texture);
     }
 
     private static void changePlatformType() {
@@ -82,8 +83,8 @@ public class PlatformGenerator {
         currentTextureIndex = textureOrder % texturesCount;
     }
 
-    public static List<Platform> generateNext() {
-        return generateNext(highestPlatformY);
+    public static List<Platform> generateNext(PlatformTexture texture) {
+        return generateNext(highestPlatformY, texture);
     }
 
 }

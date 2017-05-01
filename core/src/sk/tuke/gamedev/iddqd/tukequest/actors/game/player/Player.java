@@ -13,7 +13,6 @@ import sk.tuke.gamedev.iddqd.tukequest.actors.game.FullScreenImage;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.FxFlame;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Collectable;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.collectable.Surprise;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.CameraOnlyMovement;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.Command;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.player.commands.HorizontalMovement;
@@ -246,11 +245,12 @@ public class Player extends RectangleActor implements RenderLast {
         if (!isAlive()) {
             return;
         }
-        if (collectable instanceof Surprise) {
-            float force = getBody().getLinearVelocity().y <= 0 ? JUMP_FORCE * 2 : JUMP_FORCE;
+        collectable.collected(this);
+        float jumpForce = collectable.causesJump() * JUMP_FORCE;
+        if (jumpForce > 0) {
+            float force = getBody().getLinearVelocity().y <= 0 ? jumpForce * 2 : jumpForce;
             getBody().applyForceToCenter(new Vector2(0f, force), true);
         }
-        collectable.collected(this);
     }
 
 }
