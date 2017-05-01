@@ -46,7 +46,6 @@ public class PlatformGenerator {
 
                 // FIXME: 30/04/2017 decouple logic
                 TeacherGenerator.levelPlatforms.add(levelPlatform);
-                TeacherGenerator.generateTeacherIfNeeded();
             } else {
                 int randomStartingX = random.nextInt((X_COORDINATE_RANGE - VerticalWall.WALL_WIDTH) + 1) + VerticalWall.WALL_WIDTH;
                 platforms.add(createSmallOrMediumPlatform(randomStartingX, startingY));

@@ -92,19 +92,20 @@ public class GameScreen extends AbstractScreen {
         // Place the ground as a basis below which no actors can be created
         float groundHeight = new KeyboardGround(0, 0).addToWorld(this).getAnimation().getHeight();
 
-        addActor(new VerticalActorGenerator(
-            this.camera, this, groundHeight, VerticalActorGenerator.BACKGROUND_FACTORY));
 
-        // Generate platforms starting from height of the ground
-        PlatformGenerator.highestPlatformY = groundHeight;
-        addActor(new VerticalActorGenerator(
-            this.camera, this, groundHeight, VerticalActorGenerator.PLATFORM_FACTORY));
-
-        // Generate walls at the sides as the camera moves
-        addActor(new VerticalActorGenerator(
-            this.camera, this, groundHeight, VerticalActorGenerator.LEFT_WALL_FACTORY));
-        addActor(new VerticalActorGenerator(
-            this.camera, this, groundHeight, VerticalActorGenerator.RIGHT_WALL_FACTORY));
+//        addActor(new VerticalActorGenerator(
+//            this.camera, this, groundHeight, VerticalActorGenerator.BACKGROUND_FACTORY));
+//
+//        // Generate platforms starting from height of the ground
+//        PlatformGenerator.highestPlatformY = groundHeight;
+//        addActor(new VerticalActorGenerator(
+//            this.camera, this, groundHeight, VerticalActorGenerator.PLATFORM_FACTORY));
+//
+//        // Generate walls at the sides as the camera moves
+//        addActor(new VerticalActorGenerator(
+//            this.camera, this, groundHeight, VerticalActorGenerator.LEFT_WALL_FACTORY));
+//        addActor(new VerticalActorGenerator(
+//            this.camera, this, groundHeight, VerticalActorGenerator.RIGHT_WALL_FACTORY));
 
         // Create Player standing at the KeyboardGround in the middle of the screen
         this.player = new Player(
@@ -155,6 +156,12 @@ public class GameScreen extends AbstractScreen {
         TeacherGenerator.screen = this;
 
         TeacherGenerator.generateRandomTeacher(groundHeight);
+
+
+        GameLevelGenerator gameLevelGenerator = new GameLevelGenerator(this, camera, groundHeight);
+        gameLevelGenerator.generateLevel();
+
+        addActor(gameLevelGenerator);
     }
 
     /**
