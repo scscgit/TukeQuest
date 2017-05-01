@@ -5,9 +5,12 @@ package sk.tuke.gamedev.iddqd.tukequest.levels;
  */
 public enum Levels {
 
-    BINAS(new BinasLevel()),
-    GENCI(new GenciLevel()),
-    PORUBAN(new PorubanLevel());
+    BINAS(new BinasFirstLevel()),
+    BINAS_EXAM(new BinasExam()),
+    GENCI(new GenciFirstLevel()),
+    GENCI_EXAM(new GenciExam()),
+    PORUBAN(new PorubanFirstLevel()),
+    PORUBAN_EXAM(new PorubanExam());
 
     public final Level level;
 

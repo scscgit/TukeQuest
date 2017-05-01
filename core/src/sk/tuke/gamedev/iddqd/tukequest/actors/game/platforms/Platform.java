@@ -9,17 +9,14 @@ import sk.tuke.gamedev.iddqd.tukequest.managers.ScoreManager;
 import sk.tuke.gamedev.iddqd.tukequest.screens.AbstractScreen;
 import sk.tuke.gamedev.iddqd.tukequest.visual.Animation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Platform extends RectangleActor implements Ground {
 
     public enum PlatformTexture {
 
         MATHS("maths_texture.jpg"),
+        BINARY("binary.jpg"),
         ROCK("jerusrockwallsml.jpg"),
         CHIMNEY("cabin_chimney_side.jpg");
 
@@ -41,11 +38,10 @@ public class Platform extends RectangleActor implements Ground {
     private boolean scoreAwarded = false;
 
     static {
-
-        // add all enum values
+        // Add all enum values
         PLATFORM_TEXTURES.addAll(Arrays.asList(PlatformTexture.values()));
 
-        // generate animations in all sizes
+        // Generate animations in all sizes
         PlatformSize.getAll().forEach((platformSize -> {
             Map<PlatformTexture, Animation> animations = new HashMap<>();
             // for all textures

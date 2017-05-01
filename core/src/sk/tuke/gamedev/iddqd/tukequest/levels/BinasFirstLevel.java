@@ -3,20 +3,20 @@ package sk.tuke.gamedev.iddqd.tukequest.levels;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.Background;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.VerticalWall;
 import sk.tuke.gamedev.iddqd.tukequest.actors.game.platforms.Platform;
-import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Poruban;
+import sk.tuke.gamedev.iddqd.tukequest.actors.game.teachers.Binas;
 
 /**
  * Created by Steve on 01.05.2017.
  */
-public class PorubanLevel extends Level {
+public class BinasFirstLevel extends Level {
 
-    public PorubanLevel() {
+    public BinasFirstLevel() {
         super(
-            "Porubanov level",
-            Platform.PlatformTexture.CHIMNEY,
+            "Binasov level",
+            Platform.PlatformTexture.BINARY,
             50,
-            Poruban.class,
-            Background.BackgroundTexture.ICY_TOWER,
+            Binas.class,
+            Background.BackgroundTexture.CODE,
             VerticalWall.WallTexture.BINARY);
     }
 

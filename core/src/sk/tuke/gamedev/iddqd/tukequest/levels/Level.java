@@ -12,7 +12,7 @@ public class Level {
     public final String levelName;
     public final Platform.PlatformTexture platformTexture;
     public final Class teacherClass;
-    public final Background.BackgroundTexture background;
+    protected final Background.BackgroundTexture background;
     public final VerticalWall.WallTexture wallTexture;
     private final int platformCount;
     private int generatedCount;
@@ -43,6 +43,10 @@ public class Level {
 
     public int getGeneratedCount() {
         return this.generatedCount;
+    }
+
+    public Background.BackgroundTexture getBackground() {
+        return background;
     }
 
 }

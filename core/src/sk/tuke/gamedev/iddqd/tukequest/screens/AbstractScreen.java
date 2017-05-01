@@ -56,6 +56,7 @@ public abstract class AbstractScreen implements Screen {
     private Music music;
     private boolean paused;
     private HUD hud;
+    private int renderFirstCurrentIndex;
 
     protected AbstractScreen(TukeQuestGame game, Music music) {
         this.game = game;
@@ -193,7 +194,8 @@ public abstract class AbstractScreen implements Screen {
         for (Actor actor : this.newActors) {
             // Actors meant to render first are moved back in the queue
             if (actor instanceof RenderFirst) {
-                this.actors.add(0, actor);
+                // They will be rendered in their naturally added relative order. This fixes old background overlapping
+                this.actors.add(this.renderFirstCurrentIndex++, actor);
             } else {
                 this.actors.add(actor);
             }

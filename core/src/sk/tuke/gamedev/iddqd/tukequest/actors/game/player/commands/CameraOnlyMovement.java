@@ -25,6 +25,7 @@ public class CameraOnlyMovement extends AbstractCommand {
     @Override
     public void onExecute(Player player) {
         // Toggle between camera debug mode and normal navigation
+        // TODO: disable this in a real deployed game, because it can allow the Player to cheat by avoiding FxFlame
         if (Gdx.input.isKeyJustPressed(DEBUG_TOGGLE_KEY)) {
             this.cameraDebugMovement ^= true;
             // This will switch the Debug mode too

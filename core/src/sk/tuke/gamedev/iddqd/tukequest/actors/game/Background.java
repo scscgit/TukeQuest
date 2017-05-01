@@ -15,7 +15,10 @@ public class Background extends AbstractAnimatedActor implements RenderFirst {
 
     public enum BackgroundTexture {
 
-        ICY_TOWER("background.jpg");
+        ICY_TOWER("background.jpg"),
+        ASSEMBLER1("background/assembler1.jpg"),
+        ASSEMBLER2("background/assembler2.jpg"),
+        CODE("background/code.jpg"),;
 
         private String textureFileName;
 
