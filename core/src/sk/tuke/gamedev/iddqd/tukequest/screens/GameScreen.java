@@ -195,6 +195,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void hide() {
         super.hide();
+        TaskManager.INSTANCE.removeTimers("gameOverCountdown");
         PlatformManager.INSTANCE = null;
     }
 

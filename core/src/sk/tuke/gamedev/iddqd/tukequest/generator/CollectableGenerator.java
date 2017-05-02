@@ -18,7 +18,7 @@ public class CollectableGenerator {
     public enum CollectableType {
 
         SURPRISE(22, 5, 50),
-        HEADPHONES(30, 100, 145),
+        HEADPHONES(30, 60, 95, () -> !Poruban.isPorubanLevel),
         PAPER(90, 60, 250),
         PUBLIC_CLASS(15, 10, 50, () -> Poruban.isPorubanLevel);
 
